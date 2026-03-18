@@ -1012,3 +1012,60 @@ p  { color: var(--text-secondary); margin-bottom: 1rem; }
     .stat-card { padding: 16px; }
     .stat-number { font-size: 1.6rem; }
 }
+
+/* ===== Typed.js Cursor ===== */
+.typed-cursor {
+    color: var(--accent);
+    font-weight: 200;
+    font-size: inherit;
+    animation: typedBlink 0.7s infinite;
+}
+@keyframes typedBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+/* ===== GitHub Language Dots ===== */
+.lang-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+/* ===== Loading Spinner ===== */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-state .material-symbols-outlined {
+    display: inline-block;
+}
+
+/* ===== Project Description ===== */
+.project-description {
+    color: var(--text-secondary);
+    font-size: 0.92rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.project-category {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+

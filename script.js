@@ -1,146 +1,115 @@
-// ===== Portfolio Data =====
+// ===================================================================
+// Portfolio Data — extracted from Bleigh T.J Bande's CV
+// All data driven from this object — nothing is hardcoded in HTML
+// ===================================================================
 const portfolioData = {
     profile: {
-        name: "Bleigh Bande",
-        title: "IT Professional & Full Stack Developer",
-        description: "Experienced IT professional with over 8 years of hands-on experience in software development, system architecture, and project leadership. I specialise in building scalable, user-centred digital products — from high-traffic e-commerce platforms to AI-powered enterprise tools. My approach blends clean engineering with a sharp eye for business impact, ensuring every line of code moves the needle.",
-        email: "bleigh.bande@example.com",
-        phone: "+1 (555) 123-4567",
-        location: "Zimbabwe"
+        name: "Bleigh T.J Bande",
+        greeting: "Hello, I'm",
+        titles: [
+            "Telecommunications Engineer",
+            "Web Developer",
+            "IT Support Specialist",
+            "Problem Solver"
+        ],
+        description: "Innovative and technically-driven telecommunications engineering student with a diploma from Trust Academy and currently pursuing a bachelor's degree at Midlands State University. Passionate about leveraging technology to solve real-world problems, with a record of improving system efficiency and user experience. Vice President of Data Science MSU Charter.",
+        email: "bleighbande@gmail.com",
+        phone: "0776688563",
+        location: "Gweru, Zimbabwe",
+        dob: "20 January 2000"
     },
     highlights: [
-        { icon: "code", title: "Full Stack", desc: "End-to-end development" },
-        { icon: "cloud", title: "Cloud Native", desc: "AWS, Azure & Firebase" },
-        { icon: "groups", title: "Team Lead", desc: "Mentored 3+ devs" },
-        { icon: "speed", title: "Performance", desc: "40% faster deploys" }
+        { icon: "cell_tower", title: "Telecom Systems", desc: "Signal processing & switching" },
+        { icon: "code", title: "Web Development", desc: "HTML, CSS, Python, Flask" },
+        { icon: "support_agent", title: "IT Support", desc: "Troubleshooting & diagnostics" },
+        { icon: "groups", title: "Leadership", desc: "VP Data Science MSU Charter" }
     ],
     stats: {
-        projects: 15,
-        experience: 8,
-        clients: 20,
-        certifications: 5
+        projects: 10,
+        experience: 4,
+        skills: 15,
+        certifications: 2
     },
     skills: [
         {
-            category: "Languages",
-            icon: "data_object",
-            items: ["Python", "JavaScript", "TypeScript", "Java", "C#", "SQL", "PHP"]
+            category: "Networking & Telecoms",
+            icon: "lan",
+            items: ["LAN/WAN Config", "Cisco Packet Tracer", "Fiber Optics", "Signal Processing", "Telecoms Switching"]
         },
         {
-            category: "Frontend",
+            category: "Web Technologies",
             icon: "web",
-            items: ["React", "Vue.js", "Angular", "HTML5", "CSS3", "Bootstrap", "Tailwind"]
+            items: ["HTML", "CSS", "Responsive Design", "REST APIs", "Flask"]
         },
         {
-            category: "Backend",
-            icon: "dns",
-            items: ["Node.js", "Django", "ASP.NET", "Express.js", "FastAPI", "Spring Boot"]
+            category: "Programming",
+            icon: "data_object",
+            items: ["Python", "C", "SQL", "Git/GitHub"]
         },
         {
-            category: "Database & Cloud",
-            icon: "cloud_circle",
-            items: ["PostgreSQL", "MongoDB", "MySQL", "AWS", "Azure", "Firebase", "Docker"]
+            category: "Databases",
+            icon: "storage",
+            items: ["MySQL", "SQLite", "TinyDB", "MS Access", "Excel-based Systems"]
         },
         {
-            category: "Tools & Methods",
+            category: "IT Support & Tools",
             icon: "build_circle",
-            items: ["Git", "Agile/Scrum", "RESTful APIs", "GraphQL", "Microservices", "CI/CD"]
+            items: ["Windows OS", "MS Office Suite", "Troubleshooting", "Notion", "Slack"]
+        },
+        {
+            category: "Emerging Tech",
+            icon: "auto_awesome",
+            items: ["Generative AI", "AI-Assisted Workflows", "Content Generation", "Cybersecurity Basics"]
         }
     ],
     experience: [
         {
-            title: "Senior Full Stack Developer",
-            company: "Tech Innovations Ltd",
-            date: "2021 — Present",
-            description: "Led development of enterprise-grade applications, architected scalable microservices, mentored 3+ junior developers, and reduced deployment time by 40% through CI/CD optimization."
+            title: "IT Support & Systems Intern",
+            company: "Parirenyatwa Group Of Hospitals",
+            date: "2021",
+            description: "Designed and implemented a centralised IT inventory database, streamlining asset tracking and reducing manual entry errors by 30%. Diagnosed and resolved daily PC and peripheral issues. Conducted end-user training sessions. Collaborated on connecting Annexe Psychiatric Hospital to the central network. Upgraded network infrastructure for Sekuru Kaguvi Eye Hospital. Automated the reset request log process, reducing manual workload by 40%."
         },
         {
-            title: "Full Stack Developer",
-            company: "Digital Solutions Africa",
-            date: "2019 — 2021",
-            description: "Developed and maintained 10+ web applications using React and Node.js. Implemented database optimization strategies improving performance by 35%. Collaborated with cross-functional teams in Agile environments."
-        },
-        {
-            title: "Junior Developer",
-            company: "Software House Zimbabwe",
-            date: "2017 — 2019",
-            description: "Built responsive web applications, contributed to codebase with clean code practices, participated in daily standups and code reviews. Gained expertise in MERN stack development."
+            title: "Vice President — Data Science MSU Charter",
+            company: "Midlands State University",
+            date: "Feb 2025 — Present",
+            description: "Leading the Data Science charter at MSU, organising workshops and events to promote data literacy and analytical thinking among students. Coordinating with faculty and industry partners."
         }
     ],
     education: [
         {
-            degree: "BSc Information Technology",
+            degree: "BSc Telecommunications Engineering",
             icon: "school",
-            institution: "Zimbabwe Open University",
-            year: "2019",
-            details: "Specialised in Software Development and Database Management. Completed honours thesis on cloud-based architecture optimization."
+            institution: "Midlands State University",
+            year: "Feb 2024 — Present",
+            details: "Currently pursuing a Bachelor's degree in Telecommunications Engineering, building on a foundation in networks, electronics and communication systems."
         },
         {
-            degree: "Web Development Certification",
+            degree: "Diploma in Telecommunications",
             icon: "workspace_premium",
-            institution: "Complete Web Developer Bootcamp",
-            year: "2017",
-            details: "Intensive 12-week program covering modern web technologies, REST APIs, and best practices in full-stack development."
-        },
-        {
-            degree: "AWS Solutions Architect",
-            icon: "cloud_done",
-            institution: "Amazon Web Services",
-            year: "2022",
-            details: "Professional-level certification demonstrating expertise in designing and deploying scalable AWS solutions."
-        }
-    ],
-    projects: [
-        {
-            title: "E-Commerce Platform",
-            category: "Web Application",
-            description: "Full-featured e-commerce solution with product catalog, shopping cart, secure payments, and admin dashboard. Achieved 99.9% uptime and handles 1000+ concurrent users.",
-            technologies: ["React", "Node.js", "PostgreSQL", "Stripe", "AWS"],
-            link: "#"
-        },
-        {
-            title: "Project Management Tool",
-            category: "SaaS Platform",
-            description: "Real-time project management with team collaboration, task tracking, and analytics. Supports 500+ active users with live updates using WebSockets.",
-            technologies: ["Vue.js", "Express.js", "MongoDB", "Socket.io", "Docker"],
-            link: "#"
-        },
-        {
-            title: "Financial Analytics Dashboard",
-            category: "Data Visualization",
-            description: "Enterprise analytics platform processing 10M+ data points daily. Real-time visualisations, automated reporting, and predictive analytics for financial insights.",
-            technologies: ["React", "Chart.js", "Python", "PostgreSQL", "Redis"],
-            link: "#"
-        },
-        {
-            title: "Healthcare Management System",
-            category: "Enterprise Solution",
-            description: "HIPAA-compliant healthcare platform managing patient records, appointments, and billing. Integrated with SMS notifications and automated report generation.",
-            technologies: ["Angular", "ASP.NET Core", "SQL Server", "Azure", "Twilio"],
-            link: "#"
-        },
-        {
-            title: "Mobile E-Learning App",
-            category: "Mobile Application",
-            description: "Cross-platform learning platform with video streaming, interactive quizzes, and progress tracking. 50K+ downloads with 4.8-star rating on app stores.",
-            technologies: ["React Native", "Firebase", "Node.js", "Redux"],
-            link: "#"
-        },
-        {
-            title: "AI-Powered Chat Assistant",
-            category: "AI / ML Application",
-            description: "Intelligent chatbot for customer support with NLP capabilities. Integrated with OpenAI API, handles 10K+ conversations monthly with 85% accuracy.",
-            technologies: ["Python", "Flask", "OpenAI API", "TensorFlow", "PostgreSQL"],
-            link: "#"
+            institution: "Trust Academy",
+            year: "June 2017 — June 2023",
+            details: "Gained hands-on training and a solid academic foundation in digital systems, signal processing and telecoms switching."
         }
     ],
     contact: {
-        email: "bleigh.bande@example.com",
-        phone: "+1 (555) 123-4567",
-        location: "Zimbabwe",
+        email: "bleighbande@gmail.com",
+        phone: "0776688563",
+        location: "Gweru, Zimbabwe",
         linkedin: "https://linkedin.com/in/bleighbande",
         github: "https://github.com/bleighbande"
-    }
+    },
+    github: {
+        username: "bleighbande"
+    },
+    references: [
+        {
+            name: "Mr R. Takavada",
+            role: "Manager — Parirenyatwa Group Of Hospitals",
+            email: "Takavadareas@gmail.com",
+            phone: "0773530539"
+        }
+    ]
 };
 
 // ===== DOM Ready =====
@@ -149,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     populateSkills();
     populateExperience();
     populateEducation();
-    populateProjects();
     populateContact();
     populateFooter();
     setupNavigation();
@@ -157,7 +125,119 @@ document.addEventListener('DOMContentLoaded', () => {
     setupScrollReveal();
     setupCounters();
     setupFormValidation();
+    initTypedJS();
+    fetchGitHubProjects();
 });
+
+// ===== Typed.js Hero Animation =====
+function initTypedJS() {
+    const el = document.getElementById('heroSubtitle');
+    if (!el || typeof Typed === 'undefined') return;
+    
+    el.textContent = '';
+    new Typed('#heroSubtitle', {
+        strings: portfolioData.profile.titles,
+        typeSpeed: 50,
+        backSpeed: 30,
+        backDelay: 2000,
+        startDelay: 500,
+        loop: true,
+        showCursor: true,
+        cursorChar: '|'
+    });
+}
+
+// ===== GitHub Projects Fetch =====
+async function fetchGitHubProjects() {
+    const grid = document.getElementById('projectsGrid');
+    if (!grid) return;
+
+    const username = portfolioData.github.username;
+    grid.innerHTML = `
+        <div class="loading-state" style="grid-column:1/-1;text-align:center;padding:3rem;">
+            <span class="material-symbols-outlined" style="font-size:2rem;color:var(--accent);animation:spin 1s linear infinite;">progress_activity</span>
+            <p style="margin-top:1rem;color:var(--text-muted);">Loading projects from GitHub...</p>
+        </div>`;
+
+    try {
+        const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=12&type=owner`);
+        if (!res.ok) throw new Error('GitHub API error');
+        const repos = await res.json();
+
+        // Filter out forks and empty repos, prioritise those with descriptions
+        const filtered = repos
+            .filter(r => !r.fork)
+            .sort((a, b) => (b.stargazers_count + b.watchers_count) - (a.stargazers_count + a.watchers_count));
+
+        if (filtered.length === 0) {
+            grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">No public repositories found.</p>';
+            return;
+        }
+
+        const colors = {
+            'JavaScript': '#f7df1e', 'Python': '#3572A5', 'HTML': '#e34c26',
+            'CSS': '#563d7c', 'TypeScript': '#3178c6', 'Java': '#b07219',
+            'C': '#555555', 'C++': '#f34b7d', 'Shell': '#89e051',
+            'Jupyter Notebook': '#DA5B0B', 'Vue': '#41b883', 'PHP': '#4F5D95'
+        };
+
+        grid.innerHTML = filtered.map(repo => `
+            <div class="project-card">
+                <div class="project-header">
+                    <p class="project-category">
+                        ${repo.language ? `<span class="lang-dot" style="background:${colors[repo.language] || 'var(--accent)'}"></span> ${repo.language}` : 'Repository'}
+                    </p>
+                    <h3>${repo.name.replace(/-/g, ' ').replace(/_/g, ' ')}</h3>
+                </div>
+                <div class="project-body">
+                    <p class="project-description">${repo.description || 'No description provided.'}</p>
+                    <div class="project-tech">
+                        ${repo.topics?.map(t => `<span class="tech-badge">${t}</span>`).join('') || ''}
+                        ${repo.stargazers_count ? `<span class="tech-badge">⭐ ${repo.stargazers_count}</span>` : ''}
+                        ${repo.forks_count ? `<span class="tech-badge">🍴 ${repo.forks_count}</span>` : ''}
+                    </div>
+                    <div class="project-links">
+                        <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link">
+                            <span class="material-symbols-outlined">code</span>
+                            Source Code
+                        </a>
+                        ${repo.homepage ? `
+                            <a href="${repo.homepage}" target="_blank" rel="noopener noreferrer" class="project-link">
+                                <span class="material-symbols-outlined">open_in_new</span>
+                                Live Demo
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        // Re-apply scroll reveal to new cards
+        requestAnimationFrame(() => {
+            grid.querySelectorAll('.project-card').forEach(el => {
+                el.classList.add('reveal');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            observer.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.1 });
+                observer.observe(el);
+            });
+        });
+
+    } catch (err) {
+        console.warn('GitHub fetch failed:', err);
+        grid.innerHTML = `
+            <p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">
+                <span class="material-symbols-outlined" style="vertical-align:middle;">cloud_off</span>
+                Could not load GitHub projects. 
+                <a href="https://github.com/${username}" target="_blank" style="color:var(--accent);">View on GitHub →</a>
+            </p>`;
+    }
+}
 
 // ===== Navigation =====
 function setupNavigation() {
@@ -165,7 +245,6 @@ function setupNavigation() {
     const navMenu = document.getElementById('navMenu');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Hamburger toggle
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', () => {
             const isOpen = navMenu.classList.toggle('active');
@@ -174,7 +253,6 @@ function setupNavigation() {
         });
     }
 
-    // Smooth scroll + active state
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
@@ -184,7 +262,6 @@ function setupNavigation() {
                 target.scrollIntoView({ behavior: 'smooth' });
                 navLinks.forEach(l => l.classList.remove('active'));
                 link.classList.add('active');
-                // Close mobile menu
                 if (navMenu) navMenu.classList.remove('active');
                 if (hamburger) {
                     hamburger.classList.remove('active');
@@ -194,7 +271,6 @@ function setupNavigation() {
         });
     });
 
-    // Update active link on scroll
     const sections = document.querySelectorAll('section[id]');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -205,17 +281,11 @@ function setupNavigation() {
             }
         });
     }, { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' });
-
     sections.forEach(s => observer.observe(s));
 
-    // Navbar background on scroll
     const navbar = document.querySelector('.navbar');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            navbar.style.borderBottomColor = 'var(--border-hover)';
-        } else {
-            navbar.style.borderBottomColor = 'var(--border)';
-        }
+        navbar.style.borderBottomColor = window.scrollY > 50 ? 'var(--border-hover)' : 'var(--border)';
     }, { passive: true });
 }
 
@@ -249,7 +319,7 @@ function setupCounters() {
     const counters = [
         { el: document.getElementById('statsProjects'), target: portfolioData.stats.projects, suffix: '+' },
         { el: document.getElementById('statsExperience'), target: portfolioData.stats.experience, suffix: '+' },
-        { el: document.getElementById('statsClients'), target: portfolioData.stats.clients, suffix: '+' },
+        { el: document.getElementById('statsClients'), target: portfolioData.stats.skills, suffix: '+' },
         { el: document.getElementById('statsCerts'), target: portfolioData.stats.certifications, suffix: '' },
     ];
 
@@ -272,30 +342,23 @@ function animateCounter(el, target, suffix) {
     const increment = target / 40;
     const timer = setInterval(() => {
         current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
+        if (current >= target) { current = target; clearInterval(timer); }
         el.textContent = Math.floor(current) + suffix;
     }, 30);
 }
 
 // ===== Scroll Reveal =====
 function setupScrollReveal() {
-    // Small delay to allow DOM to be populated
     requestAnimationFrame(() => {
         const reveals = document.querySelectorAll(
-            '.skill-card, .project-card, .education-card, .timeline-item, .highlight-card, .contact-item, .about-text'
+            '.skill-card, .education-card, .timeline-item, .highlight-card, .contact-item, .about-text'
         );
         reveals.forEach(el => el.classList.add('reveal'));
 
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, i) => {
                 if (entry.isIntersecting) {
-                    // Stagger the animation
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, i * 80);
+                    setTimeout(() => entry.target.classList.add('visible'), i * 80);
                     observer.unobserve(entry.target);
                 }
             });
@@ -343,9 +406,7 @@ function populateSkills() {
                 <h3>${group.category}</h3>
             </div>
             <div class="skill-list">
-                ${group.items.map(skill => `
-                    <span class="skill-tag">${skill}</span>
-                `).join('')}
+                ${group.items.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
             </div>
         </div>
     `).join('');
@@ -395,33 +456,6 @@ function populateEducation() {
                     ${edu.year}
                 </p>
                 <p class="education-details">${edu.details}</p>
-            </div>
-        </div>
-    `).join('');
-}
-
-// ===== Populate Projects =====
-function populateProjects() {
-    const grid = document.getElementById('projectsGrid');
-    if (!grid) return;
-
-    grid.innerHTML = portfolioData.projects.map(proj => `
-        <div class="project-card">
-            <div class="project-header">
-                <p class="project-category">${proj.category}</p>
-                <h3>${proj.title}</h3>
-            </div>
-            <div class="project-body">
-                <p class="project-description">${proj.description}</p>
-                <div class="project-tech">
-                    ${proj.technologies.map(t => `<span class="tech-badge">${t}</span>`).join('')}
-                </div>
-                <div class="project-links">
-                    <a href="${proj.link}" class="project-link">
-                        <span class="material-symbols-outlined">open_in_new</span>
-                        View Project
-                    </a>
-                </div>
             </div>
         </div>
     `).join('');
@@ -495,36 +529,25 @@ function setupFormValidation() {
 
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-
         const name = document.getElementById('contactName');
         const email = document.getElementById('contactEmail');
         const message = document.getElementById('contactMessage');
         const btn = document.getElementById('submitBtn');
 
-        // Simple validation
         let valid = true;
         [name, email, message].forEach(input => {
-            if (!input.value.trim()) {
-                input.style.borderColor = '#ef4444';
-                valid = false;
-            } else {
-                input.style.borderColor = '';
-            }
+            if (!input.value.trim()) { input.style.borderColor = '#ef4444'; valid = false; }
+            else { input.style.borderColor = ''; }
         });
-
         if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-            email.style.borderColor = '#ef4444';
-            valid = false;
+            email.style.borderColor = '#ef4444'; valid = false;
         }
-
         if (!valid) return;
 
-        // Success feedback
         const originalHTML = btn.innerHTML;
         btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Sent!';
         btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
         btn.disabled = true;
-
         setTimeout(() => {
             btn.innerHTML = originalHTML;
             btn.style.background = '';
@@ -533,13 +556,8 @@ function setupFormValidation() {
         }, 2500);
     });
 
-    // Clear error on input
     ['contactName', 'contactEmail', 'contactMessage'].forEach(id => {
         const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('input', () => {
-                el.style.borderColor = '';
-            });
-        }
+        if (el) el.addEventListener('input', () => { el.style.borderColor = ''; });
     });
 }
