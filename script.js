@@ -331,8 +331,8 @@ function setupCounters() {
     const counters = [
         { el: document.getElementById('statsProjects'), target: portfolioData.stats.projects, suffix: '+' },
         { el: document.getElementById('statsExperience'), target: portfolioData.stats.experience, suffix: '+' },
-        { el: document.getElementById('statsClients'), target: portfolioData.stats.skills, suffix: '+' },
-        { el: document.getElementById('statsCerts'), target: portfolioData.stats.certifications, suffix: '' },
+        { el: document.getElementById('statsSkills'), target: portfolioData.stats.skills, suffix: '+' },
+        { el: document.getElementById('statsDiplomas'), target: portfolioData.stats.certifications, suffix: '' },
     ];
 
     const observer = new IntersectionObserver((entries) => {

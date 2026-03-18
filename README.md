@@ -1,176 +1,97 @@
-# Professional Portfolio Website
+# Professional Portfolio — Bleigh T.J Bande
 
-A modern, fully responsive portfolio website built with HTML5, CSS3, and vanilla JavaScript. Features a professional grey theme with dynamic content rendering and smooth animations.
+A premium, high-performance portfolio website built for modern web standards. Features a sleek dark-first design, real-time GitHub project integration, and automated contact notifications via EmailJS.
 
-## Features
+## 🚀 Live Demos
+- **GitHub Pages**: [https://bleighbande.github.io/portfolio/](https://bleighbande.github.io/portfolio/)
+- **Vercel**: (Link generated upon deployment)
 
-### 🎨 Design & Aesthetics
-- **Modern Grey Theme**: Professional color scheme with primary color #2c3e50 and accent color #3498db
-- **Fully Responsive**: Mobile-first design that works seamlessly on all devices
-- **Smooth Animations**: Slide-in animations, hover effects, and scroll animations
-- **Professional Layout**: Clean, organized sections with proper spacing
+## ✨ Core Features
 
-### ✨ Key Sections
+### 🎨 Premium Design & UX
+- **Dark-First Aesthetic**: Modern, sleek professional theme with glassmorphism, gradient accents, and neon highlights.
+- **Material 3 Icons**: Full integration of Google's Material Symbols (Outlined) for a consistent, modern look.
+- **Micro-Animations**: Staggered scroll-reveal effects, animated stat counters, and smooth layout transitions.
+- **Dynamic Hero**: Powered by **Typed.js**, cycling through professional roles with a typewriter effect.
+- **Theme Perspective**: Built-in Light/Dark mode toggle with system persistence.
 
-1. **Navigation Bar**
-   - Sticky navigation with active link highlighting
-   - Mobile hamburger menu for smaller screens
-   - Smooth scrolling to sections
+### 📊 Real-Time Data Integration
+- **GitHub API**: Automatically fetches and displays your public repositories.
+  - Shows language-specific color dots.
+  - Displays repository topics, stars, and forks.
+  - Dynamic "Live Demo" links for repositories with a homepage URL.
+- **Single Source of Truth**: All website content is driven by a single `portfolioData` object in `script.js`. No more hunting through HTML to update your CV.
 
-2. **Hero Section**
-   - Impressive landing page with gradient background
-   - Statistics cards showing key metrics (15+ projects, 8+ years experience, etc.)
-   - Call-to-action buttons
-   - Animated scroll indicator
+### ✉️ Functional Contact System
+- **EmailJS Integration**: Sends form submissions directly to your email from the browser (no backend required).
+- **Auto-Timestamps**: Automatically captures the submission date and time for your records.
+- **Validation**: Comprehensive client-side validation with real-time feedback.
+- **Mailto Fallback**: Robust fallback to standard email clients if the API is unconfigured.
 
-3. **About Section**
-   - Professional summary and introduction
+### 🔍 SEO & Discoverability
+- **Semantic HTML5**: Native ARIA roles and accessibility labels for WCAG compliance.
+- **JSON-LD Schema**: Structured data (`Person` schema) for better search engine indexing.
+- **Meta Tags**: Full Open Graph (OG) and Twitter Card support for social sharing.
+- **Crawler Ready**: Includes `robots.txt` and `sitemap.xml`.
 
-4. **Skills Section**
-   - Organized by categories (Languages, Frontend, Backend, Database & Cloud, Tools)
-   - Interactive skill cards with hover effects
-   - 5 skill categories with 30+ technologies
+## 🛠️ Technology Stack
+- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+)
+- **Icons**: Material Symbols (Google Fonts)
+- **Typography**: Inter (Google Fonts)
+- **Animations**: Typed.js, CSS Keyframes, Intersection Observer API
+- **APIs**: GitHub REST API, EmailJS SDK
 
-5. **Experience Section**
-   - Timeline view of work history
-   - Visual timeline with dots and connecting lines
-   - Detailed job descriptions
-
-6. **Education Section**
-   - Academic credentials and certifications
-   - Degree details with years
-   - Institution information
-
-7. **Projects Section**
-   - 6 featured projects
-   - Project cards with descriptions
-   - Technology stacks for each project
-   - Links to project details
-   - Hover animations and effects
-
-8. **Contact Section**
-   - Contact information display
-   - Contact form with validation
-   - Email, phone, location, and social media links
-
-## File Structure
-
+## 📁 File Structure
 ```
 portfolio/
-├── index.html       # Main HTML file with semantic structure
-├── styles.css       # Complete CSS with responsive design
-├── script.js        # JavaScript for dynamic content and interactivity
-└── README.md        # This file
+├── .github/workflows/   # GitHub Actions (Auto-deploy to Pages)
+├── index.html           # Main entry point (SEO & Structure)
+├── styles.css           # Design tokens, themes, & animations
+├── script.js            # Data-driven logic & API integrations
+├── vercel.json          # Deployment config for Vercel
+├── robots.txt           # SEO crawler directions
+├── sitemap.xml          # Search engine map
+└── Bleigh...CV.pdf      # Downloadable resume
 ```
 
-## How to Use
+## ⚙️ How to Customize
 
-### 1. Edit Portfolio Data
-Open `script.js` and modify the `portfolioData` object:
-
+### 1. Update Your Data
+Open `script.js` and edit the `portfolioData` object. This controls almost everything on the site:
 ```javascript
 const portfolioData = {
     profile: {
         name: "Your Name",
-        title: "Your Title",
-        email: "your.email@example.com",
-        // ... more details
+        titles: ["Developer", "Engineer"],
+        // ...
     },
-    skills: [ /* your skills */ ],
-    experience: [ /* your experience */ ],
-    education: [ /* your education */ ],
-    projects: [ /* your projects */ ],
-    contact: { /* your contact info */ }
+    // ... update stats, skills, experience, education
 };
 ```
 
-### 2. Update Statistics
-Modify the `stats` object in `portfolioData`:
+### 2. Configure EmailJS
+To receive emails directly:
+1. Sign up at [emailjs.com](https://www.emailjs.com).
+2. Get your Service ID, Template ID, and Public Key.
+3. Paste them into the `emailjs` block in `script.js`.
 
-```javascript
-stats: {
-    projects: "15+",
-    experience: "8+",
-    clients: "20+",
-    certifications: "5"
-}
-```
+### 3. GitHub Projects
+Change the `github.username` in `script.js` to your own username to fetch your repositories.
 
-### 3. Customize Colors
-Edit CSS variables in `styles.css`:
+## 🚢 Deployment
 
-```css
-:root {
-    --primary-color: #2c3e50;
-    --secondary-color: #34495e;
-    --accent-color: #3498db;
-    /* ... more variables */
-}
-```
+### GitHub Pages
+1. Push this code to a new GitHub repository.
+2. Go to **Settings > Pages**.
+3. Set Build and deployment to **GitHub Actions**.
+4. The site will deploy automatically.
 
-## Technologies Used
+### Vercel
+1. Import your repository at [vercel.com/new](https://vercel.com/new).
+2. No configuration required — `vercel.json` handles everything.
 
-- **HTML5**: Semantic markup
-- **CSS3**: Flexbox, Grid, Animations, Media Queries
-- **JavaScript**: Vanilla JS for DOM manipulation and interactivity
-- **Responsive Design**: Mobile-first approach with breakpoints at 768px and 480px
-
-## Browser Support
-
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## Dynamic Features
-
-✅ **Automatic Content Population**: All sections populate from the `portfolioData` object
-✅ **Active Link Highlighting**: Navigation links highlight based on scroll position
-✅ **Form Validation**: Contact form validates input before submission
-✅ **Smooth Scrolling**: All navigation links use smooth scroll behavior
-✅ **Intersection Observer**: Elements animate in as they come into view
-✅ **Mobile Navigation**: Hamburger menu for mobile devices
-✅ **Hover Effects**: Interactive cards and buttons with visual feedback
-
-## Customization Tips
-
-### Colors
-- Change gradient colors in `.hero` section
-- Modify accent color for links and highlights
-- Update card backgrounds in skill and project sections
-
-### Content
-- Add more skills or skill categories
-- Include additional projects
-- Update experience entries with your history
-- Add certifications to education section
-
-### Sections
-- Hide sections by removing them from HTML
-- Reorder sections by moving them in HTML
-- Add new sections following the same structure
-
-## Performance
-
-- Lightweight: No external dependencies
-- Fast loading: Minimal file sizes
-- Optimized: CSS animations use GPU acceleration
-- SEO-friendly: Semantic HTML structure
-
-## Future Enhancements
-
-- Add dark mode toggle
-- Implement project filtering
-- Add blog section
-- Integrate with email service for contact form
-- Add testimonials section
-- Implement search functionality
-
-## License
-
-Feel free to use and customize this portfolio for your personal or professional use.
+## 📜 License
+This project is open-source. Feel free to use and adapt it for your own portfolio.
 
 ---
-
-**Created with ❤️ - Your Professional Portfolio**
+Created by **Bleigh T.J Bande** with modern engineering in mind.
