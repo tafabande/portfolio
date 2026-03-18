@@ -102,6 +102,18 @@ const portfolioData = {
     github: {
         username: "bleighbande"
     },
+    // ─── EmailJS Config ───────────────────────────────────────────
+    // Sign up at https://www.emailjs.com (free: 200 emails/month)
+    // 1. Create an Email Service  → paste the Service ID below
+    // 2. Create an Email Template → paste the Template ID below
+    //    Template variables: {{name}}, {{email}}, {{message}}
+    // 3. Copy your Public Key from Account → General
+    // ──────────────────────────────────────────────────────────────
+    emailjs: {
+        publicKey:  "YOUR_PUBLIC_KEY",   // ← replace
+        serviceId:  "YOUR_SERVICE_ID",   // ← replace
+        templateId: "YOUR_TEMPLATE_ID"   // ← replace
+    },
     references: [
         {
             name: "Mr R. Takavada",
@@ -527,33 +539,71 @@ function setupFormValidation() {
     const form = document.getElementById('contactForm');
     if (!form) return;
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const name = document.getElementById('contactName');
-        const email = document.getElementById('contactEmail');
-        const message = document.getElementById('contactMessage');
-        const btn = document.getElementById('submitBtn');
+    // Initialise EmailJS with your public key
+    const ejs = portfolioData.emailjs;
+    if (typeof emailjs !== 'undefined' && ejs.publicKey !== 'YOUR_PUBLIC_KEY') {
+        emailjs.init({ publicKey: ejs.publicKey });
+    }
 
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const nameEl    = document.getElementById('contactName');
+        const emailEl   = document.getElementById('contactEmail');
+        const messageEl = document.getElementById('contactMessage');
+        const btn       = document.getElementById('submitBtn');
+
+        // ── Client-side validation ──
         let valid = true;
-        [name, email, message].forEach(input => {
+        [nameEl, emailEl, messageEl].forEach(input => {
             if (!input.value.trim()) { input.style.borderColor = '#ef4444'; valid = false; }
             else { input.style.borderColor = ''; }
         });
-        if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
-            email.style.borderColor = '#ef4444'; valid = false;
+        if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+            emailEl.style.borderColor = '#ef4444'; valid = false;
         }
         if (!valid) return;
 
         const originalHTML = btn.innerHTML;
-        btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Sent!';
-        btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-        btn.disabled = true;
-        setTimeout(() => {
-            btn.innerHTML = originalHTML;
-            btn.style.background = '';
-            btn.disabled = false;
-            form.reset();
-        }, 2500);
+
+        // ── Send via EmailJS ──
+        if (typeof emailjs !== 'undefined' && ejs.publicKey !== 'YOUR_PUBLIC_KEY') {
+            btn.innerHTML = '<span class="material-symbols-outlined">hourglass_top</span> Sending...';
+            btn.disabled = true;
+
+            try {
+                await emailjs.sendForm(ejs.serviceId, ejs.templateId, form);
+                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Sent!';
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                form.reset();
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 3000);
+            } catch (err) {
+                console.error('EmailJS error:', err);
+                btn.innerHTML = '<span class="material-symbols-outlined">error</span> Failed — try again';
+                btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.background = '';
+                    btn.disabled = false;
+                }, 3000);
+            }
+        } else {
+            // Fallback: open mailto link if EmailJS isn't configured
+            const subject = encodeURIComponent('Portfolio Contact from ' + nameEl.value);
+            const body = encodeURIComponent(
+                'Name: ' + nameEl.value + '\nEmail: ' + emailEl.value + '\n\n' + messageEl.value
+            );
+            window.open(`mailto:${portfolioData.contact.email}?subject=${subject}&body=${body}`, '_blank');
+            btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Opening mail...';
+            btn.disabled = true;
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }, 2500);
+        }
     });
 
     ['contactName', 'contactEmail', 'contactMessage'].forEach(id => {
