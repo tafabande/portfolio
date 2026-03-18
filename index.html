@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bleigh Bande — IT Professional & Full Stack Developer</title>
+    <meta name="description" content="Portfolio of Bleigh Bande — experienced IT professional and full-stack developer building innovative digital solutions in Zimbabwe.">
+    <meta name="author" content="Bleigh Bande">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Bleigh Bande — IT Professional & Full Stack Developer">
+    <meta property="og:description" content="Portfolio of Bleigh Bande — building innovative digital solutions that transform businesses.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bleighbande.github.io/portfolio/">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bleigh Bande — Full Stack Developer">
+    <meta name="twitter:description" content="Experienced IT pro building innovative digital solutions.">
+
+    <!-- Preconnect & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Bleigh Bande",
+        "jobTitle": "Full Stack Developer",
+        "url": "https://bleighbande.github.io/portfolio/",
+        "sameAs": [
+            "https://linkedin.com/in/bleighbande",
+            "https://github.com/bleighbande"
+        ],
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "ZW"
+        }
+    }
+    </script>
+</head>
+<body>
+    <!-- Skip to Content (a11y) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Navigation -->
+    <nav class="navbar" role="navigation" aria-label="Main navigation">
+        <div class="container nav-container">
+            <a href="#home" class="nav-logo" aria-label="Bleigh Bande — Home">
+                <span class="logo-icon material-symbols-outlined">terminal</span>
+                <span class="logo-text">BB</span>
+            </a>
+            <ul class="nav-menu" id="navMenu" role="menubar">
+                <li role="none"><a href="#home" class="nav-link active" role="menuitem">Home</a></li>
+                <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
+                <li role="none"><a href="#skills" class="nav-link" role="menuitem">Skills</a></li>
+                <li role="none"><a href="#experience" class="nav-link" role="menuitem">Experience</a></li>
+                <li role="none"><a href="#education" class="nav-link" role="menuitem">Education</a></li>
+                <li role="none"><a href="#projects" class="nav-link" role="menuitem">Projects</a></li>
+                <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+                <button class="hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false" aria-controls="navMenu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-bg-shapes" aria-hidden="true">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+            </div>
+            <div class="container hero-content">
+                <div class="hero-text">
+                    <p class="hero-greeting">Hello, I'm</p>
+                    <h1 class="hero-title">Bleigh Bande</h1>
+                    <p class="hero-subtitle" id="heroSubtitle">IT Professional &amp; Full Stack Developer</p>
+                    <p class="hero-description">I design and build scalable digital products that drive real business growth — from concept to deployment.</p>
+                    <div class="hero-buttons">
+                        <a href="#contact" class="btn btn-primary">
+                            <span class="material-symbols-outlined">mail</span>
+                            Get In Touch
+                        </a>
+                        <a href="#projects" class="btn btn-outline">
+                            <span class="material-symbols-outlined">work</span>
+                            View My Work
+                        </a>
+                        <a href="Bleigh Bande IT CV .pdf" download class="btn btn-ghost">
+                            <span class="material-symbols-outlined">download</span>
+                            Download CV
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <span class="material-symbols-outlined stat-icon">rocket_launch</span>
+                        <div class="stat-number" id="statsProjects">0</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="material-symbols-outlined stat-icon">calendar_month</span>
+                        <div class="stat-number" id="statsExperience">0</div>
+                        <div class="stat-label">Years Exp.</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="material-symbols-outlined stat-icon">group</span>
+                        <div class="stat-number" id="statsClients">0</div>
+                        <div class="stat-label">Clients</div>
+                    </div>
+                    <div class="stat-card">
+                        <span class="material-symbols-outlined stat-icon">verified</span>
+                        <div class="stat-number" id="statsCerts">0</div>
+                        <div class="stat-label">Certs</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-scroll" aria-hidden="true">
+                <span class="material-symbols-outlined scroll-arrow">keyboard_arrow_down</span>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><span class="material-symbols-outlined">person</span> About Me</span>
+                    <h2 class="section-title">Who I Am</h2>
+                </div>
+                <div class="about-content">
+                    <div class="about-text" id="aboutText">
+                        <!-- populated by JS -->
+                    </div>
+                    <div class="about-highlights" id="aboutHighlights">
+                        <!-- populated by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><span class="material-symbols-outlined">code</span> Expertise</span>
+                    <h2 class="section-title">Skills & Technologies</h2>
+                </div>
+                <div class="skills-grid" id="skillsGrid">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><span class="material-symbols-outlined">work_history</span> Career</span>
+                    <h2 class="section-title">Experience</h2>
+                </div>
+                <div class="timeline" id="experienceTimeline">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><span class="material-symbols-outlined">school</span> Learning</span>
+                    <h2 class="section-title">Education & Certifications</h2>
+                </div>
+                <div class="education-grid" id="educationList">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag"><span class="material-symbols-outlined">deployed_code</span> Portfolio</span>
+                    <h2 class="section-title">Featured Projects</h2>
+                </div>
+                <div class="projects-grid" id="projectsGrid">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section section-dark">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag light"><span class="material-symbols-outlined">chat</span> Let's Talk</span>
+                    <h2 class="section-title">Get In Touch</h2>
+                </div>
+                <div class="contact-content">
+                    <div class="contact-info" id="contactInfo">
+                        <!-- populated by JS -->
+                    </div>
+                    <form class="contact-form" id="contactForm" novalidate>
+                        <div class="form-group">
+                            <label for="contactName" class="sr-only">Your Name</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined input-icon">person</span>
+                                <input type="text" id="contactName" name="name" placeholder="Your Name" required autocomplete="name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactEmail" class="sr-only">Your Email</label>
+                            <div class="input-wrapper">
+                                <span class="material-symbols-outlined input-icon">email</span>
+                                <input type="email" id="contactEmail" name="email" placeholder="Your Email" required autocomplete="email">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactMessage" class="sr-only">Your Message</label>
+                            <div class="input-wrapper textarea-wrapper">
+                                <span class="material-symbols-outlined input-icon">edit_note</span>
+                                <textarea id="contactMessage" name="message" placeholder="Your Message" rows="5" required></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit" id="submitBtn">
+                            <span class="material-symbols-outlined">send</span>
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer" role="contentinfo">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <span class="material-symbols-outlined">terminal</span>
+                <span>Bleigh Bande</span>
+            </div>
+            <div class="footer-links" id="footerLinks">
+                <!-- populated by JS -->
+            </div>
+            <p class="footer-copy">&copy; 2024 Bleigh Bande. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
