@@ -110,9 +110,9 @@ const portfolioData = {
     // 3. Copy your Public Key from Account → General
     // ──────────────────────────────────────────────────────────────
     emailjs: {
-        publicKey:  "YOUR_PUBLIC_KEY",   // ← replace
-        serviceId:  "YOUR_SERVICE_ID",   // ← replace
-        templateId: "YOUR_TEMPLATE_ID"   // ← replace
+        publicKey:  "iGpebApjTDVfppOM0",   // Bleigh's EmailJS public key
+        serviceId:  "service_q7qmugv",
+        templateId: "iGpebApjTDVfppOM0"
     },
     references: [
         {
