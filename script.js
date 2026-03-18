@@ -112,7 +112,7 @@ const portfolioData = {
     emailjs: {
         publicKey:  "iGpebApjTDVfppOM0",   // Bleigh's EmailJS public key
         serviceId:  "service_q7qmugv",
-        templateId: "iGpebApjTDVfppOM0"
+        templateId: "template_iqwypms"
     },
     references: [
         {
@@ -551,6 +551,13 @@ function setupFormValidation() {
         const emailEl   = document.getElementById('contactEmail');
         const messageEl = document.getElementById('contactMessage');
         const btn       = document.getElementById('submitBtn');
+
+        // Auto-fill hidden date/time fields for the email template
+        const now = new Date();
+        const dateField = document.getElementById('contactDate');
+        const timeField = document.getElementById('contactTime');
+        if (dateField) dateField.value = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+        if (timeField) timeField.value = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
         // ── Client-side validation ──
         let valid = true;
