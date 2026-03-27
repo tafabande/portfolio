@@ -100,7 +100,7 @@ const portfolioData = {
         github: "https://github.com/bleighbande"
     },
     github: {
-        username: "bleighbande"
+        username: "tafabande"
     },
     // ─── EmailJS Config ───────────────────────────────────────────
     // Sign up at https://www.emailjs.com (free: 200 emails/month)

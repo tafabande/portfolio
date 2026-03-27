@@ -3,7 +3,7 @@
 A premium, high-performance portfolio website built for modern web standards. Features a sleek dark-first design, real-time GitHub project integration, and automated contact notifications via EmailJS.
 
 ## 🚀 Live Demos
-- **GitHub Pages**: [https://bleighbande.github.io/portfolio/](https://bleighbande.github.io/portfolio/)
+- **GitHub Pages**: [https://tafabande.github.io/portfolio/](https://tafabande.github.io/portfolio/)
 - **Vercel**: (Link generated upon deployment)
 
 ## ✨ Core Features
