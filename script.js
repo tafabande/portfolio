@@ -138,6 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupCounters();
     setupFormValidation();
     initTypedJS();
+    setupHeadingTyping();
     fetchGitHubProjects();
     fetchLatestCV();
 });
@@ -157,6 +158,37 @@ function initTypedJS() {
         loop: true,
         showCursor: true,
         cursorChar: '|'
+    });
+}
+
+// ===== Section Heading Typing Animation =====
+function setupHeadingTyping() {
+    if (typeof Typed === 'undefined') return;
+    
+    const headings = document.querySelectorAll('.section-title');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.typedInit) {
+                entry.target.dataset.typedInit = "true";
+                const text = entry.target.dataset.text;
+                
+                new Typed(entry.target, {
+                    strings: [text],
+                    typeSpeed: 60,
+                    showCursor: true,
+                    cursorChar: '|'
+                });
+                
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { rootMargin: "0px 0px -100px 0px" });
+    
+    headings.forEach(h => {
+        // Save text and clear to prep for typing
+        h.dataset.text = h.textContent.trim();
+        h.textContent = '\u00A0'; // Non-breaking space to keep height
+        observer.observe(h);
     });
 }
 
@@ -248,10 +280,11 @@ async function fetchGitHubProjects() {
         }
     }
 
-    // Filter out forks and empty repos, prioritise those with descriptions
+    // Filter out forks, sort by stars+watchers, and limit to 5
     const filtered = repos
         .filter(r => !r.fork)
-        .sort((a, b) => (b.stargazers_count + b.watchers_count) - (a.stargazers_count + a.watchers_count));
+        .sort((a, b) => (b.stargazers_count + b.watchers_count) - (a.stargazers_count + a.watchers_count))
+        .slice(0, 5);
 
     if (filtered.length === 0) {
         grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">No public repositories found.</p>';
