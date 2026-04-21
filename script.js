@@ -139,6 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupFormValidation();
     initTypedJS();
     fetchGitHubProjects();
+    fetchLatestCV();
 });
 
 // ===== Typed.js Hero Animation =====
@@ -159,95 +160,158 @@ function initTypedJS() {
     });
 }
 
+// ===== Dynamic CV Fetch =====
+async function fetchLatestCV() {
+    const btn = document.getElementById('cvDownloadBtn');
+    if (!btn) return;
+    
+    try {
+        const username = portfolioData.github.username;
+        // Deduce repo name from URL or default to 'portfolio'
+        const pathSegments = window.location.pathname.split('/').filter(s => s);
+        const repo = pathSegments.length > 0 ? pathSegments[0] : 'portfolio';
+        
+        const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/`);
+        if (!res.ok) return;
+        
+        const files = await res.json();
+        const cvFiles = files.filter(f => 
+            f.name.toLowerCase().endsWith('.pdf') && 
+            (f.name.toLowerCase().includes('cv') || f.name.toLowerCase().includes('resume'))
+        );
+        
+        if (cvFiles.length > 0) {
+            // Sort to grab the latest/most relevant if there are multiple
+            cvFiles.sort((a, b) => b.name.localeCompare(a.name));
+            btn.href = cvFiles[0].download_url || cvFiles[0].path;
+            btn.download = cvFiles[0].name;
+        }
+    } catch (err) {
+        console.warn('Could not fetch latest CV dynamically:', err);
+    }
+}
+
 // ===== GitHub Projects Fetch =====
 async function fetchGitHubProjects() {
     const grid = document.getElementById('projectsGrid');
     if (!grid) return;
 
     const username = portfolioData.github.username;
+    const cacheKey = 'github_projects_cache';
+    const cacheTimeKey = 'github_projects_cache_time';
+    const cacheExpiry = 60 * 60 * 1000; // 1 hour
+
     grid.innerHTML = `
         <div class="loading-state" style="grid-column:1/-1;text-align:center;padding:3rem;">
             <span class="material-symbols-outlined" style="font-size:2rem;color:var(--accent);animation:spin 1s linear infinite;">progress_activity</span>
             <p style="margin-top:1rem;color:var(--text-muted);">Loading projects from GitHub...</p>
         </div>`;
 
+    let repos = [];
+    let usedCache = false;
+
     try {
-        const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=12&type=owner`);
-        if (!res.ok) throw new Error('GitHub API error');
-        const repos = await res.json();
+        const cachedTime = localStorage.getItem(cacheTimeKey);
+        const cachedData = localStorage.getItem(cacheKey);
 
-        // Filter out forks and empty repos, prioritise those with descriptions
-        const filtered = repos
-            .filter(r => !r.fork)
-            .sort((a, b) => (b.stargazers_count + b.watchers_count) - (a.stargazers_count + a.watchers_count));
-
-        if (filtered.length === 0) {
-            grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">No public repositories found.</p>';
-            return;
+        if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime)) < cacheExpiry) {
+            repos = JSON.parse(cachedData);
+            usedCache = true;
+        } else {
+            const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=12&type=owner`);
+            if (!res.ok) {
+                if (res.status === 403 || res.status === 429) {
+                    throw new Error('Rate limit exceeded');
+                }
+                throw new Error('GitHub API error');
+            }
+            repos = await res.json();
+            localStorage.setItem(cacheKey, JSON.stringify(repos));
+            localStorage.setItem(cacheTimeKey, Date.now().toString());
         }
-
-        const colors = {
-            'JavaScript': '#f7df1e', 'Python': '#3572A5', 'HTML': '#e34c26',
-            'CSS': '#563d7c', 'TypeScript': '#3178c6', 'Java': '#b07219',
-            'C': '#555555', 'C++': '#f34b7d', 'Shell': '#89e051',
-            'Jupyter Notebook': '#DA5B0B', 'Vue': '#41b883', 'PHP': '#4F5D95'
-        };
-
-        grid.innerHTML = filtered.map(repo => `
-            <div class="project-card">
-                <div class="project-header">
-                    <p class="project-category">
-                        ${repo.language ? `<span class="lang-dot" style="background:${colors[repo.language] || 'var(--accent)'}"></span> ${repo.language}` : 'Repository'}
-                    </p>
-                    <h3>${repo.name.replace(/-/g, ' ').replace(/_/g, ' ')}</h3>
-                </div>
-                <div class="project-body">
-                    <p class="project-description">${repo.description || 'No description provided.'}</p>
-                    <div class="project-tech">
-                        ${repo.topics?.map(t => `<span class="tech-badge">${t}</span>`).join('') || ''}
-                        ${repo.stargazers_count ? `<span class="tech-badge">⭐ ${repo.stargazers_count}</span>` : ''}
-                        ${repo.forks_count ? `<span class="tech-badge">🍴 ${repo.forks_count}</span>` : ''}
-                    </div>
-                    <div class="project-links">
-                        <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link">
-                            <span class="material-symbols-outlined">code</span>
-                            Source Code
-                        </a>
-                        ${repo.homepage ? `
-                            <a href="${repo.homepage}" target="_blank" rel="noopener noreferrer" class="project-link">
-                                <span class="material-symbols-outlined">open_in_new</span>
-                                Live Demo
-                            </a>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-        `).join('');
-
-        // Re-apply scroll reveal to new cards
-        requestAnimationFrame(() => {
-            grid.querySelectorAll('.project-card').forEach(el => {
-                el.classList.add('reveal');
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            entry.target.classList.add('visible');
-                            observer.unobserve(entry.target);
-                        }
-                    });
-                }, { threshold: 0.1 });
-                observer.observe(el);
-            });
-        });
-
     } catch (err) {
         console.warn('GitHub fetch failed:', err);
-        grid.innerHTML = `
-            <p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">
-                <span class="material-symbols-outlined" style="vertical-align:middle;">cloud_off</span>
-                Could not load GitHub projects. 
-                <a href="https://github.com/${username}" target="_blank" style="color:var(--accent);">View on GitHub →</a>
-            </p>`;
+        const cachedData = localStorage.getItem(cacheKey);
+        if (cachedData) {
+            repos = JSON.parse(cachedData);
+            usedCache = true;
+            showToast('Showing cached projects due to GitHub API limits.', 'info');
+        } else {
+            grid.innerHTML = `
+                <p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">
+                    <span class="material-symbols-outlined" style="vertical-align:middle;">cloud_off</span>
+                    Could not load GitHub projects. 
+                    <a href="https://github.com/${username}" target="_blank" style="color:var(--accent);">View on GitHub →</a>
+                </p>`;
+            showToast('Failed to load GitHub projects.', 'error');
+            return;
+        }
+    }
+
+    // Filter out forks and empty repos, prioritise those with descriptions
+    const filtered = repos
+        .filter(r => !r.fork)
+        .sort((a, b) => (b.stargazers_count + b.watchers_count) - (a.stargazers_count + a.watchers_count));
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">No public repositories found.</p>';
+        return;
+    }
+
+    const colors = {
+        'JavaScript': '#f7df1e', 'Python': '#3572A5', 'HTML': '#e34c26',
+        'CSS': '#563d7c', 'TypeScript': '#3178c6', 'Java': '#b07219',
+        'C': '#555555', 'C++': '#f34b7d', 'Shell': '#89e051',
+        'Jupyter Notebook': '#DA5B0B', 'Vue': '#41b883', 'PHP': '#4F5D95'
+    };
+
+    grid.innerHTML = filtered.map(repo => `
+        <div class="project-card reveal">
+            <div class="project-header">
+                <p class="project-category">
+                    ${repo.language ? `<span class="lang-dot" style="background:${colors[repo.language] || 'var(--accent)'}"></span> ${repo.language}` : 'Repository'}
+                </p>
+                <h3>${repo.name.replace(/-/g, ' ').replace(/_/g, ' ')}</h3>
+            </div>
+            <div class="project-body">
+                <p class="project-description">${repo.description || 'No description provided.'}</p>
+                <div class="project-tech">
+                    ${repo.topics?.map(t => `<span class="tech-badge">${t}</span>`).join('') || ''}
+                    ${repo.stargazers_count ? `<span class="tech-badge">⭐ ${repo.stargazers_count}</span>` : ''}
+                    ${repo.forks_count ? `<span class="tech-badge">🍴 ${repo.forks_count}</span>` : ''}
+                </div>
+                <div class="project-links">
+                    <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link">
+                        <span class="material-symbols-outlined">code</span>
+                        Source Code
+                    </a>
+                    ${repo.homepage ? `
+                        <a href="${repo.homepage}" target="_blank" rel="noopener noreferrer" class="project-link">
+                            <span class="material-symbols-outlined">open_in_new</span>
+                            Live Demo
+                        </a>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    // Re-apply scroll reveal to new cards with slight stagger
+    requestAnimationFrame(() => {
+        const cards = grid.querySelectorAll('.project-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, idx) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => entry.target.classList.add('visible'), idx * 50);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        cards.forEach(el => observer.observe(el));
+    });
+
+    if (!usedCache) {
+        showToast('Projects synchronised from GitHub.', 'success');
     }
 }
 
@@ -579,23 +643,19 @@ function setupFormValidation() {
 
             try {
                 await emailjs.sendForm(ejs.serviceId, ejs.templateId, form);
-                btn.innerHTML = '<span class="material-symbols-outlined">check_circle</span> Sent!';
-                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                showToast('Message sent successfully!', 'success');
                 form.reset();
                 setTimeout(() => {
                     btn.innerHTML = originalHTML;
-                    btn.style.background = '';
                     btn.disabled = false;
-                }, 3000);
+                }, 1000);
             } catch (err) {
                 console.error('EmailJS error:', err);
-                btn.innerHTML = '<span class="material-symbols-outlined">error</span> Failed — try again';
-                btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+                showToast('Failed to send message. Please try again.', 'error');
                 setTimeout(() => {
                     btn.innerHTML = originalHTML;
-                    btn.style.background = '';
                     btn.disabled = false;
-                }, 3000);
+                }, 1000);
             }
         } else {
             // Fallback: open mailto link if EmailJS isn't configured
@@ -617,4 +677,45 @@ function setupFormValidation() {
         const el = document.getElementById(id);
         if (el) el.addEventListener('input', () => { el.style.borderColor = ''; });
     });
+}
+
+// ===== Toast Alert System =====
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toastContainer');
+    if (!container) return;
+
+    const icons = {
+        'success': 'check_circle',
+        'error': 'error',
+        'info': 'info'
+    };
+
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.innerHTML = `
+        <span class="material-symbols-outlined toast-icon">${icons[type]}</span>
+        <div class="toast-content">${message}</div>
+        <button class="toast-close" aria-label="Close notification">
+            <span class="material-symbols-outlined" style="font-size:1.2rem;">close</span>
+        </button>
+    `;
+
+    container.appendChild(toast);
+
+    const closeBtn = toast.querySelector('.toast-close');
+    let timeoutId;
+
+    const closeToast = () => {
+        toast.classList.add('hiding');
+        toast.addEventListener('animationend', () => {
+            if (toast.parentNode) toast.remove();
+        });
+    };
+
+    closeBtn.addEventListener('click', () => {
+        clearTimeout(timeoutId);
+        closeToast();
+    });
+
+    timeoutId = setTimeout(closeToast, 4000);
 }

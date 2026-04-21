@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-
-Sitemap: https://bleighbande.github.io/portfolio/sitemap.xml
+Sitemap: https://tafabande.github.io/portfolio/sitemap.xml
