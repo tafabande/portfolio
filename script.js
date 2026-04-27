@@ -147,50 +147,71 @@ document.addEventListener('DOMContentLoaded', () => {
 function initTypedJS() {
     const el = document.getElementById('heroSubtitle');
     if (!el || typeof Typed === 'undefined') return;
-    
     el.textContent = '';
     new Typed('#heroSubtitle', {
         strings: portfolioData.profile.titles,
-        typeSpeed: 50,
-        backSpeed: 30,
-        backDelay: 2000,
-        startDelay: 500,
+        typeSpeed: 25,
+        backSpeed: 15,
+        backDelay: 1600,
+        startDelay: 300,
         loop: true,
         showCursor: true,
         cursorChar: '|'
     });
 }
 
-// ===== Section Heading Typing Animation =====
+// ===== Section Heading Typing Animation (restarts every time it enters view) =====
 function setupHeadingTyping() {
     if (typeof Typed === 'undefined') return;
-    
     const headings = document.querySelectorAll('.section-title');
+    const typedInstances = new Map();
+
+    function safeDestroy(h) {
+        if (typedInstances.has(h)) {
+            try { typedInstances.get(h).destroy(); } catch(e) {}
+            typedInstances.delete(h);
+        }
+        if (h.parentElement) {
+            h.parentElement.querySelectorAll('.typed-cursor').forEach(c => c.remove());
+        }
+    }
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting && !entry.target.dataset.typedInit) {
-                entry.target.dataset.typedInit = "true";
-                const text = entry.target.dataset.text;
-                
-                new Typed(entry.target, {
+            const h = entry.target;
+            const text = h.dataset.text;
+            if (entry.isIntersecting) {
+                safeDestroy(h);
+                h.innerHTML = '';
+                const t = new Typed(h, {
                     strings: [text],
-                    typeSpeed: 60,
+                    typeSpeed: 30,
                     showCursor: true,
-                    cursorChar: '|'
+                    cursorChar: '|',
+                    onComplete(self) {
+                        if (self.cursor) {
+                            self.cursor.style.transition = 'opacity 0.5s ease 1s';
+                            self.cursor.style.opacity = '0';
+                            setTimeout(() => { try { self.cursor.remove(); } catch(e) {} }, 1600);
+                        }
+                    }
                 });
-                
-                observer.unobserve(entry.target);
+                typedInstances.set(h, t);
+            } else {
+                // Reset when scrolled out — re-animates next scroll-in
+                safeDestroy(h);
+                h.textContent = '\u00A0';
             }
         });
-    }, { rootMargin: "0px 0px -100px 0px" });
-    
+    }, { rootMargin: '0px 0px -60px 0px', threshold: 0.15 });
+
     headings.forEach(h => {
-        // Save text and clear to prep for typing
         h.dataset.text = h.textContent.trim();
-        h.textContent = '\u00A0'; // Non-breaking space to keep height
+        h.textContent = '\u00A0';
         observer.observe(h);
     });
 }
+
 
 // ===== Dynamic CV Fetch =====
 async function fetchLatestCV() {
@@ -250,11 +271,10 @@ async function fetchGitHubProjects() {
             repos = JSON.parse(cachedData);
             usedCache = true;
         } else {
-            const res = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=12&type=owner`);
+            // Sort by push date (most recently updated), grab top 10 to filter forks from
+            const res = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&direction=desc&per_page=20&type=owner`);
             if (!res.ok) {
-                if (res.status === 403 || res.status === 429) {
-                    throw new Error('Rate limit exceeded');
-                }
+                if (res.status === 403 || res.status === 429) throw new Error('Rate limit exceeded');
                 throw new Error('GitHub API error');
             }
             repos = await res.json();
@@ -267,12 +287,12 @@ async function fetchGitHubProjects() {
         if (cachedData) {
             repos = JSON.parse(cachedData);
             usedCache = true;
-            showToast('Showing cached projects due to GitHub API limits.', 'info');
+            showToast('Showing cached projects — GitHub API limit reached.', 'info');
         } else {
             grid.innerHTML = `
                 <p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">
                     <span class="material-symbols-outlined" style="vertical-align:middle;">cloud_off</span>
-                    Could not load GitHub projects. 
+                    Could not load GitHub projects.
                     <a href="https://github.com/${username}" target="_blank" style="color:var(--accent);">View on GitHub →</a>
                 </p>`;
             showToast('Failed to load GitHub projects.', 'error');
@@ -280,10 +300,10 @@ async function fetchGitHubProjects() {
         }
     }
 
-    // Filter out forks, sort by stars+watchers, and limit to 5
+    // Show only the 5 most recently pushed non-fork repos
     const filtered = repos
         .filter(r => !r.fork)
-        .sort((a, b) => (b.stargazers_count + b.watchers_count) - (a.stargazers_count + a.watchers_count))
+        .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
         .slice(0, 5);
 
     if (filtered.length === 0) {
