@@ -1,0 +1,36 @@
+{
+  "name": "portfolio",
+  "version": "1.0.0",
+  "description": "Bleigh T.J Bande Portfolio - Telecommunications Engineer & Developer",
+  "main": "index.html",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "serve": "python3 -m http.server 8000",
+    "lint:html": "htmlhint *.html",
+    "lint:css": "stylelint *.css",
+    "lint:js": "eslint *.js"
+  },
+  "keywords": [
+    "portfolio",
+    "telecommunications",
+    "web-development",
+    "engineer"
+  ],
+  "author": "Bleigh T.J Bande <bleighbande@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tafabande/portfolio.git"
+  },
+  "homepage": "https://tafabande.github.io/portfolio/",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "eslint": "^8.55.0",
+    "htmlhint": "^1.1.4",
+    "stylelint": "^16.0.2",
+    "stylelint-config-standard": "^35.0.0"
+  }
+}

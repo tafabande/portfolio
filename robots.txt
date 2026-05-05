@@ -1,3 +1,10 @@
+# robots.txt for Bleigh T.J Bande Portfolio
+
 User-agent: *
 Allow: /
+Disallow: /node_modules/
+Disallow: /tests/
+Disallow: /.git/
+
+# Sitemap
 Sitemap: https://tafabande.github.io/portfolio/sitemap.xml

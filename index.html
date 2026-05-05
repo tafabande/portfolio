@@ -6,27 +6,22 @@
     <title>Bleigh T.J Bande — Telecom Engineer & Developer</title>
     <meta name="description" content="Portfolio of Bleigh T.J Bande — telecommunications engineer and developer from Gweru, Zimbabwe. Passionate about leveraging technology to solve real-world problems.">
     <meta name="author" content="Bleigh Bande">
-
-    <!-- Open Graph -->
     <meta property="og:title" content="Bleigh T.J Bande — Telecom Engineer & Developer">
     <meta property="og:description" content="Portfolio of Bleigh T.J Bande — telecom engineer and developer from Zimbabwe.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tafabande.github.io/portfolio/">
     <meta name="theme-color" content="#0a0a0f">
-
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Bleigh T.J Bande — Telecom Engineer & Developer">
     <meta name="twitter:description" content="Telecom engineer and developer from Gweru, Zimbabwe.">
-
-    <!-- Material Symbols -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://api.github.com">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
-
     <link rel="stylesheet" href="styles.css">
-
-    <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -46,11 +41,8 @@
     </script>
 </head>
 <body>
-    <!-- Skip to Content (a11y) -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
-
-    <!-- Navigation -->
-    <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <nav class="navbar" aria-label="Main navigation">
         <div class="container nav-container">
             <a href="#home" class="nav-logo" aria-label="Bleigh Bande — Home">
                 <div class="logo-avatar" aria-hidden="true">
@@ -65,6 +57,7 @@
                 <li role="none"><a href="#experience" class="nav-link" role="menuitem">Experience</a></li>
                 <li role="none"><a href="#education" class="nav-link" role="menuitem">Education</a></li>
                 <li role="none"><a href="#projects" class="nav-link" role="menuitem">Projects</a></li>
+                <li role="none"><a href="#testimonials" class="nav-link" role="menuitem">Testimonials</a></li>
                 <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
             </ul>
             <div class="nav-actions">
@@ -79,9 +72,7 @@
             </div>
         </div>
     </nav>
-
-    <main id="main-content">
-        <!-- Hero Section -->
+    <main id="main-content" role="main">
         <section id="home" class="hero">
             <div class="hero-bg-shapes" aria-hidden="true">
                 <div class="shape shape-1"></div>
@@ -90,10 +81,22 @@
             </div>
             <div class="container hero-content">
                 <div class="hero-text">
+                    <div class="hero-badge">
+                        <span class="status-indicator"></span>
+                        <span>Available for Opportunities</span>
+                    </div>
                     <p class="hero-greeting">Hello, I'm</p>
                     <h1 class="hero-title">Bleigh T.J Bande</h1>
                     <p class="hero-subtitle" id="heroSubtitle">Telecommunications Engineer</p>
                     <p class="hero-description">Innovative telecom engineering student passionate about leveraging technology to solve real-world problems — from network infrastructure to web solutions.</p>
+                    <div class="hero-social-links">
+                        <a href="https://github.com/tafabande" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub" title="GitHub">
+                            <span class="material-symbols-outlined">code</span>
+                        </a>
+                        <a href="https://linkedin.com/in/bleighbande" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn" title="LinkedIn">
+                            <span class="material-symbols-outlined">work</span>
+                        </a>
+                    </div>
                     <div class="hero-buttons">
                         <a href="#contact" class="btn btn-primary">
                             <span class="material-symbols-outlined">mail</span>
@@ -136,8 +139,6 @@
                 <span class="material-symbols-outlined scroll-arrow">keyboard_arrow_down</span>
             </div>
         </section>
-
-        <!-- About Section -->
         <section id="about" class="section">
             <div class="container">
                 <div class="section-header">
@@ -146,16 +147,12 @@
                 </div>
                 <div class="about-content">
                     <div class="about-text" id="aboutText">
-                        <!-- populated by JS -->
                     </div>
                     <div class="about-highlights" id="aboutHighlights">
-                        <!-- populated by JS -->
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- Skills Section -->
         <section id="skills" class="section section-alt">
             <div class="container">
                 <div class="section-header">
@@ -163,12 +160,9 @@
                     <h2 class="section-title">Skills & Technologies</h2>
                 </div>
                 <div class="skills-grid" id="skillsGrid">
-                    <!-- populated by JS -->
                 </div>
             </div>
         </section>
-
-        <!-- Experience Section -->
         <section id="experience" class="section">
             <div class="container">
                 <div class="section-header">
@@ -176,12 +170,9 @@
                     <h2 class="section-title">Experience</h2>
                 </div>
                 <div class="timeline" id="experienceTimeline">
-                    <!-- populated by JS -->
                 </div>
             </div>
         </section>
-
-        <!-- Education Section -->
         <section id="education" class="section section-alt">
             <div class="container">
                 <div class="section-header">
@@ -189,25 +180,32 @@
                     <h2 class="section-title">Education & Certifications</h2>
                 </div>
                 <div class="education-grid" id="educationList">
-                    <!-- populated by JS -->
                 </div>
             </div>
         </section>
-
-        <!-- Projects Section -->
         <section id="projects" class="section">
             <div class="container">
                 <div class="section-header">
                     <span class="section-tag"><span class="material-symbols-outlined">deployed_code</span> Portfolio</span>
                     <h2 class="section-title">Featured Projects</h2>
                 </div>
-                <div class="projects-grid" id="projectsGrid">
-                    <!-- populated by JS -->
+                <div class="projects-grid" id="projectsGrid" aria-live="polite" aria-atomic="false">
                 </div>
             </div>
         </section>
-
-        <!-- Contact Section -->
+        <section id="testimonials" class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-tag">
+                        <span class="material-symbols-outlined">format_quote</span>
+                        Testimonials
+                    </span>
+                    <h2 class="section-title">What People Say</h2>
+                </div>
+                <div class="testimonials-grid" id="testimonialsGrid">
+                </div>
+            </div>
+        </section>
         <section id="contact" class="section section-dark">
             <div class="container">
                 <div class="section-header">
@@ -216,34 +214,36 @@
                 </div>
                 <div class="contact-content">
                     <div class="contact-info" id="contactInfo">
-                        <!-- populated by JS -->
                     </div>
-                    <form class="contact-form" id="contactForm" novalidate>
+                    <form class="contact-form" id="contactForm" novalidate aria-label="Contact form">
                         <div class="form-group">
                             <label for="contactName" class="sr-only">Your Name</label>
                             <div class="input-wrapper">
-                                <span class="material-symbols-outlined input-icon">person</span>
-                                <input type="text" id="contactName" name="name" placeholder="Your Name" required autocomplete="name">
+                                <span class="material-symbols-outlined input-icon" aria-hidden="true">person</span>
+                                <input type="text" id="contactName" name="name" placeholder="Your Name" required autocomplete="name" aria-required="true" aria-describedby="nameError">
                             </div>
+                            <span id="nameError" class="error-message" role="alert"></span>
                         </div>
                         <div class="form-group">
                             <label for="contactEmail" class="sr-only">Your Email</label>
                             <div class="input-wrapper">
-                                <span class="material-symbols-outlined input-icon">email</span>
-                                <input type="email" id="contactEmail" name="email" placeholder="Your Email" required autocomplete="email">
+                                <span class="material-symbols-outlined input-icon" aria-hidden="true">email</span>
+                                <input type="email" id="contactEmail" name="email" placeholder="Your Email" required autocomplete="email" aria-required="true" aria-describedby="emailError">
                             </div>
+                            <span id="emailError" class="error-message" role="alert"></span>
                         </div>
                         <div class="form-group">
                             <label for="contactMessage" class="sr-only">Your Message</label>
                             <div class="input-wrapper textarea-wrapper">
-                                <span class="material-symbols-outlined input-icon">edit_note</span>
-                                <textarea id="contactMessage" name="message" placeholder="Your Message" rows="5" required></textarea>
+                                <span class="material-symbols-outlined input-icon" aria-hidden="true">edit_note</span>
+                                <textarea id="contactMessage" name="message" placeholder="Your Message" rows="5" required aria-required="true" aria-describedby="messageError"></textarea>
                             </div>
+                            <span id="messageError" class="error-message" role="alert"></span>
                         </div>
                         <input type="hidden" name="date" id="contactDate">
                         <input type="hidden" name="time" id="contactTime">
-                        <button type="submit" class="btn btn-primary btn-submit" id="submitBtn">
-                            <span class="material-symbols-outlined">send</span>
+                        <button type="submit" class="btn btn-primary btn-submit" id="submitBtn" aria-label="Send message">
+                            <span class="material-symbols-outlined" aria-hidden="true">send</span>
                             Send Message
                         </button>
                     </form>
@@ -251,8 +251,6 @@
             </div>
         </section>
     </main>
-
-    <!-- Footer -->
     <footer class="footer" role="contentinfo">
         <div class="container footer-content">
             <div class="footer-brand">
@@ -260,17 +258,15 @@
                 <span>Bleigh Bande</span>
             </div>
             <div class="footer-links" id="footerLinks">
-                <!-- populated by JS -->
             </div>
             <p class="footer-copy">&copy; 2026 Bleigh T.J Bande. All rights reserved.</p>
         </div>
     </footer>
-
-    <!-- Toast Notification Container -->
     <div id="toastContainer" class="toast-container" aria-live="polite"></div>
-
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
