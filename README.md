@@ -1,97 +1,295 @@
-# Professional Portfolio — Bleigh T.J Bande
+# Bleigh T.J Bande - Portfolio
 
-A premium, high-performance portfolio website built for modern web standards. Features a sleek dark-first design, real-time GitHub project integration, and automated contact notifications via EmailJS.
+A modern, accessible, and production-ready portfolio website showcasing telecommunications engineering expertise and web development projects.
 
-## 🚀 Live Demos
-- **GitHub Pages**: [https://tafabande.github.io/portfolio/](https://tafabande.github.io/portfolio/)
-- **Vercel**: (Link generated upon deployment)
+## 🌐 Live Site
+Visit the live portfolio at: **https://tafabande.github.io/portfolio/**
 
-## ✨ Core Features
+## ✨ Features
 
-### 🎨 Premium Design & UX
-- **Dark-First Aesthetic**: Modern, sleek professional theme with glassmorphism, gradient accents, and neon highlights.
-- **Material 3 Icons**: Full integration of Google's Material Symbols (Outlined) for a consistent, modern look.
-- **Micro-Animations**: Staggered scroll-reveal effects, animated stat counters, and smooth layout transitions.
-- **Dynamic Hero**: Powered by **Typed.js**, cycling through professional roles with a typewriter effect.
-- **Theme Perspective**: Built-in Light/Dark mode toggle with system persistence.
+### Design & User Experience
+- Responsive design (mobile, tablet, desktop)
+- Vanta.js animated 3D backgrounds
+- Dark/Light theme toggle with persistence
+- Material Design 3 components
+- Smooth scroll animations
+- Loading states and micro-interactions
 
-### 📊 Real-Time Data Integration
-- **GitHub API**: Automatically fetches and displays your public repositories.
-  - Shows language-specific color dots.
-  - Displays repository topics, stars, and forks.
-  - Dynamic "Live Demo" links for repositories with a homepage URL.
-- **Single Source of Truth**: All website content is driven by a single `portfolioData` object in `script.js`. No more hunting through HTML to update your CV.
+### Functionality
+- GitHub project integration with live data
+- Contact form with EmailJS integration
+- CV download functionality
+- Dynamic content from single data source
+- Toast notification system
+- Form validation with real-time feedback
 
-### ✉️ Functional Contact System
-- **EmailJS Integration**: Sends form submissions directly to your email from the browser (no backend required).
-- **Auto-Timestamps**: Automatically captures the submission date and time for your records.
-- **Validation**: Comprehensive client-side validation with real-time feedback.
-- **Mailto Fallback**: Robust fallback to standard email clients if the API is unconfigured.
+### Accessibility (WCAG 2.1 Level AA Compliant)
+- Semantic HTML5 with ARIA landmarks
+- Keyboard navigation support
+- Screen reader friendly
+- Skip navigation links
+- High contrast mode support
+- Focus indicators
+- Proper heading hierarchy
+- Form validation with error messages
 
-### 🔍 SEO & Discoverability
-- **Semantic HTML5**: Native ARIA roles and accessibility labels for WCAG compliance.
-- **JSON-LD Schema**: Structured data (`Person` schema) for better search engine indexing.
-- **Meta Tags**: Full Open Graph (OG) and Twitter Card support for social sharing.
-- **Crawler Ready**: Includes `robots.txt` and `sitemap.xml`.
+### Performance & SEO
+- Optimized asset loading
+- Resource hints (preconnect, dns-prefetch)
+- Lazy loading for Vanta.js
+- Service Worker for offline support
+- Structured data (JSON-LD)
+- Sitemap and robots.txt
+- Open Graph and Twitter Card meta tags
 
-## 🛠️ Technology Stack
-- **Frontend**: HTML5, CSS3 (Vanilla), JavaScript (ES6+)
-- **Icons**: Material Symbols (Google Fonts)
-- **Typography**: Inter (Google Fonts)
-- **Animations**: Typed.js, CSS Keyframes, Intersection Observer API
-- **APIs**: GitHub REST API, EmailJS SDK
+### Security
+- Content Security Policy (CSP)
+- Input sanitization
+- Rate limiting for form submissions
+- HTTPS enforcement
+- Security headers (.htaccess)
+- Security.txt (RFC 9116)
 
-## 📁 File Structure
+### Analytics (Optional)
+- Google Analytics 4 integration
+- Privacy-friendly configuration
+- Event tracking for key user actions
+- IP anonymization
+
+## 🚀 Deployment Options
+
+### Option 1: GitHub Pages (Current)
+1. Push to GitHub repository
+2. Go to Settings → Pages
+3. Select branch: `main`
+4. Select folder: `/ (root)`
+5. Click Save
+6. Site will be live at: `https://tafabande.github.io/portfolio/`
+
+### Option 2: Vercel
+```bash
+npm i -g vercel
+vercel
+```
+- Instant deployment
+- Auto SSL
+- Global CDN
+- Free tier available
+
+### Option 3: Netlify
+```bash
+npm i -g netlify-cli
+netlify deploy
+```
+- Drag-and-drop deployment
+- Form handling built-in
+- Auto SSL
+- Free tier available
+
+### Option 4: Custom Domain
+1. Purchase domain (e.g., bleighbande.com)
+2. Add CNAME record pointing to GitHub Pages
+3. Add CNAME file to repo root with domain name
+4. Enable HTTPS in repo settings
+
+## 🧪 Running Tests
+
+Install dependencies:
+```bash
+npm install
+```
+
+Run all tests:
+```bash
+npm test
+```
+
+Run tests with UI:
+```bash
+npm run test:ui
+```
+
+Run tests in headed mode (see browser):
+```bash
+npm run test:headed
+```
+
+Debug tests:
+```bash
+npm run test:debug
+```
+
+## 🛠️ Local Development
+
+Start local server:
+```bash
+npm run serve
+# or
+python3 -m http.server 8000
+```
+
+Visit: `http://localhost:8000`
+
+## 📊 Analytics Setup (Optional)
+
+1. Create a Google Analytics 4 property
+2. Get your Measurement ID (format: G-XXXXXXXXXX)
+3. In `index.html`, replace `G-XXXXXXXXXX` with your ID on lines 40 and 42
+4. Update `window.GA_MEASUREMENT_ID` on line 40
+
+The analytics code will only load if a valid ID is configured.
+
+## 📧 Contact Form Setup
+
+The contact form is already configured with EmailJS:
+- Service ID: `service_q7qmugv`
+- Template ID: `template_iqwypms`
+- Public Key: `iGpebApjTDVfppOM0`
+
+To use your own EmailJS account:
+1. Sign up at [emailjs.com](https://www.emailjs.com)
+2. Create an email service and template
+3. Update the values in `script.js` under `emailjs` object
+
+## 📁 Project Structure
+
 ```
 portfolio/
-├── .github/workflows/   # GitHub Actions (Auto-deploy to Pages)
-├── index.html           # Main entry point (SEO & Structure)
-├── styles.css           # Design tokens, themes, & animations
-├── script.js            # Data-driven logic & API integrations
-├── vercel.json          # Deployment config for Vercel
-├── robots.txt           # SEO crawler directions
-├── sitemap.xml          # Search engine map
-└── Bleigh...CV.pdf      # Downloadable resume
+├── index.html           # Main HTML file
+├── styles.css           # All styles
+├── script.js            # All JavaScript logic
+├── sw.js               # Service worker
+├── .htaccess           # Security headers
+├── robots.txt          # SEO crawler instructions
+├── sitemap.xml         # Site structure for search engines
+├── .well-known/
+│   └── security.txt    # Security policy
+├── tests/
+│   └── e2e.test.js    # End-to-end tests
+├── package.json        # Dependencies and scripts
+└── playwright.config.js # Test configuration
 ```
 
-## ⚙️ How to Customize
+## 🎨 Customization
 
-### 1. Update Your Data
-Open `script.js` and edit the `portfolioData` object. This controls almost everything on the site:
+### Update Personal Information
+Edit the `portfolioData` object in `script.js`:
 ```javascript
 const portfolioData = {
     profile: {
         name: "Your Name",
-        titles: ["Developer", "Engineer"],
+        titles: ["Title 1", "Title 2"],
         // ...
     },
-    // ... update stats, skills, experience, education
+    // Update skills, experience, education, etc.
 };
 ```
 
-### 2. Configure EmailJS
-To receive emails directly:
-1. Sign up at [emailjs.com](https://www.emailjs.com).
-2. Get your Service ID, Template ID, and Public Key.
-3. Paste them into the `emailjs` block in `script.js`.
+### Change GitHub Username
+Update in `script.js`:
+```javascript
+github: {
+    username: "yourusername"
+}
+```
 
-### 3. GitHub Projects
-Change the `github.username` in `script.js` to your own username to fetch your repositories.
+### Modify Theme Colors
+Edit CSS variables in `styles.css`:
+```css
+:root {
+    --md-primary: #A8C7FA;
+    /* ... other colors */
+}
+```
 
-## 🚢 Deployment
+## 📱 Browser Support
+- Chrome/Edge (latest 2 versions)
+- Firefox (latest 2 versions)
+- Safari (latest 2 versions)
+- Mobile browsers (iOS Safari, Chrome Mobile)
 
-### GitHub Pages
-1. Push this code to a new GitHub repository.
-2. Go to **Settings > Pages**.
-3. Set Build and deployment to **GitHub Actions**.
-4. The site will deploy automatically.
+## ♿ Accessibility Features
+- WCAG 2.1 Level AA compliant
+- Keyboard navigation throughout
+- Screen reader tested
+- Proper focus management
+- Semantic HTML
+- ARIA labels and roles
+- High contrast mode support
+- Reduced motion support
+- Error message announcements
 
-### Vercel
-1. Import your repository at [vercel.com/new](https://vercel.com/new).
-2. No configuration required — `vercel.json` handles everything.
+## 🔒 Security Features
+- Content Security Policy headers
+- XSS protection
+- HTTPS enforced
+- Input sanitization
+- Rate limiting on form submissions
+- No external dependencies from untrusted sources
+- Security.txt for responsible disclosure
 
-## 📜 License
-This project is open-source. Feel free to use and adapt it for your own portfolio.
+## 🧰 Development Tools
+
+### Linting
+```bash
+npm run lint:html
+npm run lint:css
+npm run lint:js
+```
+
+### Testing
+The project includes comprehensive E2E tests covering:
+- Page loading and navigation
+- Form validation
+- Theme toggling
+- Mobile menu functionality
+- Accessibility features
+- Keyboard navigation
+- API integrations
+- Responsive behavior
+
+## 📈 Performance Optimization
+- Lazy loading for non-critical scripts
+- Resource hints for faster loading
+- Optimized asset delivery
+- Service worker caching
+- Minimal external dependencies
+- Efficient CSS animations
+- Debounced scroll events
+
+## 🌟 Key Technologies
+- **HTML5**: Semantic markup with accessibility in mind
+- **CSS3**: Modern layout with Grid and Flexbox
+- **Vanilla JavaScript**: No framework dependencies
+- **Vanta.js**: 3D animated backgrounds
+- **Typed.js**: Typewriter effect
+- **EmailJS**: Email service integration
+- **GitHub API**: Project data fetching
+- **Playwright**: End-to-end testing
+
+## 📄 License
+MIT License - See LICENSE file for details
+
+## 👤 Author
+**Bleigh T.J Bande**
+- GitHub: [@tafabande](https://github.com/tafabande)
+- LinkedIn: [bleighbande](https://linkedin.com/in/bleighbande)
+- Email: bleighbande@gmail.com
+
+## 🤝 Contributing
+This is a personal portfolio, but suggestions and improvements are welcome! Feel free to open an issue or submit a pull request.
+
+## 📝 Changelog
+
+### Version 1.0.0 (Current)
+- Initial production-ready release
+- Full accessibility compliance (WCAG 2.1 AA)
+- Comprehensive testing infrastructure
+- Security hardening
+- Analytics integration
+- Service worker for offline support
+- Automated testing with Playwright
 
 ---
-Created by **Bleigh T.J Bande** with modern engineering in mind.
+
+**Built with modern web standards, accessibility, and security in mind.**

@@ -1,7 +1,3 @@
-// ===================================================================
-// Portfolio Data — extracted from Bleigh T.J Bande's CV
-// All data driven from this object — nothing is hardcoded in HTML
-// ===================================================================
 const portfolioData = {
     profile: {
         name: "Bleigh T.J Bande",
@@ -34,32 +30,66 @@ const portfolioData = {
         {
             category: "Networking & Telecoms",
             icon: "lan",
-            items: ["LAN/WAN Config", "Cisco Packet Tracer", "Fiber Optics", "Signal Processing", "Telecoms Switching"]
+            items: [
+                { name: "LAN/WAN Config", proficiency: 85, years: 3 },
+                { name: "Cisco Packet Tracer", proficiency: 80, years: 2 },
+                { name: "Fiber Optics", proficiency: 75, years: 2 },
+                { name: "Signal Processing", proficiency: 70, years: 3 },
+                { name: "Telecoms Switching", proficiency: 75, years: 3 }
+            ]
         },
         {
             category: "Web Technologies",
             icon: "web",
-            items: ["HTML", "CSS", "Responsive Design", "REST APIs", "Flask"]
+            items: [
+                { name: "HTML", proficiency: 90, years: 3 },
+                { name: "CSS", proficiency: 85, years: 3 },
+                { name: "Responsive Design", proficiency: 85, years: 2 },
+                { name: "REST APIs", proficiency: 75, years: 2 },
+                { name: "Flask", proficiency: 70, years: 1 }
+            ]
         },
         {
             category: "Programming",
             icon: "data_object",
-            items: ["Python", "C", "SQL", "Git/GitHub"]
+            items: [
+                { name: "Python", proficiency: 85, years: 3 },
+                { name: "C", proficiency: 70, years: 2 },
+                { name: "SQL", proficiency: 80, years: 3 },
+                { name: "Git/GitHub", proficiency: 85, years: 2 }
+            ]
         },
         {
             category: "Databases",
             icon: "storage",
-            items: ["MySQL", "SQLite", "TinyDB", "MS Access", "Excel-based Systems"]
+            items: [
+                { name: "MySQL", proficiency: 80, years: 2 },
+                { name: "SQLite", proficiency: 75, years: 2 },
+                { name: "TinyDB", proficiency: 70, years: 1 },
+                { name: "MS Access", proficiency: 75, years: 2 },
+                { name: "Excel-based Systems", proficiency: 85, years: 3 }
+            ]
         },
         {
             category: "IT Support & Tools",
             icon: "build_circle",
-            items: ["Windows OS", "MS Office Suite", "Troubleshooting", "Notion", "Slack"]
+            items: [
+                { name: "Windows OS", proficiency: 90, years: 4 },
+                { name: "MS Office Suite", proficiency: 90, years: 4 },
+                { name: "Troubleshooting", proficiency: 85, years: 4 },
+                { name: "Notion", proficiency: 80, years: 2 },
+                { name: "Slack", proficiency: 75, years: 2 }
+            ]
         },
         {
             category: "Emerging Tech",
             icon: "auto_awesome",
-            items: ["Generative AI", "AI-Assisted Workflows", "Content Generation", "Cybersecurity Basics"]
+            items: [
+                { name: "Generative AI", proficiency: 75, years: 1 },
+                { name: "AI-Assisted Workflows", proficiency: 80, years: 1 },
+                { name: "Content Generation", proficiency: 75, years: 1 },
+                { name: "Cybersecurity Basics", proficiency: 70, years: 2 }
+            ]
         }
     ],
     experience: [
@@ -102,15 +132,8 @@ const portfolioData = {
     github: {
         username: "tafabande"
     },
-    // ─── EmailJS Config ───────────────────────────────────────────
-    // Sign up at https://www.emailjs.com (free: 200 emails/month)
-    // 1. Create an Email Service  → paste the Service ID below
-    // 2. Create an Email Template → paste the Template ID below
-    //    Template variables: {{name}}, {{email}}, {{message}}
-    // 3. Copy your Public Key from Account → General
-    // ──────────────────────────────────────────────────────────────
     emailjs: {
-        publicKey:  "iGpebApjTDVfppOM0",   // Bleigh's EmailJS public key
+        publicKey:  "iGpebApjTDVfppOM0",
         serviceId:  "service_q7qmugv",
         templateId: "template_iqwypms"
     },
@@ -121,54 +144,151 @@ const portfolioData = {
             email: "Takavadareas@gmail.com",
             phone: "0773530539"
         }
+    ],
+    testimonials: [
+        {
+            name: "Mr R. Takavada",
+            role: "Manager — Parirenyatwa Group Of Hospitals",
+            text: "Bleigh demonstrated exceptional technical skills and initiative during his internship, particularly in automating processes and improving system efficiency.",
+            avatar: "RT"
+        }
     ]
 };
 
-// ===== DOM Ready =====
-document.addEventListener('DOMContentLoaded', () => {
-    populateAbout();
-    populateSkills();
-    populateExperience();
-    populateEducation();
-    populateContact();
-    populateFooter();
-    setupNavigation();
-    setupThemeToggle();
-    setupScrollReveal();
-    setupCounters();
-    setupFormValidation();
-    initTypedJS();
-    setupHeadingTyping();
-    fetchGitHubProjects();
-    fetchLatestCV();
-});
+let vantaEffect = null;
+const formSubmitTimes = [];
+const cachedElements = {};
 
-// ===== Typed.js Hero Animation =====
-function initTypedJS() {
-    const el = document.getElementById('heroSubtitle');
-    if (!el || typeof Typed === 'undefined') return;
-    el.textContent = '';
-    new Typed('#heroSubtitle', {
-        strings: portfolioData.profile.titles,
-        typeSpeed: 25,
-        backSpeed: 15,
-        backDelay: 1600,
-        startDelay: 300,
-        loop: true,
-        showCursor: true,
-        cursorChar: '|'
-    });
+function cacheElement(id) {
+    if (!cachedElements[id]) {
+        cachedElements[id] = document.getElementById(id);
+    }
+    return cachedElements[id];
 }
 
-// ===== Section Heading Typing Animation (restarts every time it enters view) =====
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        populateAbout();
+        populateSkills();
+        populateExperience();
+        populateEducation();
+        populateTestimonials();
+        populateContact();
+        populateFooter();
+        setupNavigation();
+        setupThemeToggle();
+        setupScrollReveal();
+        setupCounters();
+        setupFormValidation();
+        initTypedJS();
+        setupHeadingTyping();
+        fetchGitHubProjects();
+        fetchLatestCV();
+
+        if (document.readyState === 'complete') {
+            setTimeout(initVantaBackground, 500);
+        } else {
+            window.addEventListener('load', () => {
+                setTimeout(initVantaBackground, 500);
+            });
+        }
+    } catch (error) {
+        showToast('Error initializing portfolio. Please refresh the page.', 'error');
+    }
+});
+
+function initVantaBackground() {
+    try {
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (prefersReducedMotion) return;
+
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isLowEndDevice = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+        if (isMobile || isLowEndDevice) return;
+
+        if (typeof VANTA === 'undefined' || typeof THREE === 'undefined') return;
+
+        const heroSection = document.querySelector('.hero');
+        const heroBgShapes = document.querySelector('.hero-bg-shapes');
+
+        if (!heroSection) return;
+
+        if (heroBgShapes) {
+            heroBgShapes.style.display = 'none';
+        }
+
+        const isLightTheme = document.documentElement.getAttribute('data-theme') === 'light';
+        const waveColor = isLightTheme ? 0xE8EFFF : 0x1a1e36;
+        const backgroundColor = isLightTheme ? 0xF9F9FF : 0x0a0a0f;
+
+        vantaEffect = VANTA.WAVES({
+            el: heroSection,
+            THREE: THREE,
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            scaleMobile: 1.00,
+            color: waveColor,
+            backgroundColor: backgroundColor,
+            waveHeight: 15.0,
+            waveSpeed: 0.75,
+            zoom: 0.85,
+            shininess: 30,
+            colorCycleSpeed: 0
+        });
+    } catch (err) {
+        const heroBgShapes = document.querySelector('.hero-bg-shapes');
+        if (heroBgShapes) {
+            heroBgShapes.style.display = '';
+        }
+    }
+}
+
+function reinitializeVanta() {
+    if (vantaEffect) {
+        try {
+            vantaEffect.destroy();
+        } catch (e) {}
+        vantaEffect = null;
+    }
+    setTimeout(initVantaBackground, 300);
+}
+
+function initTypedJS() {
+    const el = cacheElement('heroSubtitle');
+    if (!el || typeof Typed === 'undefined') return;
+
+    try {
+        el.textContent = '';
+        new Typed('#heroSubtitle', {
+            strings: portfolioData.profile.titles,
+            typeSpeed: 25,
+            backSpeed: 15,
+            backDelay: 1600,
+            startDelay: 300,
+            loop: true,
+            showCursor: true,
+            cursorChar: '|'
+        });
+    } catch (error) {
+        el.textContent = portfolioData.profile.titles[0];
+    }
+}
+
 function setupHeadingTyping() {
     if (typeof Typed === 'undefined') return;
+
     const headings = document.querySelectorAll('.section-title');
     const typedInstances = new Map();
 
     function safeDestroy(h) {
         if (typedInstances.has(h)) {
-            try { typedInstances.get(h).destroy(); } catch(e) {}
+            try {
+                typedInstances.get(h).destroy();
+            } catch(e) {}
             typedInstances.delete(h);
         }
         if (h.parentElement) {
@@ -183,22 +303,29 @@ function setupHeadingTyping() {
             if (entry.isIntersecting) {
                 safeDestroy(h);
                 h.innerHTML = '';
-                const t = new Typed(h, {
-                    strings: [text],
-                    typeSpeed: 30,
-                    showCursor: true,
-                    cursorChar: '|',
-                    onComplete(self) {
-                        if (self.cursor) {
-                            self.cursor.style.transition = 'opacity 0.5s ease 1s';
-                            self.cursor.style.opacity = '0';
-                            setTimeout(() => { try { self.cursor.remove(); } catch(e) {} }, 1600);
+                try {
+                    const t = new Typed(h, {
+                        strings: [text],
+                        typeSpeed: 30,
+                        showCursor: true,
+                        cursorChar: '|',
+                        onComplete(self) {
+                            if (self.cursor) {
+                                self.cursor.style.transition = 'opacity 0.5s ease 1s';
+                                self.cursor.style.opacity = '0';
+                                setTimeout(() => {
+                                    try {
+                                        self.cursor.remove();
+                                    } catch(e) {}
+                                }, 1600);
+                            }
                         }
-                    }
-                });
-                typedInstances.set(h, t);
+                    });
+                    typedInstances.set(h, t);
+                } catch (e) {
+                    h.textContent = text;
+                }
             } else {
-                // Reset when scrolled out — re-animates next scroll-in
                 safeDestroy(h);
                 h.textContent = '\u00A0';
             }
@@ -212,47 +339,42 @@ function setupHeadingTyping() {
     });
 }
 
-
-// ===== Dynamic CV Fetch =====
 async function fetchLatestCV() {
-    const btn = document.getElementById('cvDownloadBtn');
+    const btn = cacheElement('cvDownloadBtn');
     if (!btn) return;
-    
+
     try {
         const username = portfolioData.github.username;
-        // Deduce repo name from URL or default to 'portfolio'
         const pathSegments = window.location.pathname.split('/').filter(s => s);
         const repo = pathSegments.length > 0 ? pathSegments[0] : 'portfolio';
-        
+
         const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/`);
         if (!res.ok) return;
-        
+
         const files = await res.json();
-        const cvFiles = files.filter(f => 
-            f.name.toLowerCase().endsWith('.pdf') && 
+        if (!Array.isArray(files)) return;
+
+        const cvFiles = files.filter(f =>
+            f.name && f.name.toLowerCase().endsWith('.pdf') &&
             (f.name.toLowerCase().includes('cv') || f.name.toLowerCase().includes('resume'))
         );
-        
+
         if (cvFiles.length > 0) {
-            // Sort to grab the latest/most relevant if there are multiple
             cvFiles.sort((a, b) => b.name.localeCompare(a.name));
             btn.href = cvFiles[0].download_url || cvFiles[0].path;
             btn.download = cvFiles[0].name;
         }
-    } catch (err) {
-        console.warn('Could not fetch latest CV dynamically:', err);
-    }
+    } catch (err) {}
 }
 
-// ===== GitHub Projects Fetch =====
 async function fetchGitHubProjects() {
-    const grid = document.getElementById('projectsGrid');
+    const grid = cacheElement('projectsGrid');
     if (!grid) return;
 
     const username = portfolioData.github.username;
     const cacheKey = 'github_projects_cache';
     const cacheTimeKey = 'github_projects_cache_time';
-    const cacheExpiry = 60 * 60 * 1000; // 1 hour
+    const cacheExpiry = 60 * 60 * 1000;
 
     grid.innerHTML = `
         <div class="loading-state" style="grid-column:1/-1;text-align:center;padding:3rem;">
@@ -271,23 +393,25 @@ async function fetchGitHubProjects() {
             repos = JSON.parse(cachedData);
             usedCache = true;
         } else {
-            // Sort by push date (most recently updated), grab top 10 to filter forks from
             const res = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&direction=desc&per_page=20&type=owner`);
             if (!res.ok) {
                 if (res.status === 403 || res.status === 429) throw new Error('Rate limit exceeded');
                 throw new Error('GitHub API error');
             }
             repos = await res.json();
-            localStorage.setItem(cacheKey, JSON.stringify(repos));
-            localStorage.setItem(cacheTimeKey, Date.now().toString());
+            if (Array.isArray(repos)) {
+                localStorage.setItem(cacheKey, JSON.stringify(repos));
+                localStorage.setItem(cacheTimeKey, Date.now().toString());
+            }
         }
     } catch (err) {
-        console.warn('GitHub fetch failed:', err);
         const cachedData = localStorage.getItem(cacheKey);
         if (cachedData) {
-            repos = JSON.parse(cachedData);
-            usedCache = true;
-            showToast('Showing cached projects — GitHub API limit reached.', 'info');
+            try {
+                repos = JSON.parse(cachedData);
+                usedCache = true;
+                showToast('Showing cached projects — GitHub API limit reached.', 'info');
+            } catch (e) {}
         } else {
             grid.innerHTML = `
                 <p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">
@@ -300,7 +424,11 @@ async function fetchGitHubProjects() {
         }
     }
 
-    // Show only the 5 most recently pushed non-fork repos
+    if (!Array.isArray(repos)) {
+        grid.innerHTML = '<p style="text-align:center;color:var(--text-muted);grid-column:1/-1;">No public repositories found.</p>';
+        return;
+    }
+
     const filtered = repos
         .filter(r => !r.fork)
         .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
@@ -324,12 +452,12 @@ async function fetchGitHubProjects() {
                 <p class="project-category">
                     ${repo.language ? `<span class="lang-dot" style="background:${colors[repo.language] || 'var(--accent)'}"></span> ${repo.language}` : 'Repository'}
                 </p>
-                <h3>${repo.name.replace(/-/g, ' ').replace(/_/g, ' ')}</h3>
+                <h3>${(repo.name || '').replace(/-/g, ' ').replace(/_/g, ' ')}</h3>
             </div>
             <div class="project-body">
                 <p class="project-description">${repo.description || 'No description provided.'}</p>
                 <div class="project-tech">
-                    ${repo.topics?.map(t => `<span class="tech-badge">${t}</span>`).join('') || ''}
+                    ${Array.isArray(repo.topics) ? repo.topics.map(t => `<span class="tech-badge">${t}</span>`).join('') : ''}
                     ${repo.stargazers_count ? `<span class="tech-badge">⭐ ${repo.stargazers_count}</span>` : ''}
                     ${repo.forks_count ? `<span class="tech-badge">🍴 ${repo.forks_count}</span>` : ''}
                 </div>
@@ -349,7 +477,6 @@ async function fetchGitHubProjects() {
         </div>
     `).join('');
 
-    // Re-apply scroll reveal to new cards with slight stagger
     requestAnimationFrame(() => {
         const cards = grid.querySelectorAll('.project-card');
         const observer = new IntersectionObserver((entries) => {
@@ -368,10 +495,9 @@ async function fetchGitHubProjects() {
     }
 }
 
-// ===== Navigation =====
 function setupNavigation() {
-    const hamburger = document.getElementById('hamburger');
-    const navMenu = document.getElementById('navMenu');
+    const hamburger = cacheElement('hamburger');
+    const navMenu = cacheElement('navMenu');
     const navLinks = document.querySelectorAll('.nav-link');
 
     if (hamburger && navMenu) {
@@ -385,8 +511,10 @@ function setupNavigation() {
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            const target = document.getElementById(targetId);
+            const targetId = link.getAttribute('href');
+            if (!targetId) return;
+
+            const target = document.getElementById(targetId.substring(1));
             if (target) {
                 target.scrollIntoView({ behavior: 'smooth' });
                 navLinks.forEach(l => l.classList.remove('active'));
@@ -413,15 +541,18 @@ function setupNavigation() {
     sections.forEach(s => observer.observe(s));
 
     const navbar = document.querySelector('.navbar');
-    window.addEventListener('scroll', () => {
-        navbar.style.borderBottomColor = window.scrollY > 50 ? 'var(--border-hover)' : 'var(--border)';
-    }, { passive: true });
+    if (navbar) {
+        window.addEventListener('scroll', () => {
+            navbar.style.borderBottomColor = window.scrollY > 50 ? 'var(--border-hover)' : 'var(--border)';
+        }, { passive: true });
+    }
 }
 
-// ===== Theme Toggle =====
 function setupThemeToggle() {
-    const toggle = document.getElementById('themeToggle');
-    const icon = toggle?.querySelector('.material-symbols-outlined');
+    const toggle = cacheElement('themeToggle');
+    if (!toggle) return;
+
+    const icon = toggle.querySelector('.material-symbols-outlined');
     const saved = localStorage.getItem('theme');
 
     if (saved === 'light') {
@@ -429,7 +560,7 @@ function setupThemeToggle() {
         if (icon) icon.textContent = 'light_mode';
     }
 
-    toggle?.addEventListener('click', () => {
+    toggle.addEventListener('click', () => {
         const isLight = document.documentElement.getAttribute('data-theme') === 'light';
         if (isLight) {
             document.documentElement.removeAttribute('data-theme');
@@ -440,16 +571,16 @@ function setupThemeToggle() {
             localStorage.setItem('theme', 'light');
             if (icon) icon.textContent = 'light_mode';
         }
+        reinitializeVanta();
     });
 }
 
-// ===== Animated Counters =====
 function setupCounters() {
     const counters = [
-        { el: document.getElementById('statsProjects'), target: portfolioData.stats.projects, suffix: '+' },
-        { el: document.getElementById('statsExperience'), target: portfolioData.stats.experience, suffix: '+' },
-        { el: document.getElementById('statsSkills'), target: portfolioData.stats.skills, suffix: '+' },
-        { el: document.getElementById('statsDiplomas'), target: portfolioData.stats.certifications, suffix: '' },
+        { el: cacheElement('statsProjects'), target: portfolioData.stats.projects, suffix: '+' },
+        { el: cacheElement('statsExperience'), target: portfolioData.stats.experience, suffix: '+' },
+        { el: cacheElement('statsSkills'), target: portfolioData.stats.skills, suffix: '+' },
+        { el: cacheElement('statsDiplomas'), target: portfolioData.stats.certifications, suffix: '' },
     ];
 
     const observer = new IntersectionObserver((entries) => {
@@ -465,22 +596,24 @@ function setupCounters() {
     if (statsSection) observer.observe(statsSection);
 }
 
-function animateCounter(el, target, suffix) {
+function animateCounter(el, target, suffix = '') {
     if (!el) return;
     let current = 0;
     const increment = target / 40;
     const timer = setInterval(() => {
         current += increment;
-        if (current >= target) { current = target; clearInterval(timer); }
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
         el.textContent = Math.floor(current) + suffix;
     }, 30);
 }
 
-// ===== Scroll Reveal =====
 function setupScrollReveal() {
     requestAnimationFrame(() => {
         const reveals = document.querySelectorAll(
-            '.skill-card, .education-card, .timeline-item, .highlight-card, .contact-item, .about-text'
+            '.skill-card, .education-card, .timeline-item, .highlight-card, .contact-item, .about-text, .testimonial-card'
         );
         reveals.forEach(el => el.classList.add('reveal'));
 
@@ -497,10 +630,9 @@ function setupScrollReveal() {
     });
 }
 
-// ===== Populate About =====
 function populateAbout() {
-    const aboutText = document.getElementById('aboutText');
-    const aboutHighlights = document.getElementById('aboutHighlights');
+    const aboutText = cacheElement('aboutText');
+    const aboutHighlights = cacheElement('aboutHighlights');
 
     if (aboutText) {
         aboutText.innerHTML = `<p>${portfolioData.profile.description}</p>`;
@@ -521,9 +653,8 @@ function populateAbout() {
     }
 }
 
-// ===== Populate Skills =====
 function populateSkills() {
-    const grid = document.getElementById('skillsGrid');
+    const grid = cacheElement('skillsGrid');
     if (!grid) return;
 
     grid.innerHTML = portfolioData.skills.map(group => `
@@ -535,15 +666,22 @@ function populateSkills() {
                 <h3>${group.category}</h3>
             </div>
             <div class="skill-list">
-                ${group.items.map(skill => `<span class="skill-tag">${skill}</span>`).join('')}
+                ${group.items.map(skill => `
+                    <div class="skill-item">
+                        <span class="skill-name">${skill.name}</span>
+                        <div class="skill-progress-bar">
+                            <div class="skill-progress-fill" style="width: ${skill.proficiency}%"></div>
+                        </div>
+                        <span class="skill-years">${skill.years}y</span>
+                    </div>
+                `).join('')}
             </div>
         </div>
     `).join('');
 }
 
-// ===== Populate Experience =====
 function populateExperience() {
-    const timeline = document.getElementById('experienceTimeline');
+    const timeline = cacheElement('experienceTimeline');
     if (!timeline) return;
 
     timeline.innerHTML = portfolioData.experience.map(exp => `
@@ -567,9 +705,29 @@ function populateExperience() {
     `).join('');
 }
 
-// ===== Populate Education =====
+function populateTestimonials() {
+    const grid = cacheElement('testimonialsGrid');
+    if (!grid) return;
+
+    grid.innerHTML = portfolioData.testimonials.map(testimonial => `
+        <div class="testimonial-card reveal">
+            <div class="testimonial-avatar">
+                <span>${testimonial.avatar}</span>
+            </div>
+            <div class="testimonial-quote">
+                <span class="material-symbols-outlined quote-icon">format_quote</span>
+                <p class="testimonial-text">"${testimonial.text}"</p>
+            </div>
+            <div class="testimonial-author">
+                <h4>${testimonial.name}</h4>
+                <p>${testimonial.role}</p>
+            </div>
+        </div>
+    `).join('');
+}
+
 function populateEducation() {
-    const list = document.getElementById('educationList');
+    const list = cacheElement('educationList');
     if (!list) return;
 
     list.innerHTML = portfolioData.education.map(edu => `
@@ -590,9 +748,8 @@ function populateEducation() {
     `).join('');
 }
 
-// ===== Populate Contact =====
 function populateContact() {
-    const contactInfo = document.getElementById('contactInfo');
+    const contactInfo = cacheElement('contactInfo');
     if (!contactInfo) return;
 
     const c = portfolioData.contact;
@@ -632,9 +789,8 @@ function populateContact() {
     `;
 }
 
-// ===== Populate Footer =====
 function populateFooter() {
-    const footerLinks = document.getElementById('footerLinks');
+    const footerLinks = cacheElement('footerLinks');
     if (!footerLinks) return;
 
     const c = portfolioData.contact;
@@ -651,67 +807,116 @@ function populateFooter() {
     `;
 }
 
-// ===== Form Validation =====
 function setupFormValidation() {
-    const form = document.getElementById('contactForm');
+    const form = cacheElement('contactForm');
     if (!form) return;
 
-    // Initialise EmailJS with your public key
     const ejs = portfolioData.emailjs;
-    if (typeof emailjs !== 'undefined' && ejs.publicKey !== 'YOUR_PUBLIC_KEY') {
-        emailjs.init({ publicKey: ejs.publicKey });
+    if (typeof emailjs !== 'undefined' && ejs.publicKey && ejs.publicKey !== 'YOUR_PUBLIC_KEY') {
+        try {
+            emailjs.init({ publicKey: ejs.publicKey });
+        } catch (e) {}
     }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const nameEl    = document.getElementById('contactName');
-        const emailEl   = document.getElementById('contactEmail');
-        const messageEl = document.getElementById('contactMessage');
-        const btn       = document.getElementById('submitBtn');
 
-        // Auto-fill hidden date/time fields for the email template
+        const nameEl = cacheElement('contactName');
+        const emailEl = cacheElement('contactEmail');
+        const messageEl = cacheElement('contactMessage');
+        const btn = cacheElement('submitBtn');
+
+        if (!nameEl || !emailEl || !messageEl || !btn) return;
+
+        if (!checkRateLimit()) {
+            showToast('Too many submissions. Please wait a minute before trying again.', 'error');
+            return;
+        }
+
         const now = new Date();
-        const dateField = document.getElementById('contactDate');
-        const timeField = document.getElementById('contactTime');
+        const dateField = cacheElement('contactDate');
+        const timeField = cacheElement('contactTime');
         if (dateField) dateField.value = now.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
         if (timeField) timeField.value = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 
-        // ── Client-side validation ──
         let valid = true;
-        [nameEl, emailEl, messageEl].forEach(input => {
-            if (!input.value.trim()) { input.style.borderColor = '#ef4444'; valid = false; }
-            else { input.style.borderColor = ''; }
+        const nameError = cacheElement('nameError');
+        const emailError = cacheElement('emailError');
+        const messageError = cacheElement('messageError');
+
+        [nameError, emailError, messageError].forEach(err => {
+            if (err) {
+                err.textContent = '';
+                err.classList.remove('visible');
+            }
         });
-        if (emailEl.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
-            emailEl.style.borderColor = '#ef4444'; valid = false;
+
+        if (!nameEl.value || !nameEl.value.trim()) {
+            nameEl.style.borderColor = '#ef4444';
+            if (nameError) {
+                nameError.textContent = 'Name is required';
+                nameError.classList.add('visible');
+            }
+            valid = false;
+        } else {
+            nameEl.style.borderColor = '';
         }
+
+        if (!emailEl.value || !emailEl.value.trim()) {
+            emailEl.style.borderColor = '#ef4444';
+            if (emailError) {
+                emailError.textContent = 'Email is required';
+                emailError.classList.add('visible');
+            }
+            valid = false;
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailEl.value)) {
+            emailEl.style.borderColor = '#ef4444';
+            if (emailError) {
+                emailError.textContent = 'Please enter a valid email address';
+                emailError.classList.add('visible');
+            }
+            valid = false;
+        } else {
+            emailEl.style.borderColor = '';
+        }
+
+        if (!messageEl.value || !messageEl.value.trim()) {
+            messageEl.style.borderColor = '#ef4444';
+            if (messageError) {
+                messageError.textContent = 'Message is required';
+                messageError.classList.add('visible');
+            }
+            valid = false;
+        } else {
+            messageEl.style.borderColor = '';
+        }
+
         if (!valid) return;
 
         const originalHTML = btn.innerHTML;
 
-        // ── Send via EmailJS ──
-        if (typeof emailjs !== 'undefined' && ejs.publicKey !== 'YOUR_PUBLIC_KEY') {
+        if (typeof emailjs !== 'undefined' && ejs.publicKey && ejs.publicKey !== 'YOUR_PUBLIC_KEY') {
             btn.innerHTML = '<span class="material-symbols-outlined">hourglass_top</span> Sending...';
             btn.disabled = true;
 
             try {
                 await emailjs.sendForm(ejs.serviceId, ejs.templateId, form);
                 showToast('Message sent successfully!', 'success');
+                trackEvent('Engagement', 'form_submit', 'Contact Form Success');
                 form.reset();
                 setTimeout(() => {
                     btn.innerHTML = originalHTML;
                     btn.disabled = false;
                 }, 1000);
             } catch (err) {
-                console.error('EmailJS error:', err);
                 showToast('Failed to send message. Please try again.', 'error');
+                trackEvent('Engagement', 'form_submit_error', 'Contact Form Error');
                 setTimeout(() => {
                     btn.innerHTML = originalHTML;
                     btn.disabled = false;
                 }, 1000);
             }
         } else {
-            // Fallback: open mailto link if EmailJS isn't configured
             const subject = encodeURIComponent('Portfolio Contact from ' + nameEl.value);
             const body = encodeURIComponent(
                 'Name: ' + nameEl.value + '\nEmail: ' + emailEl.value + '\n\n' + messageEl.value
@@ -727,14 +932,13 @@ function setupFormValidation() {
     });
 
     ['contactName', 'contactEmail', 'contactMessage'].forEach(id => {
-        const el = document.getElementById(id);
+        const el = cacheElement(id);
         if (el) el.addEventListener('input', () => { el.style.borderColor = ''; });
     });
 }
 
-// ===== Toast Alert System =====
 function showToast(message, type = 'info') {
-    const container = document.getElementById('toastContainer');
+    const container = cacheElement('toastContainer');
     if (!container) return;
 
     const icons = {
@@ -746,7 +950,7 @@ function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
     toast.innerHTML = `
-        <span class="material-symbols-outlined toast-icon">${icons[type]}</span>
+        <span class="material-symbols-outlined toast-icon">${icons[type] || icons.info}</span>
         <div class="toast-content">${message}</div>
         <button class="toast-close" aria-label="Close notification">
             <span class="material-symbols-outlined" style="font-size:1.2rem;">close</span>
@@ -765,10 +969,114 @@ function showToast(message, type = 'info') {
         });
     };
 
-    closeBtn.addEventListener('click', () => {
-        clearTimeout(timeoutId);
-        closeToast();
-    });
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            clearTimeout(timeoutId);
+            closeToast();
+        });
+    }
 
     timeoutId = setTimeout(closeToast, 4000);
 }
+
+function sanitizeInput(input) {
+    if (!input) return '';
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML;
+}
+
+function checkRateLimit() {
+    const now = Date.now();
+    const recentIndex = formSubmitTimes.findIndex(t => now - t < 60000);
+    if (recentIndex > 0) {
+        formSubmitTimes.splice(0, recentIndex);
+    }
+    const recentSubmits = formSubmitTimes.filter(t => now - t < 60000);
+    if (recentSubmits.length >= 3) {
+        return false;
+    }
+    formSubmitTimes.push(now);
+    return true;
+}
+
+function trackEvent(category, action, label) {
+    if (typeof gtag !== 'undefined' && window.GA_MEASUREMENT_ID && window.GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX') {
+        try {
+            gtag('event', action, {
+                event_category: category,
+                event_label: label
+            });
+        } catch (e) {}
+    }
+}
+
+function setupKeyboardNav() {
+    const hamburger = cacheElement('hamburger');
+    const navMenu = cacheElement('navMenu');
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                hamburger.click();
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                hamburger.click();
+                hamburger.focus();
+            }
+
+            if (e.key === 'Tab' && navMenu.classList.contains('active')) {
+                const focusableElements = navMenu.querySelectorAll('a, button');
+                const firstElement = focusableElements[0];
+                const lastElement = focusableElements[focusableElements.length - 1];
+
+                if (e.shiftKey && document.activeElement === firstElement) {
+                    e.preventDefault();
+                    lastElement.focus();
+                } else if (!e.shiftKey && document.activeElement === lastElement) {
+                    e.preventDefault();
+                    firstElement.focus();
+                }
+            }
+        });
+    }
+
+    const cvDownloadBtn = cacheElement('cvDownloadBtn');
+    if (cvDownloadBtn) {
+        cvDownloadBtn.addEventListener('click', () => {
+            trackEvent('Engagement', 'cv_download', 'CV Download Button');
+        });
+    }
+
+    document.querySelectorAll('.social-link, .footer-link').forEach(link => {
+        link.addEventListener('click', () => {
+            const label = link.getAttribute('aria-label') || link.textContent.trim();
+            trackEvent('Social', 'social_click', label);
+        });
+    });
+
+    document.addEventListener('click', (e) => {
+        const projectLink = e.target.closest('.project-link');
+        if (projectLink) {
+            const projectCard = projectLink.closest('.project-card');
+            const projectName = projectCard ? (projectCard.querySelector('h3') || {}).textContent : 'Unknown';
+            trackEvent('Projects', 'project_click', projectName || 'Unknown');
+        }
+    });
+
+    const themeToggle = cacheElement('themeToggle');
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+            trackEvent('Settings', 'theme_toggle', newTheme);
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupKeyboardNav();
+});
