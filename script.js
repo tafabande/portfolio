@@ -491,18 +491,40 @@ async function fetchGitHubProjects() {
 
     const fallbackProjects = [
         {
+            name: "portfolio-cv-ingestion-app",
+            description: "Full-stack data ingestion application for PDF CV extraction, normalization, SQLite persistence, and portfolio sync.",
+            language: "JavaScript / Node.js",
+            stargazers_count: 5,
+            fork: false,
+            pushed_at: new Date().toISOString(),
+            html_url: "https://github.com/tafabande/portfolio",
+            homepage: "http://localhost:3737"
+        },
+        {
+            name: "portfolio-android-app",
+            description: "Native Android application built with Kotlin, Jetpack Compose, Material 3, and Retrofit 2 for mobile portfolio management.",
+            language: "Kotlin",
+            stargazers_count: 4,
+            fork: false,
+            pushed_at: new Date(Date.now() - 3600000).toISOString(),
+            html_url: "https://github.com/tafabande/portfolio"
+        },
+        {
             name: "telecom-inventory-systems",
             description: "Centralized IT asset tracking & network hardware database implemented at Parirenyatwa Hospitals.",
             language: "Python",
             stargazers_count: 3,
-            html_url: "https://github.com/tafabande",
-            homepage: "https://tafabande.github.io/portfolio/"
+            fork: false,
+            pushed_at: "2026-08-01T12:00:00Z",
+            html_url: "https://github.com/tafabande"
         },
         {
             name: "cisco-packet-tracer-labs",
             description: "Simulated enterprise LAN/WAN topologies, VLAN routing, and OSPF/BGP routing configuration models.",
             language: "Cisco IOS",
             stargazers_count: 5,
+            fork: false,
+            pushed_at: "2026-07-15T12:00:00Z",
             html_url: "https://github.com/tafabande"
         },
         {
@@ -510,6 +532,8 @@ async function fetchGitHubProjects() {
             description: "Community workshops platform and data science learning repository for Midlands State University charter.",
             language: "JavaScript",
             stargazers_count: 8,
+            fork: false,
+            pushed_at: "2026-06-20T12:00:00Z",
             html_url: "https://github.com/tafabande"
         },
         {
@@ -517,6 +541,8 @@ async function fetchGitHubProjects() {
             description: "Real-time subnet scanning, packet latency diagnostics, and network service uptime monitoring tool.",
             language: "Python",
             stargazers_count: 4,
+            fork: false,
+            pushed_at: "2026-05-10T12:00:00Z",
             html_url: "https://github.com/tafabande"
         }
     ];
@@ -529,10 +555,12 @@ async function fetchGitHubProjects() {
             repos = JSON.parse(cachedData);
             usedCache = true;
         } else {
-            const res = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&direction=desc&per_page=20&type=owner`);
+            const res = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&direction=desc&per_page=20`);
             if (!res.ok) {
-                if (res.status === 403 || res.status === 429) throw new Error('Rate limit exceeded');
-                throw new Error('GitHub API error');
+                if (res.status === 403 || res.status === 429) {
+                    console.warn('GitHub API rate limit reached (403/429). Using fallback repository portfolio.');
+                }
+                throw new Error(`GitHub API error: ${res.status}`);
             }
             repos = await res.json();
             if (Array.isArray(repos)) {
@@ -546,7 +574,6 @@ async function fetchGitHubProjects() {
             try {
                 repos = JSON.parse(cachedData);
                 usedCache = true;
-                showToast('Displaying cached repositories — GitHub rate limit active.', 'info');
             } catch (e) {
                 repos = fallbackProjects;
             }
@@ -560,8 +587,12 @@ async function fetchGitHubProjects() {
     }
 
     const filtered = repos
-        .filter(r => !r.fork)
-        .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at))
+        .filter(r => r && !r.fork)
+        .sort((a, b) => {
+            const dateA = a.pushed_at ? new Date(a.pushed_at).getTime() : 0;
+            const dateB = b.pushed_at ? new Date(b.pushed_at).getTime() : 0;
+            return dateB - dateA;
+        })
         .slice(0, 6);
 
     if (filtered.length === 0) {
