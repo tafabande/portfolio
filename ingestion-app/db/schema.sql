@@ -160,4 +160,15 @@ CREATE TABLE IF NOT EXISTS github_auth (
 
 INSERT OR IGNORE INTO github_auth (id, repo_owner, repo_name) VALUES (1, 'tafabande', 'portfolio');
 
+-- ─── Profile Versioning & History Schema ──────────────────────────────────────
+CREATE TABLE IF NOT EXISTS profile_versions (
+  id             TEXT PRIMARY KEY,
+  version_number INTEGER NOT NULL,
+  profile_json   TEXT NOT NULL,
+  changelog      TEXT,
+  source         TEXT DEFAULT 'manual_edit', -- 'manual_edit' | 'pdf_import' | 'rollback' | 'sync'
+  created_at     TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+
 

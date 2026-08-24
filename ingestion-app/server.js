@@ -34,8 +34,20 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// Upload endpoint stricter limit
+// Specific Rate Limiters
 const uploadLimiter = rateLimit({ windowMs: 60 * 60 * 1000, max: 20 });
+const authLimiter   = rateLimit({ windowMs: 15 * 60 * 1000, max: 15, message: { error: 'Too many authentication attempts. Please try again later.' } });
+const syncLimiter   = rateLimit({ windowMs: 15 * 60 * 1000, max: 15, message: { error: 'Sync rate limit reached.' } });
+
+// Request Timeout Handling Middleware (30s timeout)
+app.use((req, res, next) => {
+  res.setTimeout(30000, () => {
+    if (!res.headersSent) {
+      res.status(504).json({ error: 'Request timeout — operation took longer than 30 seconds' });
+    }
+  });
+  next();
+});
 
 // Body parsing
 app.use(express.json({ limit: '2mb' }));
@@ -56,10 +68,12 @@ app.use('/api/projects',         require('./api/projects'));
 app.use('/api/documents',        uploadLimiter, require('./api/documents'));
 app.use('/api/extraction-jobs',  require('./api/extraction'));
 app.use('/api/analytics',        require('./api/analytics'));
-app.use('/api/auth',             require('./api/auth'));
+app.use('/api/auth',             authLimiter, require('./api/auth'));
+app.use('/api/versions',         require('./api/versions'));
 
 // ── Portfolio Sync & GitHub Auto-Publishing ─────────────────────────────────
-app.post('/api/portfolio/sync', async (req, res) => {
+app.post('/api/portfolio/sync', syncLimiter, async (req, res) => {
+
   try {
     const db = require('./db/database');
 
@@ -108,8 +122,10 @@ app.post('/api/portfolio/sync', async (req, res) => {
       syncedAt: new Date().toISOString(),
     };
 
-    // Save snapshot in DB
+    // Save snapshot & immutable version history entry
     db.snapshots.create(fullProfile, 'portfolio_sync');
+    db.versions.create(fullProfile, `Portfolio sync (${new Date().toLocaleTimeString()})`, 'sync');
+
 
     // 1. Write profile.json to local filesystem
     const outputPath = path.resolve(

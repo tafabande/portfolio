@@ -32,7 +32,11 @@ async function initDb() {
     schema.split(';').map(s => s.trim()).filter(Boolean).forEach(stmt => {
       try { _db.run(stmt + ';'); } catch (e) { /* ignore if already exists */ }
     });
+
+    // Migrations for existing SQLite database files
+    try { _db.run('ALTER TABLE profile ADD COLUMN user_id TEXT;'); } catch (e) {}
     persistSync();
+
 
 
     _ready = true;
@@ -296,10 +300,83 @@ const githubAuth = {
   }
 };
 
+// ── Profile Versions ─────────────────────────────────────────────────────────
+const versions = {
+  create(profileJson, changelog = 'Profile updated', source = 'manual_edit') {
+    const id = uuid();
+    const maxVerRow = get('SELECT MAX(version_number) as maxVer FROM profile_versions');
+    const versionNumber = ((maxVerRow && maxVerRow.maxVer) || 0) + 1;
+    const jsonStr = typeof profileJson === 'string' ? profileJson : JSON.stringify(profileJson);
+
+    run(`INSERT INTO profile_versions (id, version_number, profile_json, changelog, source, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`,
+        [id, versionNumber, jsonStr, changelog, source, now()]);
+    
+    return this.getById(id);
+  },
+  getAll() {
+    return all('SELECT id, version_number, changelog, source, created_at FROM profile_versions ORDER BY version_number DESC');
+  },
+  getById(id) {
+    return get('SELECT * FROM profile_versions WHERE id = ?', [id]);
+  },
+  rollback(id) {
+    const ver = this.getById(id);
+    if (!ver || !ver.profile_json) throw new Error('Version snapshot not found');
+
+    const data = JSON.parse(ver.profile_json);
+    
+    if (data.personal) {
+      profile.update({
+        first_name: data.personal.firstName,
+        last_name:  data.personal.lastName,
+        email:      data.personal.email,
+        phone:      data.personal.phone,
+        location:   data.personal.location,
+        bio:        data.personal.bio
+      });
+    }
+
+    // Clear and restore education
+    run('DELETE FROM education');
+    if (Array.isArray(data.education)) {
+      data.education.forEach(e => education.create({
+        institution: e.institution, qualification: e.qualification,
+        field: e.field, start_date: e.startDate, end_date: e.endDate, description: e.description
+      }));
+    }
+
+    // Clear and restore experience
+    run('DELETE FROM experience');
+    if (Array.isArray(data.experience)) {
+      data.experience.forEach(e => experience.create({
+        company: e.company, position: e.position,
+        start_date: e.startDate, end_date: e.endDate, location: e.location, description: e.description
+      }));
+    }
+
+    // Clear and restore skills
+    run('DELETE FROM skills');
+    if (Array.isArray(data.skills)) {
+      data.skills.forEach(s => skills.create({ name: s.name, category: s.category, proficiency: s.proficiency }));
+    }
+
+    // Clear and restore projects
+    run('DELETE FROM projects');
+    if (Array.isArray(data.projects)) {
+      data.projects.forEach(p => projects.create({ name: p.name, description: p.description, technologies: p.technologies, url: p.url }));
+    }
+
+    // Create rollback version marker
+    return this.create(data, `Rolled back to Version ${ver.version_number}`, 'rollback');
+  }
+};
+
 // Initialise immediately (fire-and-forget; routes call getDb() which awaits this)
 initDb().catch(e => console.error('[DB] Init error:', e));
 
-module.exports = { getDb: initDb, users, profile, education, experience, skills, projects, documents, extractionJobs, snapshots, analytics, githubAuth };
+module.exports = { getDb: initDb, users, profile, education, experience, skills, projects, documents, extractionJobs, snapshots, analytics, githubAuth, versions };
+
 
 
 
