@@ -1,0 +1,18 @@
+{
+  "name": "Bleigh Portfolio Hub",
+  "short_name": "Portfolio Hub",
+  "description": "Android management hub for Bleigh Bande Portfolio, Document Vault & Live Form Editor",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#141312",
+  "theme_color": "#141312",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23ea580c'/><text x='50%' y='58%' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-weight='900' font-size='42' fill='%23141312'>BB</text></svg>",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

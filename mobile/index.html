@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Portfolio Mobile Hub — Bleigh T.J Bande</title>
+    <meta name="theme-color" content="#141312">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top App Bar -->
+        <header class="top-app-bar">
+            <div class="top-bar-left">
+                <div class="app-avatar">BT</div>
+                <div class="top-bar-title-wrap">
+                    <span class="top-bar-greeting">Portfolio Manager</span>
+                    <span class="top-bar-name">Bleigh T.J Bande</span>
+                </div>
+            </div>
+            <div class="top-bar-actions">
+                <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle Theme">
+                    <span class="material-symbols-outlined">dark_mode</span>
+                </button>
+                <a href="../index.html" class="icon-btn" target="_blank" aria-label="Open Live Site" title="View Portfolio">
+                    <span class="material-symbols-outlined">open_in_new</span>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Views Container -->
+        <main class="app-content">
+            <!-- TAB 1: DASHBOARD -->
+            <section class="tab-view active" id="tab-dashboard">
+                <div class="view-header">
+                    <h1 class="view-title">Command Center</h1>
+                    <p class="view-subtitle">Live status &amp; telemetry overview</p>
+                </div>
+
+                <!-- Site Status Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="material-symbols-outlined card-icon">cloud_done</span>
+                            <h2 class="card-title">Live Portfolio</h2>
+                        </div>
+                        <span class="chip-status online">
+                            <span class="status-dot"></span> 200 OK
+                        </span>
+                    </div>
+                    <div class="stats-strip">
+                        <div class="stat-box">
+                            <span class="stat-box-val" id="dashProjects">10+</span>
+                            <span class="stat-box-lbl">Projects</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-box-val" id="dashExp">1 Yr</span>
+                            <span class="stat-box-lbl">Work Exp.</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-box-val" id="dashSkills">15+</span>
+                            <span class="stat-box-lbl">Skills</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-box-val" id="dashDiplomas">1</span>
+                            <span class="stat-box-lbl">Diploma</span>
+                        </div>
+                    </div>
+                    <button class="btn-tonal" id="quickSyncBtn">
+                        <span class="material-symbols-outlined">sync</span>
+                        Quick Verify &amp; Sync
+                    </button>
+                </div>
+
+                <!-- Quick Document Status -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="material-symbols-outlined card-icon">folder_shared</span>
+                            <h2 class="card-title">Ground Truth Files</h2>
+                        </div>
+                    </div>
+                    <div class="doc-slot">
+                        <div class="doc-slot-info">
+                            <div class="doc-slot-icon">
+                                <span class="material-symbols-outlined">picture_as_pdf</span>
+                            </div>
+                            <div class="doc-slot-text">
+                                <span class="doc-slot-name">Bleigh Bande IT CV .pdf</span>
+                                <span class="doc-slot-meta">Official Curriculum Vitae</span>
+                            </div>
+                        </div>
+                        <button class="btn-upload-slot" onclick="switchTab('tab-docs')">
+                            Manage
+                        </button>
+                    </div>
+                    <div class="doc-slot">
+                        <div class="doc-slot-info">
+                            <div class="doc-slot-icon">
+                                <span class="material-symbols-outlined">description</span>
+                            </div>
+                            <div class="doc-slot-text">
+                                <span class="doc-slot-name">Tafadzwa_J.docx</span>
+                                <span class="doc-slot-meta">Personal Bio &amp; Preferences</span>
+                            </div>
+                        </div>
+                        <button class="btn-upload-slot" onclick="switchTab('tab-docs')">
+                            Manage
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Fast Actions -->
+                <div class="card">
+                    <h2 class="card-title">Instant Actions</h2>
+                    <button class="btn-primary" onclick="switchTab('tab-form')">
+                        <span class="material-symbols-outlined">edit_note</span>
+                        Edit Portfolio Content
+                    </button>
+                </div>
+            </section>
+
+            <!-- TAB 2: DOCUMENT VAULT -->
+            <section class="tab-view" id="tab-docs">
+                <div class="view-header">
+                    <h1 class="view-title">Document Vault</h1>
+                    <p class="view-subtitle">Upload &amp; replace verified source documents</p>
+                </div>
+
+                <!-- CV Uploader Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="material-symbols-outlined card-icon">badge</span>
+                            <h2 class="card-title">Curriculum Vitae (PDF)</h2>
+                        </div>
+                    </div>
+                    <p class="doc-slot-meta">Linked directly to the "Download CV" button on the live portfolio.</p>
+                    <div class="dropzone" id="cvDropzone">
+                        <span class="material-symbols-outlined dropzone-icon">upload_file</span>
+                        <span class="dropzone-title">Upload New CV (PDF)</span>
+                        <span class="dropzone-desc">Tap to browse or drop file here</span>
+                        <input type="file" id="cvFileInput" accept=".pdf" style="display:none">
+                    </div>
+                    <div id="cvFileInfo" class="doc-slot" style="display:none;">
+                        <div class="doc-slot-info">
+                            <div class="doc-slot-icon">
+                                <span class="material-symbols-outlined">check_circle</span>
+                            </div>
+                            <div class="doc-slot-text">
+                                <span class="doc-slot-name" id="cvFileName">Bleigh Bande IT CV .pdf</span>
+                                <span class="doc-slot-meta" id="cvFileSize">Ready for deployment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Bio Document Uploader Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="material-symbols-outlined card-icon">psychology</span>
+                            <h2 class="card-title">Personal Bio (DOCX / Text)</h2>
+                        </div>
+                    </div>
+                    <p class="doc-slot-meta">Ground-truth bio, preferences, and verified details.</p>
+                    <div class="dropzone" id="bioDropzone">
+                        <span class="material-symbols-outlined dropzone-icon">article</span>
+                        <span class="dropzone-title">Upload Bio Document (.docx / .txt)</span>
+                        <span class="dropzone-desc">Tap to browse or drop file here</span>
+                        <input type="file" id="bioFileInput" accept=".docx,.doc,.txt,.json" style="display:none">
+                    </div>
+                    <div id="bioFileInfo" class="doc-slot" style="display:none;">
+                        <div class="doc-slot-info">
+                            <div class="doc-slot-icon">
+                                <span class="material-symbols-outlined">check_circle</span>
+                            </div>
+                            <div class="doc-slot-text">
+                                <span class="doc-slot-name" id="bioFileName">Tafadzwa_J.docx</span>
+                                <span class="doc-slot-meta" id="bioFileSize">Ready</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: FORM EDITOR -->
+            <section class="tab-view" id="tab-form">
+                <div class="view-header">
+                    <h1 class="view-title">Live Form Editor</h1>
+                    <p class="view-subtitle">Edit portfolio data without opening project files</p>
+                </div>
+
+                <form id="portfolioEditorForm" onsubmit="handleFormSave(event)">
+                    <!-- Profile Information -->
+                    <div class="card">
+                        <h2 class="card-title">Personal &amp; Contact</h2>
+                        <div class="form-field">
+                            <label class="field-label" for="formName">Full Name</label>
+                            <input type="text" id="formName" class="field-input" value="Bleigh T.J Bande">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formGreeting">Greeting</label>
+                            <input type="text" id="formGreeting" class="field-input" value="Hello, I'm">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formEmail">Email Address</label>
+                            <input type="email" id="formEmail" class="field-input" value="bleighbande@gmail.com">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formPhone">Phone Number</label>
+                            <input type="tel" id="formPhone" class="field-input" value="0776688563">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formLocation">Station Base / Location</label>
+                            <input type="text" id="formLocation" class="field-input" value="Gweru, Zimbabwe">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formBio">Professional Summary</label>
+                            <textarea id="formBio" class="field-textarea">Innovative and technically-driven telecommunications student with a diploma from Trust Academy and currently pursuing a Bachelor’s degree in Telecommunications Engineering at Midlands State University. Possesses foundational knowledge in web technologies, networking, telecoms systems, IT support, and emerging technologies, with leadership experience as Vice President of Data Science MSU Charter.</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Skill Proficiency XP Sliders -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Skill Proficiency XP</h2>
+                            <span class="doc-slot-meta">Touch sliders to calibrate</span>
+                        </div>
+                        <div class="slider-group" id="skillSlidersContainer">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Verified Stats Counters -->
+                    <div class="card">
+                        <h2 class="card-title">Hero Telemetry Stats</h2>
+                        <div class="form-field">
+                            <label class="field-label" for="formStatsProjects">Projects Count</label>
+                            <input type="number" id="formStatsProjects" class="field-input" value="10">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formStatsExp">Years Work Experience</label>
+                            <input type="number" id="formStatsExp" class="field-input" value="1">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formStatsSkills">Skills Count</label>
+                            <input type="number" id="formStatsSkills" class="field-input" value="15">
+                        </div>
+                        <div class="form-field">
+                            <label class="field-label" for="formStatsDiplomas">Diplomas Count</label>
+                            <input type="number" id="formStatsDiplomas" class="field-input" value="1">
+                        </div>
+                    </div>
+                </form>
+            </section>
+
+            <!-- TAB 4: PREVIEW & DEPLOY -->
+            <section class="tab-view" id="tab-deploy">
+                <div class="view-header">
+                    <h1 class="view-title">Deploy &amp; Sync</h1>
+                    <p class="view-subtitle">Publish updates or download updated code</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="material-symbols-outlined card-icon">rocket_launch</span>
+                            <h2 class="card-title">1-Tap Deployment</h2>
+                        </div>
+                    </div>
+                    <p class="doc-slot-meta">Export updated portfolio data directly to your project.</p>
+                    <button class="btn-primary" id="downloadScriptBtn">
+                        <span class="material-symbols-outlined">download</span>
+                        Download Updated script.js
+                    </button>
+                    <button class="btn-tonal" id="copyJsonBtn">
+                        <span class="material-symbols-outlined">content_copy</span>
+                        Copy Config JSON
+                    </button>
+                </div>
+
+                <!-- GitHub Push Integration Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="material-symbols-outlined card-icon">terminal</span>
+                            <h2 class="card-title">GitHub Sync Command</h2>
+                        </div>
+                    </div>
+                    <p class="doc-slot-meta">Run this in your terminal to push anytime:</p>
+                    <div class="stat-box" style="text-align:left; font-family:var(--font-mono); font-size:0.78rem; padding:var(--space-3);">
+                        <code>git add . ; git commit -m "Update portfolio" ; git push origin main</code>
+                    </div>
+                    <button class="btn-tonal" id="copyGitCmdBtn">
+                        <span class="material-symbols-outlined">content_copy</span>
+                        Copy Terminal Command
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Floating Action Button (Save & Sync) -->
+        <button class="fab" id="mainFab" onclick="triggerSave()">
+            <span class="material-symbols-outlined">save</span>
+            <span>Save &amp; Sync</span>
+        </button>
+
+        <!-- Bottom Navigation Bar (Material 3) -->
+        <nav class="bottom-nav" aria-label="Bottom Navigation">
+            <button class="nav-item active" data-target="tab-dashboard" onclick="switchTab('tab-dashboard')">
+                <div class="nav-pill">
+                    <span class="material-symbols-outlined nav-icon">dashboard</span>
+                </div>
+                <span class="nav-label">Dashboard</span>
+            </button>
+            <button class="nav-item" data-target="tab-docs" onclick="switchTab('tab-docs')">
+                <div class="nav-pill">
+                    <span class="material-symbols-outlined nav-icon">folder</span>
+                </div>
+                <span class="nav-label">Documents</span>
+            </button>
+            <button class="nav-item" data-target="tab-form" onclick="switchTab('tab-form')">
+                <div class="nav-pill">
+                    <span class="material-symbols-outlined nav-icon">edit_note</span>
+                </div>
+                <span class="nav-label">Form</span>
+            </button>
+            <button class="nav-item" data-target="tab-deploy" onclick="switchTab('tab-deploy')">
+                <div class="nav-pill">
+                    <span class="material-symbols-outlined nav-icon">rocket_launch</span>
+                </div>
+                <span class="nav-label">Deploy</span>
+            </button>
+        </nav>
+
+        <!-- Mobile Toast Notification -->
+        <div class="mobile-toast" id="mobileToast">
+            <span class="material-symbols-outlined toast-success-icon" id="toastIcon">check_circle</span>
+            <span id="toastMessage">Changes saved successfully</span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
