@@ -23,12 +23,12 @@ app.use(helmet({
   }
 }));
 
-app.use(cors({ origin: false })); // same-origin only
+app.use(cors()); // Allow cross-origin requests for telemetry beacon & local testing
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 200,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
 });
@@ -55,6 +55,8 @@ app.use('/api/skills',           require('./api/skills'));
 app.use('/api/projects',         require('./api/projects'));
 app.use('/api/documents',        uploadLimiter, require('./api/documents'));
 app.use('/api/extraction-jobs',  require('./api/extraction'));
+app.use('/api/analytics',        require('./api/analytics'));
+
 
 // ── Portfolio Sync ────────────────────────────────────────────────────────────
 // POST /api/portfolio/sync — assembles full profile and writes profile.json

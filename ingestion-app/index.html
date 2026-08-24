@@ -79,32 +79,63 @@
   <!-- ── Screen 1: Welcome ───────────────────────────────────────────────── -->
   <section class="screen is-active" id="screen-welcome" aria-labelledby="welcome-title">
     <div class="welcome-hero">
-      <span class="welcome-tag" aria-hidden="true">📄 Data Ingestion Pipeline</span>
+      <span class="welcome-tag" aria-hidden="true">🎛️ Control Room &amp; Data Pipeline</span>
       <h1 class="welcome-title" id="welcome-title">
-        Build your<br><em>professional profile</em>
+        Welcome back, <em id="dashGreetingName">Bleigh</em> 👋
       </h1>
       <p class="welcome-sub">
-        Enter your information step by step, or upload your CV and we'll extract
-        the details automatically. You review everything before it's saved.
+        Manage your portfolio content, run PDF extraction, view visitor telemetry, and sync published files.
       </p>
-      <div class="welcome-pipeline" aria-hidden="true">
-        <span class="pipeline-node">Form</span>
-        <span class="pipeline-arrow">→</span>
-        <span class="pipeline-node">PDF Upload</span>
-        <span class="pipeline-arrow">→</span>
-        <span class="pipeline-node">Extraction</span>
-        <span class="pipeline-arrow">→</span>
-        <span class="pipeline-node">Review</span>
-        <span class="pipeline-arrow">→</span>
-        <span class="pipeline-node">Profile</span>
+    </div>
+
+    <!-- ── Control Room Analytics Card ────────────────────────────────────── -->
+    <div class="confirm-card" style="align-items:stretch;text-align:left;padding:var(--space-6);gap:var(--space-5)">
+      <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--color-rule);padding-bottom:var(--space-3)">
+        <div style="display:flex;align-items:center;gap:var(--space-2)">
+          <span style="width:8px;height:8px;border-radius:50%;background:var(--color-signal-green);display:inline-block"></span>
+          <strong style="font-family:var(--font-mono);font-size:0.75rem;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-ink-muted)">Portfolio Status: Published</strong>
+        </div>
+        <span class="text-mono text-dim" style="font-size:0.75rem" id="dashLastSyncTime">Synced</span>
+      </div>
+
+      <!-- Metrics Grid -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(120px, 1fr));gap:var(--space-3)">
+        <div style="background:var(--color-paper-surface);border:1px solid var(--color-rule);border-radius:var(--radius-sm);padding:var(--space-3);text-align:center">
+          <span style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--color-accent);display:block" id="metricViews">0</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-ink-dim);text-transform:uppercase">Views</span>
+        </div>
+        <div style="background:var(--color-paper-surface);border:1px solid var(--color-rule);border-radius:var(--radius-sm);padding:var(--space-3);text-align:center">
+          <span style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--color-signal-green);display:block" id="metricVisitors">0</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-ink-dim);text-transform:uppercase">Visitors</span>
+        </div>
+        <div style="background:var(--color-paper-surface);border:1px solid var(--color-rule);border-radius:var(--radius-sm);padding:var(--space-3);text-align:center">
+          <span style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--color-signal-amber);display:block" id="metricCvOpens">0</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-ink-dim);text-transform:uppercase">CV Opens</span>
+        </div>
+        <div style="background:var(--color-paper-surface);border:1px solid var(--color-rule);border-radius:var(--radius-sm);padding:var(--space-3);text-align:center">
+          <span style="font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--color-ink);display:block" id="metricProjClicks">0</span>
+          <span style="font-family:var(--font-mono);font-size:0.6875rem;color:var(--color-ink-dim);text-transform:uppercase">Project Clicks</span>
+        </div>
+      </div>
+
+      <!-- Recent Activity Feed -->
+      <div style="display:flex;flex-direction:column;gap:var(--space-2)">
+        <span style="font-family:var(--font-mono);font-size:0.6875rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--color-ink-dim)">Recent Activity</span>
+        <div id="dashActivityList" style="display:flex;flex-direction:column;gap:var(--space-2);font-size:0.875rem;color:var(--color-ink-muted)">
+          <div style="padding:var(--space-2);background:var(--color-paper-surface);border-radius:var(--radius-xs)">No recent activity recorded</div>
+        </div>
       </div>
     </div>
+
     <div class="welcome-actions">
       <button class="btn btn-primary" id="btnStartFresh" type="button">
-        Start fresh — fill in manually
+        Edit Profile &amp; Data →
       </button>
       <button class="btn btn-ghost" id="btnStartWithCV" type="button">
-        Upload my CV first
+        Import from CV (PDF)
+      </button>
+      <button class="btn btn-ghost" id="btnDashSync" type="button" style="border-color:var(--color-accent);color:var(--color-accent)">
+        ⚡ Publish to Portfolio
       </button>
     </div>
   </section>

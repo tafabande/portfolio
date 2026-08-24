@@ -119,3 +119,16 @@ CREATE TABLE IF NOT EXISTS profile_snapshots (
   source        TEXT DEFAULT 'manual',  -- 'manual' | 'pdf_extraction'
   created_at    TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
+-- ─── Analytics Events ─────────────────────────────────────────────────────────
+-- Collects portfolio telemetry: page views, CV opens, project clicks, contact clicks
+CREATE TABLE IF NOT EXISTS analytics_events (
+  id            TEXT PRIMARY KEY,
+  event_type    TEXT NOT NULL CHECK(event_type IN ('page_view','cv_open','project_click','contact_click')),
+  target        TEXT,
+  visitor_id    TEXT,
+  user_agent    TEXT,
+  referrer      TEXT,
+  created_at    TEXT NOT NULL DEFAULT (datetime('now'))
+);
+

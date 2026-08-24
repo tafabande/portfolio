@@ -1109,6 +1109,66 @@ function bindEvents() {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   CONTROL ROOM ANALYTICS
+═══════════════════════════════════════════════════════════════════════════ */
+
+async function loadDashboardAnalytics() {
+  try {
+    const [profile, analytics] = await Promise.all([
+      api('GET', '/api/profile').catch(() => ({})),
+      api('GET', '/api/analytics/summary').catch(() => ({}))
+    ]);
+
+    if (profile.first_name) {
+      const nameEl = document.getElementById('dashGreetingName');
+      if (nameEl) nameEl.textContent = profile.first_name;
+    }
+
+    if (analytics) {
+      const setM = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = (val || 0).toLocaleString();
+      };
+      setM('metricViews',      analytics.totalViews);
+      setM('metricVisitors',   analytics.uniqueVisitors);
+      setM('metricCvOpens',     analytics.cvOpens);
+      setM('metricProjClicks',  analytics.projectClicks);
+
+      const activityList = document.getElementById('dashActivityList');
+      if (activityList && Array.isArray(analytics.recentActivity) && analytics.recentActivity.length) {
+        const icons = {
+          'page_view': '👁 Portfolio viewed',
+          'cv_open': '📄 CV opened / downloaded',
+          'project_click': '🔗 Project link clicked',
+          'contact_click': '✉️ Contact link clicked'
+        };
+
+        activityList.innerHTML = analytics.recentActivity.map(act => {
+          const label = icons[act.event_type] || act.event_type;
+          const targetStr = act.target ? ` · <span class="text-accent">${esc(act.target)}</span>` : '';
+          const timeStr = timeAgo(act.created_at);
+          return `<div style="display:flex;justify-content:space-between;align-items:center;padding:var(--space-2);background:var(--color-paper-surface);border-radius:var(--radius-xs)">
+            <span>${label}${targetStr}</span>
+            <span class="text-mono text-dim" style="font-size:0.75rem">${timeStr}</span>
+          </div>`;
+        }).join('');
+      }
+    }
+  } catch (err) {
+    console.warn('[DASHBOARD] Analytics load error:', err);
+  }
+}
+
+function timeAgo(isoString) {
+  if (!isoString) return 'just now';
+  const diffSec = Math.floor((Date.now() - new Date(isoString).getTime()) / 1000);
+  if (diffSec < 60) return `${Math.max(1, diffSec)}s ago`;
+  if (diffSec < 3600) return `${Math.floor(diffSec / 60)}m ago`;
+  if (diffSec < 86400) return `${Math.floor(diffSec / 3600)}h ago`;
+  return `${Math.floor(diffSec / 86400)}d ago`;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -1116,6 +1176,26 @@ function init() {
   bindEvents();
   tickClock();
   setInterval(tickClock, 1000);
+
+  // Bind Dashboard Quick Sync button
+  const dashSyncBtn = document.getElementById('btnDashSync');
+  if (dashSyncBtn) {
+    dashSyncBtn.addEventListener('click', async () => {
+      dashSyncBtn.dataset.loading = 'true';
+      try {
+        const result = await api('POST', '/api/portfolio/sync');
+        toast('Portfolio synced successfully!', 'success');
+        const timeEl = document.getElementById('dashLastSyncTime');
+        if (timeEl) timeEl.textContent = 'Synced just now';
+      } catch (err) {
+        toast('Sync failed: ' + err.message, 'error');
+      } finally {
+        dashSyncBtn.dataset.loading = 'false';
+      }
+    });
+  }
+
+  loadDashboardAnalytics();
 
   // Check server health
   fetch('/api/health')
@@ -1129,3 +1209,4 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+

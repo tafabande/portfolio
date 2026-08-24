@@ -213,7 +213,39 @@ const snapshots = {
   getLatest() { return get('SELECT * FROM profile_snapshots ORDER BY created_at DESC LIMIT 1'); }
 };
 
+// ── Analytics ────────────────────────────────────────────────────────────────
+const analytics = {
+  logEvent(data) {
+    const id = uuid();
+    run(`INSERT INTO analytics_events (id, event_type, target, visitor_id, user_agent, referrer, created_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, data.event_type, data.target || null, data.visitor_id || null, data.user_agent || null, data.referrer || null, now()]);
+    return { id, success: true };
+  },
+  getSummary() {
+    const totalViews = (get("SELECT COUNT(*) as count FROM analytics_events WHERE event_type = 'page_view'") || {}).count || 0;
+    const uniqueVisitors = (get("SELECT COUNT(DISTINCT visitor_id) as count FROM analytics_events WHERE visitor_id IS NOT NULL AND visitor_id != ''") || {}).count || 0;
+    const cvOpens = (get("SELECT COUNT(*) as count FROM analytics_events WHERE event_type = 'cv_open'") || {}).count || 0;
+    const projectClicks = (get("SELECT COUNT(*) as count FROM analytics_events WHERE event_type = 'project_click'") || {}).count || 0;
+    const contactClicks = (get("SELECT COUNT(*) as count FROM analytics_events WHERE event_type = 'contact_click'") || {}).count || 0;
+
+    const recentActivity = all("SELECT id, event_type, target, created_at FROM analytics_events ORDER BY created_at DESC LIMIT 10");
+    const topProjects = all("SELECT target as name, COUNT(*) as clicks FROM analytics_events WHERE event_type = 'project_click' AND target IS NOT NULL GROUP BY target ORDER BY clicks DESC LIMIT 5");
+
+    return {
+      totalViews,
+      uniqueVisitors: Math.max(uniqueVisitors, totalViews > 0 ? 1 : 0),
+      cvOpens,
+      projectClicks,
+      contactClicks,
+      topProjects,
+      recentActivity
+    };
+  }
+};
+
 // Initialise immediately (fire-and-forget; routes call getDb() which awaits this)
 initDb().catch(e => console.error('[DB] Init error:', e));
 
-module.exports = { getDb: initDb, profile, education, experience, skills, projects, documents, extractionJobs, snapshots };
+module.exports = { getDb: initDb, profile, education, experience, skills, projects, documents, extractionJobs, snapshots, analytics };
+

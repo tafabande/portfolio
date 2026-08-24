@@ -1167,3 +1167,68 @@ function setupKeyboardNav() {
         });
     }
 }
+
+/* ==========================================================================
+   PORTFOLIO ANALYTICS TELEMETRY BEACON
+   ========================================================================== */
+function initPortfolioTelemetry() {
+    const ANALYTICS_URL = 'http://localhost:3737/api/analytics/event';
+    
+    // Visitor ID (anonymized session token stored in localStorage)
+    let visitorId = localStorage.getItem('portfolio_visitor_id');
+    if (!visitorId) {
+        visitorId = 'v_' + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+        localStorage.setItem('portfolio_visitor_id', visitorId);
+    }
+
+    function sendEvent(eventType, target = null) {
+        const payload = JSON.stringify({
+            event_type: eventType,
+            target: target,
+            visitor_id: visitorId
+        });
+
+        if (navigator.sendBeacon) {
+            try {
+                const blob = new Blob([payload], { type: 'application/json' });
+                navigator.sendBeacon(ANALYTICS_URL, blob);
+                return;
+            } catch (e) {}
+        }
+
+        fetch(ANALYTICS_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: payload,
+            keepalive: true
+        }).catch(() => {}); // Fails silently if offline or backend stopped
+    }
+
+    // 1. Record Page View
+    sendEvent('page_view');
+
+    // 2. Track CV Downloads
+    const cvBtn = document.getElementById('cvDownloadBtn');
+    if (cvBtn) {
+        cvBtn.addEventListener('click', () => sendEvent('cv_open', 'Bleigh_Bande_CV.pdf'));
+    }
+
+    // 3. Track Project Link Clicks
+    document.addEventListener('click', (e) => {
+        const card = e.target.closest('.project-card');
+        const link = e.target.closest('a');
+        if (card && link) {
+            const titleEl = card.querySelector('.project-title');
+            const title = titleEl ? titleEl.textContent.trim() : 'Project Link';
+            sendEvent('project_click', title);
+        } else if (link && link.href && (link.href.startsWith('mailto:') || link.href.startsWith('tel:'))) {
+            sendEvent('contact_click', link.href.startsWith('mailto:') ? 'Email' : 'Phone');
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initPortfolioTelemetry();
+});
+
+
