@@ -127,6 +127,28 @@
       </div>
     </div>
 
+    <!-- ── GitHub Authorization & Account Linking Card ───────────────────── -->
+    <div class="confirm-card" style="align-items:stretch;text-align:left;padding:var(--space-5);gap:var(--space-4)">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:var(--space-3)">
+        <div style="display:flex;align-items:center;gap:var(--space-3)">
+          <img id="ghAvatar" src="https://github.com/tafabande.png" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--color-rule)" alt="GitHub Avatar">
+          <div>
+            <strong style="font-family:var(--font-display);font-size:0.9375rem" id="ghUsername">GitHub: @tafabande</strong><br>
+            <span class="text-mono text-dim" style="font-size:0.6875rem" id="ghRepoTarget">Target: tafabande/portfolio (main)</span>
+          </div>
+        </div>
+        <div id="ghAuthActions" style="display:flex;gap:var(--space-2)">
+          <button class="btn btn-sm btn-ghost" id="btnLinkGithub" type="button">🔗 Authorize OAuth</button>
+          <button class="btn btn-sm btn-ghost" id="btnLinkPAT" type="button">🔑 Token Link</button>
+        </div>
+      </div>
+      <div id="ghCommitStatus" style="display:none;padding:var(--space-2) var(--space-3);background:var(--color-paper-surface);border-radius:var(--radius-xs);font-size:0.8125rem;color:var(--color-signal-green);align-items:center;justify-content:space-between">
+        <span>✓ GitHub auto-commit SHA: <strong id="ghLastSha" class="text-mono">—</strong></span>
+        <a id="ghCommitLink" href="#" target="_blank" class="text-mono text-accent" style="font-size:0.75rem">View commit ↗</a>
+      </div>
+    </div>
+
+
     <div class="welcome-actions">
       <button class="btn btn-primary" id="btnStartFresh" type="button">
         Edit Profile &amp; Data →

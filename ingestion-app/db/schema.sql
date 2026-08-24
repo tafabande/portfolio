@@ -132,3 +132,19 @@ CREATE TABLE IF NOT EXISTS analytics_events (
   created_at    TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
+-- ─── GitHub Authorization & Account Linking ──────────────────────────────────
+CREATE TABLE IF NOT EXISTS github_auth (
+  id            INTEGER PRIMARY KEY DEFAULT 1,
+  username      TEXT,
+  avatar_url    TEXT,
+  access_token  TEXT,
+  scope         TEXT,
+  repo_owner    TEXT DEFAULT 'tafabande',
+  repo_name     TEXT DEFAULT 'portfolio',
+  linked_at     TEXT,
+  updated_at    TEXT
+);
+
+INSERT OR IGNORE INTO github_auth (id, repo_owner, repo_name) VALUES (1, 'tafabande', 'portfolio');
+
+

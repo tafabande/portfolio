@@ -244,8 +244,33 @@ const analytics = {
   }
 };
 
+// ── GitHub Auth ──────────────────────────────────────────────────────────────
+const githubAuth = {
+  get() {
+    return get('SELECT * FROM github_auth WHERE id = 1') || { repo_owner: 'tafabande', repo_name: 'portfolio' };
+  },
+  saveToken(data) {
+    const existing = this.get();
+    const owner = data.repo_owner || process.env.GITHUB_REPO_OWNER || existing.repo_owner || 'tafabande';
+    const repo  = data.repo_name  || process.env.GITHUB_REPO_NAME  || existing.repo_name  || 'portfolio';
+    
+    run(`UPDATE github_auth SET 
+         username = ?, avatar_url = ?, access_token = ?, scope = ?, 
+         repo_owner = ?, repo_name = ?, linked_at = ?, updated_at = ?
+         WHERE id = 1`,
+        [data.username || null, data.avatar_url || null, data.access_token || null, data.scope || null,
+         owner, repo, now(), now()]);
+    return this.get();
+  },
+  unlink() {
+    run(`UPDATE github_auth SET username = NULL, avatar_url = NULL, access_token = NULL, scope = NULL, updated_at = ? WHERE id = 1`, [now()]);
+    return this.get();
+  }
+};
+
 // Initialise immediately (fire-and-forget; routes call getDb() which awaits this)
 initDb().catch(e => console.error('[DB] Init error:', e));
 
-module.exports = { getDb: initDb, profile, education, experience, skills, projects, documents, extractionJobs, snapshots, analytics };
+module.exports = { getDb: initDb, profile, education, experience, skills, projects, documents, extractionJobs, snapshots, analytics, githubAuth };
+
 

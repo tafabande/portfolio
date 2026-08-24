@@ -56,10 +56,9 @@ app.use('/api/projects',         require('./api/projects'));
 app.use('/api/documents',        uploadLimiter, require('./api/documents'));
 app.use('/api/extraction-jobs',  require('./api/extraction'));
 app.use('/api/analytics',        require('./api/analytics'));
+app.use('/api/auth',             require('./api/auth'));
 
-
-// ── Portfolio Sync ────────────────────────────────────────────────────────────
-// POST /api/portfolio/sync — assembles full profile and writes profile.json
+// ── Portfolio Sync & GitHub Auto-Publishing ─────────────────────────────────
 app.post('/api/portfolio/sync', async (req, res) => {
   try {
     const db = require('./db/database');
@@ -112,20 +111,87 @@ app.post('/api/portfolio/sync', async (req, res) => {
     // Save snapshot in DB
     db.snapshots.create(fullProfile, 'portfolio_sync');
 
-    // Write profile.json to parent portfolio directory
+    // 1. Write profile.json to local filesystem
     const outputPath = path.resolve(
       process.env.PROFILE_OUTPUT_PATH || path.join(__dirname, '..', 'profile.json')
     );
     fs.writeFileSync(outputPath, JSON.stringify(fullProfile, null, 2), 'utf8');
-
     console.log(`[SYNC] Profile written to ${outputPath}`);
-    res.json({ success: true, outputPath, profile: fullProfile });
+
+    // 2. Publish directly to GitHub repository if account is linked
+    const auth = db.githubAuth.get();
+    const token = auth.access_token || process.env.GITHUB_PERSONAL_TOKEN;
+    let githubPublishResult = null;
+
+    if (token) {
+      const owner = auth.repo_owner || process.env.GITHUB_REPO_OWNER || 'tafabande';
+      const repo  = auth.repo_name  || process.env.GITHUB_REPO_NAME  || 'portfolio';
+      const pathInRepo = 'profile.json';
+      const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${pathInRepo}`;
+
+      // Check if profile.json already exists to get SHA for update
+      let sha = undefined;
+      try {
+        const getRes = await fetch(apiUrl, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'User-Agent': 'Portfolio-Ingestion-App',
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        });
+        if (getRes.ok) {
+          const getJson = await getRes.json();
+          sha = getJson.sha;
+        }
+      } catch (e) {
+        console.warn('[GITHUB PUBLISH] Could not fetch existing file SHA:', e.message);
+      }
+
+      // Commit file to GitHub repo
+      const contentBase64 = Buffer.from(JSON.stringify(fullProfile, null, 2)).toString('base64');
+      const putRes = await fetch(apiUrl, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'User-Agent': 'Portfolio-Ingestion-App',
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `build: Synchronize portfolio profile via Control Room App (${new Date().toISOString()})`,
+          content: contentBase64,
+          sha: sha
+        })
+      });
+
+      if (putRes.ok) {
+        const commitData = await putRes.json();
+        githubPublishResult = {
+          published: true,
+          commitSha: commitData.commit?.sha?.substring(0, 7) || 'success',
+          htmlUrl: commitData.content?.html_url || `https://github.com/${owner}/${repo}`
+        };
+        console.log(`[GITHUB PUBLISH] Published to ${owner}/${repo} (${githubPublishResult.commitSha})`);
+      } else {
+        const errJson = await putRes.json().catch(() => ({}));
+        console.warn('[GITHUB PUBLISH] Failed:', errJson.message || putRes.statusText);
+        githubPublishResult = { published: false, error: errJson.message || `HTTP ${putRes.status}` };
+      }
+    }
+
+    res.json({
+      success: true,
+      outputPath,
+      profile: fullProfile,
+      githubPublish: githubPublishResult
+    });
 
   } catch (err) {
     console.error('[SYNC] Failed:', err.message);
     res.status(500).json({ error: 'Sync failed', detail: err.message });
   }
 });
+
 
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get('/api/health', (req, res) => res.json({ status: 'ok', timestamp: new Date().toISOString() }));

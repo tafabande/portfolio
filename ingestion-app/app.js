@@ -1168,6 +1168,58 @@ function timeAgo(isoString) {
   return `${Math.floor(diffSec / 86400)}d ago`;
 }
 
+async function checkGitHubAuthStatus() {
+  try {
+    const status = await api('GET', '/api/auth/status');
+    const nameEl = document.getElementById('ghUsername');
+    const repoEl = document.getElementById('ghRepoTarget');
+    const avatarEl = document.getElementById('ghAvatar');
+    const actionsEl = document.getElementById('ghAuthActions');
+
+    if (nameEl) nameEl.textContent = `GitHub: @${status.username}`;
+    if (repoEl) repoEl.textContent = `Target: ${status.repoOwner}/${status.repoName} (main)`;
+    if (avatarEl && status.avatarUrl) avatarEl.src = status.avatarUrl;
+
+    if (status.linked && status.hasToken) {
+      if (actionsEl) {
+        actionsEl.innerHTML = `
+          <span style="font-family:var(--font-mono);font-size:0.75rem;color:var(--color-signal-green);padding:4px 8px;background:oklch(74% 0.17 145 / 0.15);border-radius:var(--radius-full)">✓ Authorized</span>
+          <button class="btn btn-sm btn-ghost" id="btnUnlinkGithub" type="button" style="font-size:0.75rem">Unlink</button>
+        `;
+        document.getElementById('btnUnlinkGithub')?.addEventListener('click', async () => {
+          await api('POST', '/api/auth/disconnect');
+          toast('GitHub account unlinked');
+          checkGitHubAuthStatus();
+        });
+      }
+    } else {
+      if (actionsEl) {
+        actionsEl.innerHTML = `
+          <button class="btn btn-sm btn-ghost" id="btnLinkGithub" type="button">🔗 Authorize OAuth</button>
+          <button class="btn btn-sm btn-ghost" id="btnLinkPAT" type="button">🔑 Token Link</button>
+        `;
+        document.getElementById('btnLinkGithub')?.addEventListener('click', () => {
+          window.location.href = '/api/auth/github/login';
+        });
+        document.getElementById('btnLinkPAT')?.addEventListener('click', promptPATLink);
+      }
+    }
+  } catch (err) {
+    console.warn('[AUTH] Status check failed:', err);
+  }
+}
+
+function promptPATLink() {
+  const token = prompt('Enter your GitHub Personal Access Token (with repo scope):');
+  if (!token) return;
+  api('POST', '/api/auth/github/pat', { token })
+    .then(res => {
+      toast(`Successfully linked GitHub account @${res.username}!`, 'success');
+      checkGitHubAuthStatus();
+    })
+    .catch(err => toast(`Linking failed: ${err.message}`, 'error'));
+}
+
 /* ═══════════════════════════════════════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════════════════════════════════════ */
@@ -1176,6 +1228,13 @@ function init() {
   bindEvents();
   tickClock();
   setInterval(tickClock, 1000);
+
+  // Check URL params for OAuth status
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('auth') === 'success') {
+    toast('GitHub Account authorized & linked successfully!', 'success');
+    window.history.replaceState({}, document.title, window.location.pathname);
+  }
 
   // Bind Dashboard Quick Sync button
   const dashSyncBtn = document.getElementById('btnDashSync');
@@ -1187,6 +1246,18 @@ function init() {
         toast('Portfolio synced successfully!', 'success');
         const timeEl = document.getElementById('dashLastSyncTime');
         if (timeEl) timeEl.textContent = 'Synced just now';
+
+        if (result.githubPublish && result.githubPublish.published) {
+          const statusBox = document.getElementById('ghCommitStatus');
+          const shaEl = document.getElementById('ghLastSha');
+          const linkEl = document.getElementById('ghCommitLink');
+          if (statusBox && shaEl && linkEl) {
+            shaEl.textContent = result.githubPublish.commitSha;
+            linkEl.href = result.githubPublish.htmlUrl;
+            statusBox.style.display = 'flex';
+          }
+          toast(`Auto-committed to GitHub (${result.githubPublish.commitSha})`, 'success');
+        }
       } catch (err) {
         toast('Sync failed: ' + err.message, 'error');
       } finally {
@@ -1196,6 +1267,7 @@ function init() {
   }
 
   loadDashboardAnalytics();
+  checkGitHubAuthStatus();
 
   // Check server health
   fetch('/api/health')
@@ -1209,4 +1281,5 @@ function init() {
 }
 
 document.addEventListener('DOMContentLoaded', init);
+
 
