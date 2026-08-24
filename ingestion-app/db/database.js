@@ -27,14 +27,13 @@ async function initDb() {
     // Enable WAL-equivalent pragmas
     _db.run('PRAGMA foreign_keys = ON;');
 
-    if (!fileBuffer) {
-      const schema = fs.readFileSync(SCHEMA_PATH, 'utf8');
-      // Split schema by semicolons and run each statement
-      schema.split(';').map(s => s.trim()).filter(Boolean).forEach(stmt => {
-        try { _db.run(stmt + ';'); } catch (e) { /* ignore if already exists */ }
-      });
-      persistSync();
-    }
+    // Always run schema to ensure any new tables are created
+    const schema = fs.readFileSync(SCHEMA_PATH, 'utf8');
+    schema.split(';').map(s => s.trim()).filter(Boolean).forEach(stmt => {
+      try { _db.run(stmt + ';'); } catch (e) { /* ignore if already exists */ }
+    });
+    persistSync();
+
 
     _ready = true;
     return _db;
@@ -80,6 +79,34 @@ function all(sql, params = []) {
 function now() { return new Date().toISOString(); }
 function uuid() { return require('uuid').v4(); }
 
+// ── Users & Authentication ───────────────────────────────────────────────────
+const bcrypt = require('bcryptjs');
+
+const users = {
+  create(data) {
+    const id = uuid();
+    const hash = bcrypt.hashSync(data.password, 10);
+    run(`INSERT INTO users (id, email, password_hash, first_name, last_name, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [id, data.email.toLowerCase().trim(), hash, data.first_name || null, data.last_name || null, now(), now()]);
+    
+    // Auto-create initial profile bound to this user
+    run('UPDATE profile SET user_id = ?, first_name = ?, last_name = ?, email = ? WHERE id = 1',
+        [id, data.first_name || null, data.last_name || null, data.email]);
+    
+    return this.findById(id);
+  },
+  findByEmail(email) {
+    return get('SELECT * FROM users WHERE lower(email) = lower(?)', [email.trim()]);
+  },
+  findById(id) {
+    return get('SELECT id, email, first_name, last_name, created_at, updated_at FROM users WHERE id = ?', [id]);
+  },
+  verifyPassword(plainPassword, passwordHash) {
+    return bcrypt.compareSync(plainPassword, passwordHash);
+  }
+};
+
 // ── Profile ──────────────────────────────────────────────────────────────────
 const profile = {
   get()  { return get('SELECT * FROM profile WHERE id = 1') || {}; },
@@ -92,6 +119,7 @@ const profile = {
     return this.get();
   }
 };
+
 
 // ── Education ────────────────────────────────────────────────────────────────
 const education = {
@@ -271,6 +299,7 @@ const githubAuth = {
 // Initialise immediately (fire-and-forget; routes call getDb() which awaits this)
 initDb().catch(e => console.error('[DB] Init error:', e));
 
-module.exports = { getDb: initDb, profile, education, experience, skills, projects, documents, extractionJobs, snapshots, analytics, githubAuth };
+module.exports = { getDb: initDb, users, profile, education, experience, skills, projects, documents, extractionJobs, snapshots, analytics, githubAuth };
+
 
 

@@ -2,8 +2,75 @@
 const express = require('express');
 const router  = express.Router();
 const db      = require('../db/database');
+const jwt     = require('jsonwebtoken');
+
+
+const JWT_SECRET = process.env.SESSION_SECRET || 'portfolio-secure-jwt-secret-key-2026';
+
+function generateToken(user) {
+  return jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+}
+
+// Authentication Middleware
+function requireAuth(req, res, next) {
+  const authHeader = req.headers['authorization'] || req.headers['x-auth-token'];
+  if (!authHeader) return res.status(401).json({ error: 'Authentication required' });
+
+  const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader;
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: 'Invalid or expired session token' });
+  }
+}
+
+// POST /api/auth/register — User registration
+router.post('/register', (req, res) => {
+  const { email, password, firstName, lastName } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
+  if (password.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+
+  const existing = db.users.findByEmail(email);
+  if (existing) return res.status(400).json({ error: 'An account with this email already exists' });
+
+  const user = db.users.create({
+    email,
+    password,
+    first_name: firstName,
+    last_name: lastName
+  });
+
+  const token = generateToken(user);
+  res.status(201).json({ success: true, token, user });
+});
+
+// POST /api/auth/login — User authentication
+router.post('/login', (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) return res.status(400).json({ error: 'Email and password are required' });
+
+  const user = db.users.findByEmail(email);
+  if (!user) return res.status(401).json({ error: 'Invalid email or password' });
+
+  const isValid = db.users.verifyPassword(password, user.password_hash);
+  if (!isValid) return res.status(401).json({ error: 'Invalid email or password' });
+
+  const token = generateToken(user);
+  const safeUser = db.users.findById(user.id);
+  res.json({ success: true, token, user: safeUser });
+});
+
+// GET /api/auth/me — Current user profile
+router.get('/me', requireAuth, (req, res) => {
+  const user = db.users.findById(req.user.userId);
+  if (!user) return res.status(404).json({ error: 'User not found' });
+  res.json(user);
+});
 
 // GET /api/auth/status — return link status
+
 router.get('/status', (req, res) => {
   const auth = db.githubAuth.get();
   const token = auth.access_token || process.env.GITHUB_PERSONAL_TOKEN;
@@ -130,3 +197,5 @@ router.post('/disconnect', (req, res) => {
 });
 
 module.exports = router;
+module.exports.requireAuth = requireAuth;
+

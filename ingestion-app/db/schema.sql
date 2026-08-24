@@ -4,9 +4,21 @@
 PRAGMA journal_mode = WAL;
 PRAGMA foreign_keys = ON;
 
--- ─── Profile (single-user, id = 1 always) ────────────────────────────────────
+-- ─── Users & Account Identity ──────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS users (
+  id            TEXT PRIMARY KEY,
+  email         TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  first_name    TEXT,
+  last_name     TEXT,
+  created_at    TEXT NOT NULL DEFAULT (datetime('now')),
+  updated_at    TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- ─── Profile (associated with user) ──────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS profile (
   id            INTEGER PRIMARY KEY DEFAULT 1,
+  user_id       TEXT REFERENCES users(id) ON DELETE CASCADE,
   first_name    TEXT,
   last_name     TEXT,
   email         TEXT,
@@ -16,6 +28,7 @@ CREATE TABLE IF NOT EXISTS profile (
   created_at    TEXT NOT NULL DEFAULT (datetime('now')),
   updated_at    TEXT NOT NULL DEFAULT (datetime('now'))
 );
+
 
 -- Seed empty profile row
 INSERT OR IGNORE INTO profile (id) VALUES (1);

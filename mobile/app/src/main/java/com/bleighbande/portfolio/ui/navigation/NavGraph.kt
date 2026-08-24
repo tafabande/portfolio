@@ -10,6 +10,8 @@ import com.bleighbande.portfolio.ui.screens.*
 import com.bleighbande.portfolio.ui.viewmodel.ProfileViewModel
 
 object Routes {
+    const val LOGIN        = "login"
+    const val REGISTER     = "register"
     const val HOME         = "home"
     const val PROFILE_EDIT = "profile_edit"
     const val EDUCATION    = "education"
@@ -31,6 +33,31 @@ fun AppNavGraph(
     viewModel: ProfileViewModel = viewModel()
 ) {
     NavHost(navController = navController, startDestination = Routes.HOME) {
+
+        composable(Routes.LOGIN) {
+            LoginScreen(
+                viewModel = viewModel,
+                onLoginSuccess = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.LOGIN) { inclusive = true }
+                    }
+                },
+                onNavigateRegister = { navController.navigate(Routes.REGISTER) }
+            )
+        }
+
+        composable(Routes.REGISTER) {
+            RegisterScreen(
+                viewModel = viewModel,
+                onRegisterSuccess = {
+                    navController.navigate(Routes.HOME) {
+                        popUpTo(Routes.REGISTER) { inclusive = true }
+                    }
+                },
+                onNavigateLogin = { navController.navigate(Routes.LOGIN) }
+            )
+        }
+
 
         composable(Routes.HOME) {
             HomeScreen(

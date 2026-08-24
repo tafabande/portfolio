@@ -24,10 +24,13 @@ data class ProfileUiState(
     val documents: List<Document> = emptyList(),
     val authStatus: AuthStatus = AuthStatus(),
     val analytics: AnalyticsSummary = AnalyticsSummary(),
+    val currentUser: UserAccount? = null,
+    val isAuthenticated: Boolean = false,
     val isLoading: Boolean = false,
     val error: String? = null,
     val successMessage: String? = null
 )
+
 
 data class UploadUiState(
     val isUploading: Boolean = false,
@@ -374,9 +377,67 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
+    fun loginUser(email: String, pass: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true, error = null)
+            when (val r = repo.login(LoginRequest(email, pass))) {
+                is Result.Success -> {
+                    val resp = r.data
+                    if (resp.token != null) {
+                        com.bleighbande.portfolio.data.api.ApiClient.setAuthToken(resp.token)
+                        uiState = uiState.copy(
+                            currentUser = resp.user,
+                            isAuthenticated = true,
+                            isLoading = false,
+                            successMessage = "Welcome back, ${resp.user?.firstName ?: "User"}!"
+                        )
+                        loadAll()
+                        onSuccess()
+                    } else {
+                        uiState = uiState.copy(isLoading = false, error = resp.error ?: "Login failed")
+                    }
+                }
+                is Result.Error -> uiState = uiState.copy(isLoading = false, error = r.message)
+                else -> {}
+            }
+        }
+    }
+
+    fun registerUser(email: String, pass: String, firstName: String, lastName: String, onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            uiState = uiState.copy(isLoading = true, error = null)
+            when (val r = repo.register(RegisterRequest(email, pass, firstName, lastName))) {
+                is Result.Success -> {
+                    val resp = r.data
+                    if (resp.token != null) {
+                        com.bleighbande.portfolio.data.api.ApiClient.setAuthToken(resp.token)
+                        uiState = uiState.copy(
+                            currentUser = resp.user,
+                            isAuthenticated = true,
+                            isLoading = false,
+                            successMessage = "Account created successfully!"
+                        )
+                        loadAll()
+                        onSuccess()
+                    } else {
+                        uiState = uiState.copy(isLoading = false, error = resp.error ?: "Registration failed")
+                    }
+                }
+                is Result.Error -> uiState = uiState.copy(isLoading = false, error = r.message)
+                else -> {}
+            }
+        }
+    }
+
+    fun logoutUser() {
+        com.bleighbande.portfolio.data.api.ApiClient.setAuthToken(null)
+        uiState = uiState.copy(currentUser = null, isAuthenticated = false)
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
 
     fun clearMessage() { uiState = uiState.copy(error = null, successMessage = null) }
     fun resetUpload()  { uploadState = UploadUiState(); pollJob?.cancel() }
 }
+
 

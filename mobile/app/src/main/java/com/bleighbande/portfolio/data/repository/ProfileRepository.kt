@@ -67,7 +67,11 @@ class ProfileRepository {
     suspend fun linkPat(token: String): Result<Any> = safeCall { api.linkPat(PatLinkRequest(token)) }
     suspend fun disconnectAuth(): Result<Any> = safeCall { api.disconnectAuth() }
     suspend fun getAnalytics(): Result<AnalyticsSummary> = safeCall { api.getAnalytics() }
+    suspend fun register(req: RegisterRequest): Result<AuthResponse> = safeCall { api.register(req) }
+    suspend fun login(req: LoginRequest): Result<AuthResponse> = safeCall { api.login(req) }
+    suspend fun getMe(): Result<UserAccount> = safeCall { api.getMe() }
     suspend fun checkHealth(): Result<Any> = safeCall { api.health() }
+
 
 
     private suspend fun <T> safeCall(call: suspend () -> retrofit2.Response<T>): Result<T> =

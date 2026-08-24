@@ -105,21 +105,50 @@ interface PortfolioApi {
     @GET("api/analytics/summary")
     suspend fun getAnalytics(): Response<AnalyticsSummary>
 
+    // ── User Authentication & Account ──────────────────────────────────────────
+    @POST("api/auth/register")
+    suspend fun register(@Body req: RegisterRequest): Response<AuthResponse>
+
+    @POST("api/auth/login")
+    suspend fun login(@Body req: LoginRequest): Response<AuthResponse>
+
+    @GET("api/auth/me")
+    suspend fun getMe(): Response<UserAccount>
+
     // ── Health ────────────────────────────────────────────────────────────────
     @GET("api/health")
     suspend fun health(): Response<Any>
-
 }
 
 object ApiClient {
+    private var authToken: String? = null
+
+    fun setAuthToken(token: String?) {
+        authToken = token
+    }
+
+    fun getAuthToken(): String? = authToken
+
+    private val authInterceptor = okhttp3.Interceptor { chain ->
+        val original = chain.request()
+        val builder = original.newBuilder()
+        authToken?.let { token ->
+            if (token.isNotBlank()) {
+                builder.addHeader("Authorization", "Bearer $token")
+            }
+        }
+        chain.proceed(builder.build())
+    }
+
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
 
     private val okHttpClient = OkHttpClient.Builder()
+        .addInterceptor(authInterceptor)
         .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(60, TimeUnit.SECONDS)   // longer for PDF processing
+        .readTimeout(60, TimeUnit.SECONDS)
         .writeTimeout(60, TimeUnit.SECONDS)
         .build()
 
@@ -132,3 +161,4 @@ object ApiClient {
             .create(PortfolioApi::class.java)
     }
 }
+

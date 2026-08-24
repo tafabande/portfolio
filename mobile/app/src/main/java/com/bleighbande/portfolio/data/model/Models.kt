@@ -182,5 +182,34 @@ data class GithubPublishResult(
     val error: String? = null
 )
 
+// ── User Authentication & Account Models ──────────────────────────────────────
+data class UserAccount(
+    val id: String = "",
+    val email: String = "",
+    @SerializedName("first_name") val firstName: String? = null,
+    @SerializedName("last_name") val lastName: String? = null,
+    @SerializedName("created_at") val createdAt: String? = null
+)
+
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+data class RegisterRequest(
+    val email: String,
+    val password: String,
+    val firstName: String? = null,
+    val lastName: String? = null
+)
+
+data class AuthResponse(
+    val success: Boolean = false,
+    val token: String? = null,
+    val user: UserAccount? = null,
+    val error: String? = null
+)
+
 data class ApiError(val error: String)
+
 
