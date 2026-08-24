@@ -11,3 +11,15 @@ node_modules/
 playwright-report/
 test-results/
 .agents/
+.env
+*.db
+uploads/*.pdf
+!uploads/.gitkeep
+
+# Android
+.gradle/
+build/
+**/build/
+*.apk
+*.aar
+

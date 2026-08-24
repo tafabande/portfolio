@@ -18,12 +18,15 @@
             <div class="top-bar-left">
                 <div class="app-avatar">BT</div>
                 <div class="top-bar-title-wrap">
-                    <span class="top-bar-greeting">Portfolio Manager</span>
+                    <span class="top-bar-greeting" id="networkStatusHeader">
+                        <span class="status-dot" id="networkStatusDot" style="color:var(--md-sys-color-success)"></span>
+                        <span id="networkStatusText">Cloud Connected</span>
+                    </span>
                     <span class="top-bar-name">Bleigh T.J Bande</span>
                 </div>
             </div>
             <div class="top-bar-actions">
-                <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle Theme">
+                <button class="icon-btn" id="themeToggleBtn" aria-label="Toggle Theme" title="Toggle Theme">
                     <span class="material-symbols-outlined">dark_mode</span>
                 </button>
                 <a href="../index.html" class="icon-btn" target="_blank" aria-label="Open Live Site" title="View Portfolio">
@@ -48,7 +51,7 @@
                             <span class="material-symbols-outlined card-icon">cloud_done</span>
                             <h2 class="card-title">Live Portfolio</h2>
                         </div>
-                        <span class="chip-status online">
+                        <span class="chip-status online" id="dashLiveChip">
                             <span class="status-dot"></span> 200 OK
                         </span>
                     </div>
@@ -73,6 +76,24 @@
                     <button class="btn-tonal" id="quickSyncBtn">
                         <span class="material-symbols-outlined">sync</span>
                         Quick Verify &amp; Sync
+                    </button>
+                </div>
+
+                <!-- Credentials Summary Tile -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <span class="material-symbols-outlined card-icon">school</span>
+                            <h2 class="card-title">Academic Credentials</h2>
+                        </div>
+                        <span class="doc-slot-meta" id="credentialsSummaryBadge">2 Recorded</span>
+                    </div>
+                    <div id="dashboardCredentialsList" style="display:flex; flex-direction:column; gap:8px;">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                    <button class="btn-tonal" onclick="switchTab('tab-form')">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        Manage Degrees, Diplomas &amp; Certs
                     </button>
                 </div>
 
@@ -112,15 +133,6 @@
                             Manage
                         </button>
                     </div>
-                </div>
-
-                <!-- Fast Actions -->
-                <div class="card">
-                    <h2 class="card-title">Instant Actions</h2>
-                    <button class="btn-primary" onclick="switchTab('tab-form')">
-                        <span class="material-symbols-outlined">edit_note</span>
-                        Edit Portfolio Content
-                    </button>
                 </div>
             </section>
 
@@ -192,7 +204,7 @@
             <section class="tab-view" id="tab-form">
                 <div class="view-header">
                     <h1 class="view-title">Live Form Editor</h1>
-                    <p class="view-subtitle">Edit portfolio data without opening project files</p>
+                    <p class="view-subtitle">Offline-first manager synced directly to the cloud</p>
                 </div>
 
                 <form id="portfolioEditorForm" onsubmit="handleFormSave(event)">
@@ -222,6 +234,23 @@
                         <div class="form-field">
                             <label class="field-label" for="formBio">Professional Summary</label>
                             <textarea id="formBio" class="field-textarea">Innovative and technically-driven telecommunications student with a diploma from Trust Academy and currently pursuing a Bachelor’s degree in Telecommunications Engineering at Midlands State University. Possesses foundational knowledge in web technologies, networking, telecoms systems, IT support, and emerging technologies, with leadership experience as Vice President of Data Science MSU Charter.</textarea>
+                        </div>
+                    </div>
+
+                    <!-- ACADEMIC CREDENTIALS & QUALIFICATIONS (Diploma, Degree, Masters, PhD, Cert) -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title-group">
+                                <span class="material-symbols-outlined card-icon">workspace_premium</span>
+                                <h2 class="card-title">Credentials &amp; Education</h2>
+                            </div>
+                            <button type="button" class="btn-upload-slot" onclick="addNewEducationEntry()">
+                                <span class="material-symbols-outlined" style="font-size:1rem;">add</span> Add
+                            </button>
+                        </div>
+                        <p class="doc-slot-meta">Add or calibrate Degrees, Diplomas, Master's, PhDs, or Certifications.</p>
+                        <div id="educationEntriesContainer" style="display:flex; flex-direction:column; gap:16px;">
+                            <!-- Populated dynamically via JS -->
                         </div>
                     </div>
 
@@ -262,22 +291,33 @@
             <!-- TAB 4: PREVIEW & DEPLOY -->
             <section class="tab-view" id="tab-deploy">
                 <div class="view-header">
-                    <h1 class="view-title">Deploy &amp; Sync</h1>
-                    <p class="view-subtitle">Publish updates or download updated code</p>
+                    <h1 class="view-title">Deploy &amp; Cloud Sync</h1>
+                    <p class="view-subtitle">Offline caching with automatic cloud synchronization</p>
                 </div>
 
+                <!-- Cloud Sync Status Card -->
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title-group">
-                            <span class="material-symbols-outlined card-icon">rocket_launch</span>
-                            <h2 class="card-title">1-Tap Deployment</h2>
+                            <span class="material-symbols-outlined card-icon">cloud_sync</span>
+                            <h2 class="card-title">Cloud Synchronization</h2>
                         </div>
+                        <span class="chip-status online" id="cloudSyncStatusChip">
+                            <span class="status-dot"></span> Online
+                        </span>
                     </div>
-                    <p class="doc-slot-meta">Export updated portfolio data directly to your project.</p>
-                    <button class="btn-primary" id="downloadScriptBtn">
-                        <span class="material-symbols-outlined">download</span>
-                        Download Updated script.js
+                    <p class="doc-slot-meta" id="cloudSyncMetaText">All changes are cached locally in your browser storage and will push to the cloud automatically when connected.</p>
+                    
+                    <button class="btn-primary" id="pushCloudBtn" onclick="pushToCloud()">
+                        <span class="material-symbols-outlined">cloud_upload</span>
+                        Push Changes to Cloud
                     </button>
+                    
+                    <button class="btn-tonal" id="downloadScriptBtn">
+                        <span class="material-symbols-outlined">download</span>
+                        Export State JSON / script.js
+                    </button>
+                    
                     <button class="btn-tonal" id="copyJsonBtn">
                         <span class="material-symbols-outlined">content_copy</span>
                         Copy Config JSON
@@ -294,7 +334,7 @@
                     </div>
                     <p class="doc-slot-meta">Run this in your terminal to push anytime:</p>
                     <div class="stat-box" style="text-align:left; font-family:var(--font-mono); font-size:0.78rem; padding:var(--space-3);">
-                        <code>git add . ; git commit -m "Update portfolio" ; git push origin main</code>
+                        <code>git add . ; git commit -m "Update portfolio credentials" ; git push origin main</code>
                     </div>
                     <button class="btn-tonal" id="copyGitCmdBtn">
                         <span class="material-symbols-outlined">content_copy</span>
@@ -332,9 +372,9 @@
             </button>
             <button class="nav-item" data-target="tab-deploy" onclick="switchTab('tab-deploy')">
                 <div class="nav-pill">
-                    <span class="material-symbols-outlined nav-icon">rocket_launch</span>
+                    <span class="material-symbols-outlined nav-icon">cloud_sync</span>
                 </div>
-                <span class="nav-label">Deploy</span>
+                <span class="nav-label">Cloud</span>
             </button>
         </nav>
 

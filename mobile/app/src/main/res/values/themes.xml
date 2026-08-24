@@ -1,0 +1,4 @@
+<resources>
+    <!-- Base theme — Compose handles all actual styling -->
+    <style name="Theme.PortfolioApp" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

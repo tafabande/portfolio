@@ -836,16 +836,28 @@ function populateExperience() {
     }).join('');
 }
 
+function getQualificationIcon(type, customIcon) {
+    if (customIcon) return customIcon;
+    const t = (type || '').toLowerCase();
+    if (t.includes('phd') || t.includes('doctorate')) return 'psychology';
+    if (t.includes('master')) return 'history_edu';
+    if (t.includes('degree') || t.includes('bachelor')) return 'school';
+    if (t.includes('diploma')) return 'workspace_premium';
+    if (t.includes('cert')) return 'verified';
+    return 'military_tech';
+}
+
 function populateEducation() {
     const list = cacheElement('educationList');
     if (!list) return;
 
     list.innerHTML = portfolioData.education.map(edu => {
         const isOngoing = edu.year.includes('Present');
+        const iconName = getQualificationIcon(edu.qualificationType, edu.icon);
         return `
             <div class="education-card">
                 <div class="education-icon-wrap">
-                    <span class="material-symbols-outlined">${edu.icon}</span>
+                    <span class="material-symbols-outlined">${iconName}</span>
                 </div>
                 <div class="education-details">
                     <div class="education-badge-row">

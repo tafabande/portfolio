@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Builder — Bleigh T.J Bande</title>
+  <meta name="description" content="CV ingestion and profile builder — upload your PDF and we'll extract your professional profile automatically.">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ── System telemetry bar ─────────────────────────────────────────────── -->
+<header class="system-bar" aria-label="Application status">
+  <div class="system-bar-inner">
+    <div class="system-status">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span class="status-text">Profile Builder · Data Ingestion Pipeline</span>
+    </div>
+    <div class="system-meta">
+      <span id="sysTime" class="text-mono text-dim">Loading…</span>
+      <span class="system-sep" aria-hidden="true">/</span>
+      <span class="system-badge text-mono text-dim">v1.0</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── Progress stepper ─────────────────────────────────────────────────── -->
+<nav class="stepper" aria-label="Profile builder progress" id="progressStepper">
+  <div class="stepper-inner">
+    <div class="step-item is-active" data-screen="welcome"    id="step-welcome">
+      <span class="step-num" aria-hidden="true">1</span>
+      <span class="step-label">Welcome</span>
+    </div>
+    <div class="step-item" data-screen="personal"  id="step-personal">
+      <span class="step-num" aria-hidden="true">2</span>
+      <span class="step-label">Personal</span>
+    </div>
+    <div class="step-item" data-screen="education" id="step-education">
+      <span class="step-num" aria-hidden="true">3</span>
+      <span class="step-label">Education</span>
+    </div>
+    <div class="step-item" data-screen="experience" id="step-experience">
+      <span class="step-num" aria-hidden="true">4</span>
+      <span class="step-label">Experience</span>
+    </div>
+    <div class="step-item" data-screen="skills"    id="step-skills">
+      <span class="step-num" aria-hidden="true">5</span>
+      <span class="step-label">Skills</span>
+    </div>
+    <div class="step-item" data-screen="projects"  id="step-projects">
+      <span class="step-num" aria-hidden="true">6</span>
+      <span class="step-label">Projects</span>
+    </div>
+    <div class="step-item" data-screen="upload"    id="step-upload">
+      <span class="step-num" aria-hidden="true">7</span>
+      <span class="step-label">Upload CV</span>
+    </div>
+    <div class="step-item" data-screen="processing" id="step-processing">
+      <span class="step-num" aria-hidden="true">8</span>
+      <span class="step-label">Processing</span>
+    </div>
+    <div class="step-item" data-screen="review"    id="step-review">
+      <span class="step-num" aria-hidden="true">9</span>
+      <span class="step-label">Review</span>
+    </div>
+    <div class="step-item" data-screen="confirm"   id="step-confirm">
+      <span class="step-num" aria-hidden="true">10</span>
+      <span class="step-label">Confirm</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Main wizard ───────────────────────────────────────────────────────── -->
+<main class="wizard-main" id="main-content">
+
+  <!-- ── Screen 1: Welcome ───────────────────────────────────────────────── -->
+  <section class="screen is-active" id="screen-welcome" aria-labelledby="welcome-title">
+    <div class="welcome-hero">
+      <span class="welcome-tag" aria-hidden="true">📄 Data Ingestion Pipeline</span>
+      <h1 class="welcome-title" id="welcome-title">
+        Build your<br><em>professional profile</em>
+      </h1>
+      <p class="welcome-sub">
+        Enter your information step by step, or upload your CV and we'll extract
+        the details automatically. You review everything before it's saved.
+      </p>
+      <div class="welcome-pipeline" aria-hidden="true">
+        <span class="pipeline-node">Form</span>
+        <span class="pipeline-arrow">→</span>
+        <span class="pipeline-node">PDF Upload</span>
+        <span class="pipeline-arrow">→</span>
+        <span class="pipeline-node">Extraction</span>
+        <span class="pipeline-arrow">→</span>
+        <span class="pipeline-node">Review</span>
+        <span class="pipeline-arrow">→</span>
+        <span class="pipeline-node">Profile</span>
+      </div>
+    </div>
+    <div class="welcome-actions">
+      <button class="btn btn-primary" id="btnStartFresh" type="button">
+        Start fresh — fill in manually
+      </button>
+      <button class="btn btn-ghost" id="btnStartWithCV" type="button">
+        Upload my CV first
+      </button>
+    </div>
+  </section>
+
+  <!-- ── Screen 2: Personal Information ─────────────────────────────────── -->
+  <section class="screen" id="screen-personal" aria-labelledby="personal-title">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 2 of 10</span>
+      <h2 class="screen-title" id="personal-title">Personal information</h2>
+      <p class="screen-desc">Basic contact details for your profile.</p>
+    </div>
+
+    <form id="formPersonal" novalidate>
+      <div style="display:flex;flex-direction:column;gap:var(--space-5)">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="firstName">
+              First name <span class="required" aria-label="required">*</span>
+            </label>
+            <input class="form-input" type="text" id="firstName" name="first_name"
+                   autocomplete="given-name" placeholder="Bleigh" required>
+            <span class="form-error-msg" id="firstName-error">First name is required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="lastName">Last name</label>
+            <input class="form-input" type="text" id="lastName" name="last_name"
+                   autocomplete="family-name" placeholder="Bande">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="email">
+              Email <span class="required" aria-label="required">*</span>
+            </label>
+            <input class="form-input" type="email" id="email" name="email"
+                   autocomplete="email" placeholder="bleigh@example.com" required>
+            <span class="form-error-msg" id="email-error">Valid email required</span>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="phone">Phone</label>
+            <input class="form-input" type="tel" id="phone" name="phone"
+                   autocomplete="tel" placeholder="+263 7X XXX XXXX">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="location">Location</label>
+          <input class="form-input" type="text" id="location" name="location"
+                 autocomplete="address-level2" placeholder="Gweru, Zimbabwe">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bio">Bio / Professional summary</label>
+          <textarea class="form-textarea" id="bio" name="bio" rows="4"
+                    placeholder="Telecommunications engineer passionate about networking, systems, and building tools that matter…"></textarea>
+          <span class="form-hint">Shown on your portfolio profile.</span>
+        </div>
+      </div>
+    </form>
+
+    <div class="screen-nav">
+      <div class="screen-nav-left">
+        <button class="btn btn-ghost" type="button" data-nav="prev">← Back</button>
+      </div>
+      <div class="screen-nav-right">
+        <button class="btn btn-ghost" type="button" data-nav="skip">Skip</button>
+        <button class="btn btn-primary" type="button" id="btnSavePersonal">
+          Save &amp; continue →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 3: Education ─────────────────────────────────────────────── -->
+  <section class="screen" id="screen-education" aria-labelledby="education-title">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 3 of 10</span>
+      <h2 class="screen-title" id="education-title">Education</h2>
+      <p class="screen-desc">Your academic qualifications. Add as many as you need.</p>
+    </div>
+
+    <div id="educationList" class="entries-list">
+      <!-- Entries injected by JS -->
+    </div>
+
+    <button class="btn btn-add" type="button" id="btnAddEducation">
+      + Add education
+    </button>
+
+    <div class="screen-nav">
+      <div class="screen-nav-left">
+        <button class="btn btn-ghost" type="button" data-nav="prev">← Back</button>
+      </div>
+      <div class="screen-nav-right">
+        <button class="btn btn-ghost" type="button" data-nav="skip">Skip</button>
+        <button class="btn btn-primary" type="button" id="btnSaveEducation">
+          Save &amp; continue →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 4: Experience ────────────────────────────────────────────── -->
+  <section class="screen" id="screen-experience" aria-labelledby="experience-title">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 4 of 10</span>
+      <h2 class="screen-title" id="experience-title">Work experience</h2>
+      <p class="screen-desc">Positions you've held. Most recent first.</p>
+    </div>
+
+    <div id="experienceList" class="entries-list">
+      <!-- Entries injected by JS -->
+    </div>
+
+    <button class="btn btn-add" type="button" id="btnAddExperience">
+      + Add experience
+    </button>
+
+    <div class="screen-nav">
+      <div class="screen-nav-left">
+        <button class="btn btn-ghost" type="button" data-nav="prev">← Back</button>
+      </div>
+      <div class="screen-nav-right">
+        <button class="btn btn-ghost" type="button" data-nav="skip">Skip</button>
+        <button class="btn btn-primary" type="button" id="btnSaveExperience">
+          Save &amp; continue →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 5: Skills ────────────────────────────────────────────────── -->
+  <section class="screen" id="screen-skills" aria-labelledby="skills-title">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 5 of 10</span>
+      <h2 class="screen-title" id="skills-title">Skills</h2>
+      <p class="screen-desc">Type a skill and press Enter or comma to add it.</p>
+    </div>
+
+    <div class="form-group" style="position:relative">
+      <label class="form-label" for="skillInput">Skills</label>
+      <div class="skill-tags-container" id="skillTagsContainer" role="group" aria-label="Skills list">
+        <input class="skill-input" type="text" id="skillInput"
+               placeholder="e.g. Python, Cisco, Networking…"
+               autocomplete="off" aria-autocomplete="list"
+               aria-controls="skillSuggestions" aria-expanded="false">
+      </div>
+      <div class="skill-suggestions" id="skillSuggestions" role="listbox" aria-label="Skill suggestions"></div>
+      <span class="form-hint">Common: Python, JavaScript, Cisco, Linux, Git, Docker, SQL…</span>
+    </div>
+
+    <div class="screen-nav">
+      <div class="screen-nav-left">
+        <button class="btn btn-ghost" type="button" data-nav="prev">← Back</button>
+      </div>
+      <div class="screen-nav-right">
+        <button class="btn btn-ghost" type="button" data-nav="skip">Skip</button>
+        <button class="btn btn-primary" type="button" id="btnSaveSkills">
+          Save &amp; continue →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 6: Projects ──────────────────────────────────────────────── -->
+  <section class="screen" id="screen-projects" aria-labelledby="projects-title">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 6 of 10</span>
+      <h2 class="screen-title" id="projects-title">Projects</h2>
+      <p class="screen-desc">Side projects, open-source work, or academic projects.</p>
+    </div>
+
+    <div id="projectsList" class="entries-list">
+      <!-- Entries injected by JS -->
+    </div>
+
+    <button class="btn btn-add" type="button" id="btnAddProject">
+      + Add project
+    </button>
+
+    <div class="screen-nav">
+      <div class="screen-nav-left">
+        <button class="btn btn-ghost" type="button" data-nav="prev">← Back</button>
+      </div>
+      <div class="screen-nav-right">
+        <button class="btn btn-ghost" type="button" data-nav="skip">Skip</button>
+        <button class="btn btn-primary" type="button" id="btnSaveProjects">
+          Save &amp; continue →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 7: PDF Upload ────────────────────────────────────────────── -->
+  <section class="screen" id="screen-upload" aria-labelledby="upload-title">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 7 of 10</span>
+      <h2 class="screen-title" id="upload-title">Import from CV</h2>
+      <p class="screen-desc">
+        Upload your CV or résumé and we'll extract information automatically.
+        You'll review everything before it's saved.
+      </p>
+    </div>
+
+    <div class="alert alert-info" role="note">
+      <span class="alert-icon" aria-hidden="true">💡</span>
+      <span>If you already filled in details above, extraction results will <strong>suggest updates</strong> — you confirm what to keep.</span>
+    </div>
+
+    <div class="upload-zone" id="uploadZone" role="button" tabindex="0"
+         aria-label="Upload PDF — drag and drop or click to browse">
+      <input type="file" id="fileInput" accept=".pdf,application/pdf"
+             aria-label="Choose PDF file" aria-describedby="uploadMeta">
+      <div class="upload-icon" aria-hidden="true">📄</div>
+      <p class="upload-zone-title">Drop your PDF here</p>
+      <p class="upload-zone-sub">
+        or click to choose a file
+      </p>
+      <span class="upload-zone-meta" id="uploadMeta">PDF only · Max 10 MB</span>
+    </div>
+
+    <div id="uploadSelectedInfo" style="display:none">
+      <div class="alert alert-info">
+        <span class="alert-icon" aria-hidden="true">📎</span>
+        <div>
+          <strong id="selectedFileName">file.pdf</strong><br>
+          <span class="text-dim text-mono" id="selectedFileSize">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="uploadError" style="display:none">
+      <div class="alert alert-error" role="alert">
+        <span class="alert-icon" aria-hidden="true">⚠️</span>
+        <span id="uploadErrorMsg">Upload failed</span>
+      </div>
+    </div>
+
+    <div class="screen-nav">
+      <div class="screen-nav-left">
+        <button class="btn btn-ghost" type="button" data-nav="prev">← Back</button>
+      </div>
+      <div class="screen-nav-right">
+        <button class="btn btn-ghost" type="button" data-nav="skip">Skip PDF upload</button>
+        <button class="btn btn-primary" type="button" id="btnUpload" disabled>
+          Upload &amp; extract →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 8: Processing ────────────────────────────────────────────── -->
+  <section class="screen" id="screen-processing" aria-labelledby="processing-title" aria-live="polite">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 8 of 10</span>
+      <h2 class="screen-title" id="processing-title">Processing your CV</h2>
+      <p class="screen-desc">Hold tight while we extract your information.</p>
+    </div>
+
+    <div class="pipeline-stages" role="list" aria-label="Processing stages">
+      <div class="pipeline-stage" data-state="pending" id="stage-upload" role="listitem">
+        <div class="pipeline-stage-icon" aria-hidden="true">↑</div>
+        <div class="pipeline-stage-text">
+          <span class="pipeline-stage-name">File uploaded</span>
+          <span class="pipeline-stage-detail" id="stage-upload-detail">Waiting…</span>
+        </div>
+      </div>
+      <div class="pipeline-stage" data-state="pending" id="stage-validate" role="listitem">
+        <div class="pipeline-stage-icon" aria-hidden="true">🔍</div>
+        <div class="pipeline-stage-text">
+          <span class="pipeline-stage-name">Document verified</span>
+          <span class="pipeline-stage-detail" id="stage-validate-detail">Waiting…</span>
+        </div>
+      </div>
+      <div class="pipeline-stage" data-state="pending" id="stage-text" role="listitem">
+        <div class="pipeline-stage-icon" aria-hidden="true">📝</div>
+        <div class="pipeline-stage-text">
+          <span class="pipeline-stage-name">Extracting text</span>
+          <span class="pipeline-stage-detail" id="stage-text-detail">Waiting…</span>
+        </div>
+      </div>
+      <div class="pipeline-stage" data-state="pending" id="stage-parse" role="listitem">
+        <div class="pipeline-stage-icon" aria-hidden="true">🧩</div>
+        <div class="pipeline-stage-text">
+          <span class="pipeline-stage-name">Analysing content</span>
+          <span class="pipeline-stage-detail" id="stage-parse-detail">Waiting…</span>
+        </div>
+      </div>
+      <div class="pipeline-stage" data-state="pending" id="stage-done" role="listitem">
+        <div class="pipeline-stage-icon" aria-hidden="true">✓</div>
+        <div class="pipeline-stage-text">
+          <span class="pipeline-stage-name">Ready for review</span>
+          <span class="pipeline-stage-detail" id="stage-done-detail">Waiting…</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="processingError" style="display:none">
+      <div class="alert alert-error" role="alert">
+        <span class="alert-icon" aria-hidden="true">⚠️</span>
+        <div>
+          <strong>Extraction failed</strong><br>
+          <span id="processingErrorMsg">Something went wrong.</span>
+        </div>
+      </div>
+      <div style="margin-top:var(--space-4);display:flex;gap:var(--space-3)">
+        <button class="btn btn-ghost" type="button" id="btnRetryExtraction">Retry</button>
+        <button class="btn btn-ghost" type="button" data-nav="skip-to-review">Skip &amp; review manually</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 9: Review ────────────────────────────────────────────────── -->
+  <section class="screen" id="screen-review" aria-labelledby="review-title">
+    <div class="screen-header">
+      <span class="screen-kicker">Step 9 of 10</span>
+      <h2 class="screen-title" id="review-title">Review extracted information</h2>
+      <p class="screen-desc">
+        Check the extracted data and correct anything that looks wrong.
+        Confidence scores show how certain the extraction was.
+      </p>
+    </div>
+
+    <div class="alert alert-warning" id="reviewLowConfAlert" style="display:none" role="alert">
+      <span class="alert-icon" aria-hidden="true">⚠️</span>
+      <span>Some fields have low confidence. Please verify the highlighted items before continuing.</span>
+    </div>
+
+    <!-- Personal -->
+    <div class="review-section" id="reviewPersonalSection">
+      <div class="review-section-header">
+        <span class="review-section-title">Personal information</span>
+        <button class="btn btn-sm btn-ghost" type="button" id="btnEditPersonal">Edit</button>
+      </div>
+      <div id="reviewPersonalFields"><!-- Injected by JS --></div>
+    </div>
+
+    <!-- Education -->
+    <div class="review-section" id="reviewEducationSection">
+      <div class="review-section-header">
+        <span class="review-section-title">Education</span>
+        <button class="btn btn-sm btn-ghost" type="button" id="btnEditEducation">Edit</button>
+      </div>
+      <div id="reviewEducationFields"><!-- Injected by JS --></div>
+    </div>
+
+    <!-- Experience -->
+    <div class="review-section" id="reviewExperienceSection">
+      <div class="review-section-header">
+        <span class="review-section-title">Experience</span>
+        <button class="btn btn-sm btn-ghost" type="button" id="btnEditExperience">Edit</button>
+      </div>
+      <div id="reviewExperienceFields"><!-- Injected by JS --></div>
+    </div>
+
+    <!-- Skills -->
+    <div class="review-section" id="reviewSkillsSection">
+      <div class="review-section-header">
+        <span class="review-section-title">Skills</span>
+        <button class="btn btn-sm btn-ghost" type="button" id="btnEditSkills">Edit</button>
+      </div>
+      <div id="reviewSkillsFields"><!-- Injected by JS --></div>
+    </div>
+
+    <div class="screen-nav">
+      <div class="screen-nav-left">
+        <button class="btn btn-ghost" type="button" data-nav="prev">← Back</button>
+      </div>
+      <div class="screen-nav-right">
+        <button class="btn btn-primary" type="button" id="btnConfirmReview">
+          Confirm information →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Screen 10: Confirm ──────────────────────────────────────────────── -->
+  <section class="screen" id="screen-confirm" aria-labelledby="confirm-title">
+    <div class="confirm-card">
+      <div class="confirm-icon success" aria-hidden="true">✓</div>
+      <h2 class="confirm-title" id="confirm-title">Profile confirmed</h2>
+      <p class="confirm-sub">
+        Your profile is saved. Sync it to your portfolio or continue editing.
+      </p>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);width:100%;max-width:320px">
+        <button class="btn btn-primary" type="button" id="btnSyncPortfolio" style="width:100%">
+          Sync to portfolio →
+        </button>
+        <button class="btn btn-ghost" type="button" id="btnEditAgain" style="width:100%">
+          ← Edit profile
+        </button>
+        <button class="btn btn-ghost" type="button" id="btnViewPortfolio" style="width:100%">
+          View portfolio ↗
+        </button>
+      </div>
+    </div>
+
+    <div id="syncStatus" style="display:none">
+      <div class="alert alert-success" role="status">
+        <span class="alert-icon" aria-hidden="true">✓</span>
+        <div>
+          <strong>Synced to portfolio</strong><br>
+          <span class="text-mono text-dim" id="syncOutputPath">profile.json written</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main><!-- /wizard-main -->
+
+<!-- ── Toast container ───────────────────────────────────────────────────── -->
+<div class="toast-container" id="toastContainer" aria-live="polite" aria-atomic="true"></div>
+
+<!-- ── Confirm dialog ─────────────────────────────────────────────────────── -->
+<div class="dialog-backdrop" id="confirmDialog" role="dialog" aria-modal="true"
+     aria-labelledby="dialogTitle" aria-describedby="dialogBody">
+  <div class="dialog">
+    <h3 class="dialog-title" id="dialogTitle">Remove entry?</h3>
+    <p class="dialog-body" id="dialogBody">This will permanently remove this entry from your profile.</p>
+    <div class="dialog-actions">
+      <button class="btn btn-ghost" type="button" id="dialogCancel">Cancel</button>
+      <button class="btn btn-danger" type="button" id="dialogConfirm">Remove</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

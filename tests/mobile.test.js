@@ -25,9 +25,33 @@ test.describe('Mobile App Hub E2E Tests (Android Viewport)', () => {
         await expect(page.locator('#tab-form')).toHaveClass(/active/);
         await expect(page.locator('#formName')).toHaveValue('Bleigh T.J Bande');
 
-        // Switch to Deploy
+        // Switch to Deploy / Cloud
         await page.locator('.nav-item[data-target="tab-deploy"]').click();
         await expect(page.locator('#tab-deploy')).toHaveClass(/active/);
+    });
+
+    test('should dynamically manage education credentials (degrees, diplomas, masters, phds)', async ({ page }) => {
+        await page.locator('.nav-item[data-target="tab-form"]').click();
+        
+        // Check initial qualifications count
+        const initialCards = await page.locator('#educationEntriesContainer .card').count();
+        expect(initialCards).toBeGreaterThanOrEqual(2);
+
+        // Click Add button to add a new qualification
+        await page.locator('button[onclick="addNewEducationEntry()"]').click();
+        
+        // Verify a new card was added
+        const newCount = await page.locator('#educationEntriesContainer .card').count();
+        expect(newCount).toBe(initialCards + 1);
+
+        // Set the new card type to Master's Degree
+        const lastCard = page.locator('#educationEntriesContainer .card').last();
+        const typeSelect = lastCard.locator('select').first();
+        await typeSelect.selectOption("Master's");
+
+        // Save & Sync via FAB
+        await page.locator('#mainFab').click();
+        await expect(page.locator('#mobileToast')).toHaveClass(/show/);
     });
 
     test('should update skill XP values with sliders', async ({ page }) => {
@@ -37,6 +61,14 @@ test.describe('Mobile App Hub E2E Tests (Android Viewport)', () => {
         await firstSlider.dispatchEvent('input');
         
         await expect(page.locator('#skillVal_0')).toContainText('95% · 950 XP');
+    });
+
+    test('should trigger cloud push and export', async ({ page }) => {
+        await page.locator('.nav-item[data-target="tab-deploy"]').click();
+        
+        const pushBtn = page.locator('#pushCloudBtn');
+        await pushBtn.click();
+        await expect(page.locator('#mobileToast')).toHaveClass(/show/);
     });
 
     test('should toggle dark/light theme on mobile', async ({ page }) => {
