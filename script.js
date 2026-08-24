@@ -469,34 +469,18 @@ function copyEmailToClipboard() {
 }
 
 /* ==========================================================================
-   GITHUB REPOSITORIES API & LOCALSTORAGE CACHE
+   VERIFIED PROJECTS RENDERER (NO UNAUTHENTICATED API CALLS)
    ========================================================================== */
 async function fetchGitHubProjects() {
     const grid = cacheElement('projectsGrid');
     if (!grid) return;
 
-    const username = portfolioData.github.username;
-    const cacheKey = 'github_projects_cache';
-    const cacheTimeKey = 'github_projects_cache_time';
-    const cacheExpiry = 60 * 60 * 1000; // 1 hour
-
-    grid.innerHTML = `
-        <div class="loading-state">
-            <span class="material-symbols-outlined" style="font-size:2rem;color:var(--color-accent);animation:spin 1s linear infinite;">progress_activity</span>
-            <p style="margin-top:0.75rem;color:var(--color-ink-muted);">Synchronizing verified projects from GitHub...</p>
-        </div>`;
-
-    let repos = [];
-    let usedCache = false;
-
-    const fallbackProjects = [
+    const verifiedProjects = [
         {
             name: "portfolio-cv-ingestion-app",
             description: "Full-stack data ingestion application for PDF CV extraction, normalization, SQLite persistence, and portfolio sync.",
             language: "JavaScript / Node.js",
             stargazers_count: 5,
-            fork: false,
-            pushed_at: new Date().toISOString(),
             html_url: "https://github.com/tafabande/portfolio",
             homepage: "http://localhost:3737"
         },
@@ -505,8 +489,6 @@ async function fetchGitHubProjects() {
             description: "Native Android application built with Kotlin, Jetpack Compose, Material 3, and Retrofit 2 for mobile portfolio management.",
             language: "Kotlin",
             stargazers_count: 4,
-            fork: false,
-            pushed_at: new Date(Date.now() - 3600000).toISOString(),
             html_url: "https://github.com/tafabande/portfolio"
         },
         {
@@ -514,8 +496,6 @@ async function fetchGitHubProjects() {
             description: "Centralized IT asset tracking & network hardware database implemented at Parirenyatwa Hospitals.",
             language: "Python",
             stargazers_count: 3,
-            fork: false,
-            pushed_at: "2026-08-01T12:00:00Z",
             html_url: "https://github.com/tafabande"
         },
         {
@@ -523,8 +503,6 @@ async function fetchGitHubProjects() {
             description: "Simulated enterprise LAN/WAN topologies, VLAN routing, and OSPF/BGP routing configuration models.",
             language: "Cisco IOS",
             stargazers_count: 5,
-            fork: false,
-            pushed_at: "2026-07-15T12:00:00Z",
             html_url: "https://github.com/tafabande"
         },
         {
@@ -532,8 +510,6 @@ async function fetchGitHubProjects() {
             description: "Community workshops platform and data science learning repository for Midlands State University charter.",
             language: "JavaScript",
             stargazers_count: 8,
-            fork: false,
-            pushed_at: "2026-06-20T12:00:00Z",
             html_url: "https://github.com/tafabande"
         },
         {
@@ -541,66 +517,11 @@ async function fetchGitHubProjects() {
             description: "Real-time subnet scanning, packet latency diagnostics, and network service uptime monitoring tool.",
             language: "Python",
             stargazers_count: 4,
-            fork: false,
-            pushed_at: "2026-05-10T12:00:00Z",
             html_url: "https://github.com/tafabande"
         }
     ];
 
-    try {
-        const cachedTime = localStorage.getItem(cacheTimeKey);
-        const cachedData = localStorage.getItem(cacheKey);
-
-        if (cachedData && cachedTime && (Date.now() - parseInt(cachedTime)) < cacheExpiry) {
-            repos = JSON.parse(cachedData);
-            usedCache = true;
-        } else {
-            const res = await fetch(`https://api.github.com/users/${username}/repos?sort=pushed&direction=desc&per_page=20`);
-            if (!res.ok) {
-                if (res.status === 403 || res.status === 429) {
-                    console.warn('GitHub API rate limit reached (403/429). Using fallback repository portfolio.');
-                }
-                throw new Error(`GitHub API error: ${res.status}`);
-            }
-            repos = await res.json();
-            if (Array.isArray(repos)) {
-                localStorage.setItem(cacheKey, JSON.stringify(repos));
-                localStorage.setItem(cacheTimeKey, Date.now().toString());
-            }
-        }
-    } catch (err) {
-        const cachedData = localStorage.getItem(cacheKey);
-        if (cachedData) {
-            try {
-                repos = JSON.parse(cachedData);
-                usedCache = true;
-            } catch (e) {
-                repos = fallbackProjects;
-            }
-        } else {
-            repos = fallbackProjects;
-        }
-    }
-
-    if (!Array.isArray(repos) || repos.length === 0) {
-        repos = fallbackProjects;
-    }
-
-    const filtered = repos
-        .filter(r => r && !r.fork)
-        .sort((a, b) => {
-            const dateA = a.pushed_at ? new Date(a.pushed_at).getTime() : 0;
-            const dateB = b.pushed_at ? new Date(b.pushed_at).getTime() : 0;
-            return dateB - dateA;
-        })
-        .slice(0, 6);
-
-    if (filtered.length === 0) {
-        grid.innerHTML = '<div class="loading-state">No public repositories discovered.</div>';
-        return;
-    }
-
-    grid.innerHTML = filtered.map(repo => `
+    grid.innerHTML = verifiedProjects.map(repo => `
         <article class="project-card">
             <div class="project-card-top">
                 <div class="project-badge-row">
@@ -611,7 +532,7 @@ async function fetchGitHubProjects() {
                     </div>
                 </div>
                 <h3 class="project-title">${(repo.name || '').replace(/-/g, ' ').replace(/_/g, ' ')}</h3>
-                <p class="project-desc">${repo.description || 'Telecommunications & web engineering repository on GitHub.'}</p>
+                <p class="project-desc">${repo.description || 'Telecommunications & web engineering repository.'}</p>
             </div>
             <div class="project-card-footer">
                 <a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" class="project-link" aria-label="View source for ${repo.name}">
@@ -630,35 +551,15 @@ async function fetchGitHubProjects() {
 }
 
 /* ==========================================================================
-   DYNAMIC CV DOWNLOAD DETECTOR
+   DYNAMIC CV DOWNLOAD TARGET
    ========================================================================== */
-async function fetchLatestCV() {
+function fetchLatestCV() {
     const btn = cacheElement('cvDownloadBtn');
     if (!btn) return;
-
-    try {
-        const username = portfolioData.github.username;
-        const pathSegments = window.location.pathname.split('/').filter(s => s);
-        const repo = pathSegments.length > 0 ? pathSegments[0] : 'portfolio';
-
-        const res = await fetch(`https://api.github.com/repos/${username}/${repo}/contents/`);
-        if (!res.ok) return;
-
-        const files = await res.json();
-        if (!Array.isArray(files)) return;
-
-        const cvFiles = files.filter(f =>
-            f.name && f.name.toLowerCase().endsWith('.pdf') &&
-            (f.name.toLowerCase().includes('cv') || f.name.toLowerCase().includes('resume'))
-        );
-
-        if (cvFiles.length > 0) {
-            cvFiles.sort((a, b) => b.name.localeCompare(a.name));
-            btn.href = cvFiles[0].download_url || cvFiles[0].path;
-            btn.download = cvFiles[0].name;
-        }
-    } catch (err) {}
+    btn.href = './Bleigh_Bande_CV.pdf';
+    btn.download = 'Bleigh_Bande_CV.pdf';
 }
+
 
 /* ==========================================================================
    NAVIGATION & ACTIVE SCROLL INDICATOR
