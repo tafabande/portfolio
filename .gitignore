@@ -6,5 +6,8 @@ Thumbs.db
 .vscode/
 .idea/
 
-# Node (future-proofing)
+# Node & Tests
 node_modules/
+playwright-report/
+test-results/
+.agents/

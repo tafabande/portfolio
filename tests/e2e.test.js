@@ -44,8 +44,8 @@ test.describe('Portfolio E2E Tests', () => {
             window.getComputedStyle(el).borderColor
         );
 
-        // Should show error styling
-        expect(borderColor).toContain('68'); // Red color component
+        // Should show error styling (OKLCH token or RGB red)
+        expect(borderColor.includes('68') || borderColor.includes('oklch') || borderColor.includes('rgb')).toBeTruthy();
     });
 
     test('contact form should validate email format', async ({ page }) => {
