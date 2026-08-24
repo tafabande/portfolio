@@ -1299,7 +1299,42 @@ button, input, textarea, select {
 .education-details {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.35rem;
+}
+
+.education-badge-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.education-type-badge {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-accent);
+    background-color: var(--color-accent-subtle);
+    padding: 0.1rem 0.45rem;
+    border-radius: var(--radius-xs);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.education-status-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: var(--radius-xs);
+}
+
+.education-status-tag.in-progress {
+    color: var(--color-signal-green);
+    background-color: color-mix(in srgb, var(--color-signal-green) 12%, transparent);
+}
+
+.education-status-tag.completed {
+    color: var(--color-ink-dim);
+    background-color: var(--color-paper);
 }
 
 .education-degree {
@@ -1321,17 +1356,6 @@ button, input, textarea, select {
     font-family: var(--font-mono);
     font-size: 0.75rem;
     color: var(--color-ink-dim);
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-}
-
-.education-ongoing-tag {
-    font-size: 0.65rem;
-    color: var(--color-signal-green);
-    background-color: color-mix(in srgb, var(--color-signal-green) 12%, transparent);
-    padding: 0.1rem 0.35rem;
-    border-radius: var(--radius-xs);
 }
 
 .education-info {

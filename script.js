@@ -14,7 +14,7 @@ const portfolioData = {
             "Data Science Leader",
             "Network Systems Problem Solver"
         ],
-        description: "Innovative and technically-driven telecommunications engineering scholar at Midlands State University with a foundational Diploma from Trust Academy. Vice President of the Data Science MSU Charter. Experienced in network switching, fiber diagnostics, IT system automation, and modern web application development.",
+        description: "Innovative and technically-driven telecommunications student with a diploma from Trust Academy and currently pursuing a Bachelor’s degree in Telecommunications Engineering at Midlands State University. Possesses foundational knowledge in web technologies, networking, telecoms systems, IT support, and emerging technologies, with leadership experience as Vice President of the Data Science MSU Charter.",
         email: "bleighbande@gmail.com",
         phone: "0776688563",
         location: "Gweru, Zimbabwe",
@@ -28,9 +28,9 @@ const portfolioData = {
     ],
     stats: {
         projects: 10,
-        experience: 4,
+        experience: 1, // 1 Year verified work experience at Parirenyatwa (2021)
         skills: 15,
-        certifications: 2
+        diplomas: 1    // 1 Diploma from Trust Academy
     },
     skills: [
         {
@@ -99,38 +99,40 @@ const portfolioData = {
         {
             title: "Vice President — Data Science MSU Charter",
             company: "Midlands State University",
+            type: "Leadership",
             startDate: "2025-02",
-            endDate: null, // Ongoing active role (autodetects duration to present)
-            date: "Feb 2025 — Present",
+            endDate: null,
+            date: "February 2025 — Present",
             description: "Leading the MSU Data Science Charter, orchestrating practical analytical workshops, student technical cohorts, and university-wide hackathons. Liaising between engineering faculties and industry partners."
         },
         {
             title: "IT Support & Systems Intern",
             company: "Parirenyatwa Group Of Hospitals",
-            startDate: "2021-01",
-            endDate: "2021-12", // Completed internship
-            date: "2021",
-            description: "Engineered and deployed a centralized IT inventory database, reducing manual tracking errors by 30%. Collaborated on linking the Annexe Psychiatric Hospital to the hospital core network and upgraded infrastructure for Sekuru Kaguvi Eye Hospital. Automated user reset requests log, cutting manual workload by 40%."
+            type: "Work Experience",
+            startDate: "2021",
+            endDate: "2021",
+            date: "2021 (1 Year)",
+            description: "Designed and implemented a centralized IT inventory database, streamlining asset tracking and reducing manual entry errors by 30%. Diagnosed and resolved daily PC and peripheral devices. Conducted hardware infrastructure surveys and end-user training. Collaborated on connecting Annexe Psychiatric Hospital to the central network and upgraded infrastructure for Sekuru Kaguvi Eye Hospital. Automated user reset requests log, cutting processing time by 40%."
         }
     ],
     education: [
         {
-            degree: "BSc Telecommunications Engineering",
-            icon: "school",
+            degree: "Bachelor of Science in Telecommunications Engineering",
+            qualificationType: "Degree",
             institution: "Midlands State University",
-            startDate: "2024-02",
-            endDate: null, // Ongoing degree (autodetects to present)
-            year: "Feb 2024 — Present",
-            details: "Specializing in advanced optical communication, RF signal propagation, digital switching architectures, and computer networking."
+            status: "In Progress",
+            icon: "school",
+            year: "February 2024 — Present",
+            details: "Currently pursuing a Bachelor’s degree in Telecommunications Engineering building on foundation in networks, electronics and communication systems in emerging ICT systems."
         },
         {
             degree: "Diploma in Telecommunications",
-            icon: "workspace_premium",
+            qualificationType: "Diploma",
             institution: "Trust Academy",
-            startDate: "2017-06",
-            endDate: "2023-06",
+            status: "Completed (Credit)",
+            icon: "workspace_premium",
             year: "June 2017 — June 2023",
-            details: "Rigorous hands-on engineering foundation in digital telecommunications, electronics, signals, and routing protocols."
+            details: "Successfully completed diploma in Telecommunications gaining hands-on training and solid academic foundation in digital systems, signal processing and telecoms switching."
         }
     ],
     contact: {
@@ -711,9 +713,9 @@ function setupThemeToggle() {
 function setupCounters() {
     const counters = [
         { el: cacheElement('statsProjects'), target: portfolioData.stats.projects, suffix: '+' },
-        { el: cacheElement('statsExperience'), target: portfolioData.stats.experience, suffix: '+' },
+        { el: cacheElement('statsExperience'), target: portfolioData.stats.experience, suffix: ' Yr' },
         { el: cacheElement('statsSkills'), target: portfolioData.stats.skills, suffix: '+' },
-        { el: cacheElement('statsDiplomas'), target: portfolioData.stats.certifications, suffix: '+' },
+        { el: cacheElement('statsDiplomas'), target: portfolioData.stats.diplomas, suffix: '' },
     ];
 
     const observer = new IntersectionObserver((entries) => {
@@ -800,34 +802,12 @@ function populateSkills() {
 }
 
 function formatTimelineDate(item) {
-    if (!item.startDate) {
-        return {
-            dateStr: item.date || item.year || '',
-            durationStr: '',
-            isOngoing: false
-        };
-    }
-
-    const isOngoing = !item.endDate || item.endDate.toLowerCase() === 'present';
-    const start = new Date(item.startDate + '-01');
-    const end = isOngoing ? new Date() : new Date(item.endDate + '-01');
-
-    // Calculate actual elapsed duration
-    const totalMonths = Math.max(1, (end.getFullYear() - start.getFullYear()) * 12 + (end.getMonth() - start.getMonth()) + 1);
-    let durationStr = '';
-    const yrs = Math.floor(totalMonths / 12);
-    const mos = totalMonths % 12;
-    if (yrs > 0 && mos > 0) {
-        durationStr = `${yrs} yr${yrs > 1 ? 's' : ''} ${mos} mo${mos > 1 ? 's' : ''}`;
-    } else if (yrs > 0) {
-        durationStr = `${yrs} yr${yrs > 1 ? 's' : ''}`;
-    } else {
-        durationStr = `${mos} mo${mos > 1 ? 's' : ''}`;
-    }
+    const dateStr = item.date || item.year || '';
+    const isOngoing = dateStr.includes('Present');
 
     return {
-        dateStr: item.date || item.year || (isOngoing ? 'Present' : item.endDate),
-        durationStr: isOngoing ? `${durationStr} · Ongoing` : durationStr,
+        dateStr: dateStr,
+        durationStr: isOngoing ? 'Active Role' : '',
         isOngoing: isOngoing
     };
 }
@@ -844,7 +824,6 @@ function populateExperience() {
                     <h3 class="timeline-title">${exp.title}</h3>
                     <div class="timeline-date-wrap">
                         <span class="timeline-date">${timeInfo.dateStr}</span>
-                        ${timeInfo.durationStr ? `<span class="timeline-duration">(${timeInfo.durationStr})</span>` : ''}
                     </div>
                 </div>
                 <div class="timeline-company">
@@ -862,19 +841,20 @@ function populateEducation() {
     if (!list) return;
 
     list.innerHTML = portfolioData.education.map(edu => {
-        const timeInfo = formatTimelineDate(edu);
+        const isOngoing = edu.year.includes('Present');
         return `
             <div class="education-card">
                 <div class="education-icon-wrap">
                     <span class="material-symbols-outlined">${edu.icon}</span>
                 </div>
                 <div class="education-details">
+                    <div class="education-badge-row">
+                        <span class="education-type-badge">${edu.qualificationType}</span>
+                        ${edu.status ? `<span class="education-status-tag ${isOngoing ? 'in-progress' : 'completed'}">${edu.status}</span>` : ''}
+                    </div>
                     <h3 class="education-degree">${edu.degree}</h3>
                     <div class="education-institution">${edu.institution}</div>
-                    <div class="education-year">
-                        ${timeInfo.dateStr}
-                        ${timeInfo.isOngoing ? `<span class="education-ongoing-tag">In Progress</span>` : ''}
-                    </div>
+                    <div class="education-year">${edu.year}</div>
                     <p class="education-info">${edu.details}</p>
                 </div>
             </div>
