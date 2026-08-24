@@ -203,34 +203,124 @@ fun HomeScreen(
                 }
             }
 
-            // ── Sync button ─────────────────────────────────────────────────────
+            // ── GitHub Authorization Card ───────────────────────────────────────
             item {
-                var syncLoading by remember { mutableStateOf(false) }
-                OutlinedButton(
-                    onClick = {
-                        syncLoading = true
-                        viewModel.syncPortfolio { success, msg ->
-                            syncLoading = false
-                            scope.launch {
-                                snackbarHostState.showSnackbar(if (success) "✓ $msg" else "✕ $msg")
+                Text(
+                    text = "GitHub Authorization".uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(bottom = 4.dp, top = 8.dp)
+                )
+            }
+            item {
+                val auth = state.authStatus
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    color = MaterialTheme.colorScheme.surface,
+                    border = androidx.compose.foundation.BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column {
+                                Text(
+                                    text = "GitHub: @${auth.username}",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.SemiBold
+                                )
+                                Text(
+                                    text = "Target: ${auth.repoOwner}/${auth.repoName} (main)",
+                                    style = MaterialTheme.typography.labelMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                            Surface(
+                                shape = RoundedCornerShape(50),
+                                color = if (auth.linked) SignalGreen.copy(alpha = 0.15f) else AmberSubtle
+                            ) {
+                                Text(
+                                    text = if (auth.linked) "✓ Authorized" else "Unlinked",
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = if (auth.linked) SignalGreen else Amber400,
+                                    modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+                                )
                             }
                         }
-                    },
-                    modifier = Modifier.fillMaxWidth().height(52.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    border = androidx.compose.foundation.BorderStroke(
-                        1.dp, MaterialTheme.colorScheme.outlineVariant
-                    )
-                ) {
-                    if (syncLoading) {
-                        CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp)
-                    } else {
-                        Icon(Icons.Default.Sync, contentDescription = null, modifier = Modifier.size(18.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("Sync to Portfolio", fontWeight = FontWeight.Medium)
                     }
                 }
             }
+
+            // ── Analytics Summary Card ──────────────────────────────────────────
+            item {
+                Text(
+                    text = "Live Telemetry & Views".uppercase(),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(bottom = 4.dp, top = 4.dp)
+                )
+            }
+            item {
+                val analytics = state.analytics
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    StatCard("Views", analytics.totalViews.toString(), "👁", Modifier.weight(1f))
+                    StatCard("Visitors", analytics.uniqueVisitors.toString(), "👤", Modifier.weight(1f))
+                    StatCard("CV Opens", analytics.cvOpens.toString(), "📄", Modifier.weight(1f))
+                    StatCard("Clicks", analytics.projectClicks.toString(), "🔗", Modifier.weight(1f))
+                }
+            }
+
+            // ── Sync button ─────────────────────────────────────────────────────
+            item {
+                var syncLoading by remember { mutableStateOf(false) }
+                var lastSha by remember { mutableStateOf<String?>(null) }
+
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Button(
+                        onClick = {
+                            syncLoading = true
+                            viewModel.syncPortfolio { success, msg, ghResult ->
+                                syncLoading = false
+                                if (ghResult?.published == true) {
+                                    lastSha = ghResult.commitSha
+                                }
+                                scope.launch {
+                                    val feedback = if (ghResult?.published == true)
+                                        "✓ Synced & Auto-Committed to GitHub (${ghResult.commitSha})!"
+                                    else if (success) "✓ $msg"
+                                    else "✕ $msg"
+                                    snackbarHostState.showSnackbar(feedback)
+                                }
+                            }
+                        },
+                        modifier = Modifier.fillMaxWidth().height(52.dp),
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                    ) {
+                        if (syncLoading) {
+                            CircularProgressIndicator(Modifier.size(18.dp), strokeWidth = 2.dp, color = MaterialTheme.colorScheme.onPrimary)
+                        } else {
+                            Icon(Icons.Default.Sync, contentDescription = null, modifier = Modifier.size(18.dp))
+                            Spacer(Modifier.width(8.dp))
+                            Text("Publish & Commit to GitHub", fontWeight = FontWeight.Bold)
+                        }
+                    }
+                    if (lastSha != null) {
+                        Text(
+                            text = "✓ GitHub Commit SHA: $lastSha",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = SignalGreen
+                        )
+                    }
+                }
+            }
+
 
             item { Spacer(Modifier.height(32.dp)) }
         }

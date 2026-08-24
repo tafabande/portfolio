@@ -87,16 +87,28 @@ interface PortfolioApi {
     @POST("api/extraction-jobs/{id}/confirm")
     suspend fun confirmJob(@Path("id") id: String): Response<Any>
 
-    @POST("api/extraction-jobs/{id}/retry")
-    suspend fun retryJob(@Path("id") id: String): Response<Any>
-
     // ── Portfolio Sync ────────────────────────────────────────────────────────
     @POST("api/portfolio/sync")
     suspend fun syncPortfolio(): Response<SyncResponse>
 
+    // ── GitHub Auth ───────────────────────────────────────────────────────────
+    @GET("api/auth/status")
+    suspend fun getAuthStatus(): Response<AuthStatus>
+
+    @POST("api/auth/github/pat")
+    suspend fun linkPat(@Body req: PatLinkRequest): Response<Any>
+
+    @POST("api/auth/disconnect")
+    suspend fun disconnectAuth(): Response<Any>
+
+    // ── Analytics ─────────────────────────────────────────────────────────────
+    @GET("api/analytics/summary")
+    suspend fun getAnalytics(): Response<AnalyticsSummary>
+
     // ── Health ────────────────────────────────────────────────────────────────
     @GET("api/health")
     suspend fun health(): Response<Any>
+
 }
 
 object ApiClient {

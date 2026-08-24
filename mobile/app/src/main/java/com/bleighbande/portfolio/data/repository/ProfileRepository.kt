@@ -63,7 +63,12 @@ class ProfileRepository {
     suspend fun retryJob(id: String): Result<Any> = safeCall { api.retryJob(id) }
 
     suspend fun syncPortfolio(): Result<SyncResponse> = safeCall { api.syncPortfolio() }
+    suspend fun getAuthStatus(): Result<AuthStatus> = safeCall { api.getAuthStatus() }
+    suspend fun linkPat(token: String): Result<Any> = safeCall { api.linkPat(PatLinkRequest(token)) }
+    suspend fun disconnectAuth(): Result<Any> = safeCall { api.disconnectAuth() }
+    suspend fun getAnalytics(): Result<AnalyticsSummary> = safeCall { api.getAnalytics() }
     suspend fun checkHealth(): Result<Any> = safeCall { api.health() }
+
 
     private suspend fun <T> safeCall(call: suspend () -> retrofit2.Response<T>): Result<T> =
         withContext(Dispatchers.IO) {

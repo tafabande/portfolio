@@ -126,6 +126,40 @@ data class ExtractedSkill(
     val category: String? = null
 )
 
+// ── Analytics Summary ─────────────────────────────────────────────────────────
+data class AnalyticsSummary(
+    val totalViews: Int = 0,
+    val uniqueVisitors: Int = 0,
+    val cvOpens: Int = 0,
+    val projectClicks: Int = 0,
+    val contactClicks: Int = 0,
+    val recentActivity: List<ActivityEvent>? = null
+)
+
+data class ActivityEvent(
+    val id: String = "",
+    @SerializedName("event_type") val eventType: String = "",
+    val target: String? = null,
+    @SerializedName("created_at") val createdAt: String? = null
+)
+
+// ── GitHub Auth Status ────────────────────────────────────────────────────────
+data class AuthStatus(
+    val linked: Boolean = false,
+    val username: String = "tafabande",
+    val avatarUrl: String? = null,
+    val repoOwner: String = "tafabande",
+    val repoName: String = "portfolio",
+    val hasToken: Boolean = false,
+    val linkedAt: String? = null
+)
+
+data class PatLinkRequest(
+    val token: String,
+    val repoOwner: String? = "tafabande",
+    val repoName: String? = "portfolio"
+)
+
 // ── API responses ─────────────────────────────────────────────────────────────
 data class UploadResponse(
     val documentId: String,
@@ -137,7 +171,16 @@ data class UploadResponse(
 data class SyncResponse(
     val success: Boolean,
     val outputPath: String?,
-    val profile: Any?
+    val profile: Any?,
+    val githubPublish: GithubPublishResult? = null
+)
+
+data class GithubPublishResult(
+    val published: Boolean = false,
+    val commitSha: String? = null,
+    val htmlUrl: String? = null,
+    val error: String? = null
 )
 
 data class ApiError(val error: String)
+

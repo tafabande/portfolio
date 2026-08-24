@@ -22,6 +22,8 @@ data class ProfileUiState(
     val skills: List<Skill> = emptyList(),
     val projects: List<Project> = emptyList(),
     val documents: List<Document> = emptyList(),
+    val authStatus: AuthStatus = AuthStatus(),
+    val analytics: AnalyticsSummary = AnalyticsSummary(),
     val isLoading: Boolean = false,
     val error: String? = null,
     val successMessage: String? = null
@@ -65,6 +67,8 @@ class ProfileViewModel : ViewModel() {
             loadExperience()
             loadSkills()
             loadProjects()
+            loadAuthStatus()
+            loadAnalytics()
             uiState = uiState.copy(isLoading = false)
         }
     }
@@ -317,13 +321,54 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
+    fun loadAuthStatus() {
+        viewModelScope.launch {
+            when (val r = repo.getAuthStatus()) {
+                is Result.Success -> uiState = uiState.copy(authStatus = r.data)
+                else -> {}
+            }
+        }
+    }
+
+    fun loadAnalytics() {
+        viewModelScope.launch {
+            when (val r = repo.getAnalytics()) {
+                is Result.Success -> uiState = uiState.copy(analytics = r.data)
+                else -> {}
+            }
+        }
+    }
+
+    fun linkGithubPat(token: String, onResult: (Boolean, String) -> Unit) {
+        viewModelScope.launch {
+            when (val r = repo.linkPat(token)) {
+                is Result.Success -> {
+                    loadAuthStatus()
+                    onResult(true, "GitHub account authorized!")
+                }
+                is Result.Error -> onResult(false, r.message)
+                else -> {}
+            }
+        }
+    }
+
+    fun disconnectGithub() {
+        viewModelScope.launch {
+            repo.disconnectAuth()
+            loadAuthStatus()
+        }
+    }
+
     // ── Sync to portfolio ─────────────────────────────────────────────────────
 
-    fun syncPortfolio(onResult: (Boolean, String) -> Unit) {
+    fun syncPortfolio(onResult: (Boolean, String, GithubPublishResult?) -> Unit) {
         viewModelScope.launch {
             when (val r = repo.syncPortfolio()) {
-                is Result.Success -> onResult(true, r.data.outputPath ?: "profile.json synced")
-                is Result.Error   -> onResult(false, r.message)
+                is Result.Success -> {
+                    loadAnalytics()
+                    onResult(true, r.data.outputPath ?: "profile.json synced", r.data.githubPublish)
+                }
+                is Result.Error   -> onResult(false, r.message, null)
                 else -> {}
             }
         }
@@ -334,3 +379,4 @@ class ProfileViewModel : ViewModel() {
     fun clearMessage() { uiState = uiState.copy(error = null, successMessage = null) }
     fun resetUpload()  { uploadState = UploadUiState(); pollJob?.cancel() }
 }
+
