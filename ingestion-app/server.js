@@ -68,7 +68,9 @@ app.use('/api/projects',         require('./api/projects'));
 app.use('/api/documents',        uploadLimiter, require('./api/documents'));
 app.use('/api/extraction-jobs',  require('./api/extraction'));
 app.use('/api/analytics',        require('./api/analytics'));
+app.use('/api/stats',            require('./api/analytics'));
 app.use('/api/auth',             authLimiter, require('./api/auth'));
+
 app.use('/api/versions',         require('./api/versions'));
 
 // ── Portfolio Sync & GitHub Auto-Publishing ─────────────────────────────────

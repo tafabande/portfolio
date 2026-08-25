@@ -1070,10 +1070,10 @@ function setupKeyboardNav() {
 }
 
 /* ==========================================================================
-   PORTFOLIO ANALYTICS TELEMETRY BEACON
+   PORTFOLIO TELEMETRY BEACON (ADBLOCK-FRIENDLY ENDPOINT)
    ========================================================================== */
 function initPortfolioTelemetry() {
-    const ANALYTICS_URL = 'http://localhost:3737/api/analytics/event';
+    const STATS_URL = 'http://localhost:3737/api/stats/ping';
     
     // Visitor ID (anonymized session token stored in localStorage)
     let visitorId = localStorage.getItem('portfolio_visitor_id');
@@ -1083,27 +1083,28 @@ function initPortfolioTelemetry() {
     }
 
     function sendEvent(eventType, target = null) {
-        const payload = JSON.stringify({
-            event_type: eventType,
-            target: target,
-            visitor_id: visitorId
-        });
+        try {
+            const payload = JSON.stringify({
+                event_type: eventType,
+                target: target,
+                visitor_id: visitorId
+            });
 
-        if (navigator.sendBeacon) {
-            try {
+            if (navigator.sendBeacon) {
                 const blob = new Blob([payload], { type: 'application/json' });
-                navigator.sendBeacon(ANALYTICS_URL, blob);
-                return;
-            } catch (e) {}
-        }
+                const sent = navigator.sendBeacon(STATS_URL, blob);
+                if (sent) return;
+            }
 
-        fetch(ANALYTICS_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: payload,
-            keepalive: true
-        }).catch(() => {}); // Fails silently if offline or backend stopped
+            fetch(STATS_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: payload,
+                keepalive: true
+            }).catch(() => {}); // Fails silently if offline or blocked
+        } catch (err) {}
     }
+
 
     // 1. Record Page View
     sendEvent('page_view');
