@@ -37,7 +37,10 @@ const server = http.createServer((req, res) => {
         res.writeHead(200, {
             'Content-Type': contentType,
             'Cache-Control': 'no-cache',
-            'Access-Control-Allow-Origin': '*'
+            'Access-Control-Allow-Origin': req.headers.origin || '*',
+            'Access-Control-Allow-Credentials': 'true',
+            'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
         });
 
         fs.createReadStream(filePath).pipe(res);

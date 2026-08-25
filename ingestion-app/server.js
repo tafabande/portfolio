@@ -23,7 +23,10 @@ app.use(helmet({
   }
 }));
 
-app.use(cors()); // Allow cross-origin requests for telemetry beacon & local testing
+app.use(cors({
+  origin: true, // Dynamically mirror request Origin (handles 'null' from file://, localhost:8080, etc.)
+  credentials: true
+})); // Allow cross-origin requests for telemetry beacon & local testing
 
 // Rate limiting
 const limiter = rateLimit({

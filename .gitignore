@@ -23,3 +23,6 @@ build/
 *.apk
 *.aar
 
+# Tesseract
+*.traineddata
+
