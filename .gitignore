@@ -23,6 +23,8 @@ build/
 **/build/
 *.apk
 *.aar
+local.properties
+**/local.properties
 !gradle/wrapper/gradle-wrapper.jar
 !**/gradle-wrapper.jar
 
