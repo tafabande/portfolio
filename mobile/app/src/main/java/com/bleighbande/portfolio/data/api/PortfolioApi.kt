@@ -87,6 +87,9 @@ interface PortfolioApi {
     @POST("api/extraction-jobs/{id}/confirm")
     suspend fun confirmJob(@Path("id") id: String): Response<Any>
 
+    @POST("api/extraction-jobs/{id}/retry")
+    suspend fun retryJob(@Path("id") id: String): Response<Any>
+
     // ── Portfolio Sync ────────────────────────────────────────────────────────
     @POST("api/portfolio/sync")
     suspend fun syncPortfolio(): Response<SyncResponse>

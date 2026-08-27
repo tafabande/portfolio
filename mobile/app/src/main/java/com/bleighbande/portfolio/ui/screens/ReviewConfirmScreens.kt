@@ -1,6 +1,16 @@
-package com.bleighbande.portfolio.ui.screens
-
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -18,6 +28,7 @@ import com.bleighbande.portfolio.ui.theme.SignalRed
 import com.bleighbande.portfolio.ui.viewmodel.ProfileViewModel
 
 // ── Review ────────────────────────────────────────────────────────────────────
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ReviewScreen(
     viewModel: ProfileViewModel,
@@ -234,7 +245,7 @@ fun ConfirmScreen(
                 enabled = !syncSuccess,
                 onClick = {
                     syncLoading = true
-                    viewModel.syncPortfolio { ok, msg ->
+                    viewModel.syncPortfolio { ok, msg, _ ->
                         syncLoading = false
                         syncResult  = msg
                         syncSuccess = ok
@@ -264,6 +275,3 @@ fun ConfirmScreen(
         }
     }
 }
-
-// Alias for FlowRow availability
-private typealias FlowRow = androidx.compose.foundation.layout.FlowRow

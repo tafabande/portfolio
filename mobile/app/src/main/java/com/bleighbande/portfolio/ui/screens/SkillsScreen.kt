@@ -25,6 +25,7 @@ val SUGGESTED_SKILLS = listOf(
     "HTML","CSS","SQL","MATLAB","R"
 )
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun SkillsScreen(
     viewModel: ProfileViewModel,

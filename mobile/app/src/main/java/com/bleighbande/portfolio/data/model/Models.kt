@@ -36,8 +36,10 @@ data class Education(
     @SerializedName("end_date")   val endDate: String? = null,
     val description: String? = null
 ) {
-    val dateRange: String get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
-    val displayTitle: String get() = listOfNotNull(qualification, field).joinToString(" in ").ifBlank { institution }
+    val dateRange: String
+        get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
+    val displayTitle: String
+        get() = listOfNotNull(qualification, field).joinToString(" in ").ifBlank { institution }
 }
 
 // ── Experience ───────────────────────────────────────────────────────────────
@@ -50,7 +52,8 @@ data class Experience(
     val location: String? = null,
     val description: String? = null
 ) {
-    val dateRange: String get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
+    val dateRange: String
+        get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
 }
 
 // ── Skills ───────────────────────────────────────────────────────────────────
