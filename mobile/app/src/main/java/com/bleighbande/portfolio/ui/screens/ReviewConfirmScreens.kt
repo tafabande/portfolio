@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.bleighbande.portfolio.data.model.ExtractedProfile
+import com.bleighbande.portfolio.data.model.*
 import com.bleighbande.portfolio.ui.components.*
 import com.bleighbande.portfolio.ui.theme.SignalGreen
 import com.bleighbande.portfolio.ui.theme.SignalAmber

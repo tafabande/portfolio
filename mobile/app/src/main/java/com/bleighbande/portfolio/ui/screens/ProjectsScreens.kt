@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.bleighbande.portfolio.data.model.Project
+import com.bleighbande.portfolio.data.model.*
 import com.bleighbande.portfolio.ui.components.*
 import com.bleighbande.portfolio.ui.theme.SignalRed
 import com.bleighbande.portfolio.ui.viewmodel.ProfileViewModel

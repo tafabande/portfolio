@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.bleighbande.portfolio.data.model.*
 import com.bleighbande.portfolio.ui.components.StatusDot
 import com.bleighbande.portfolio.ui.theme.*
 import com.bleighbande.portfolio.ui.viewmodel.ProfileViewModel

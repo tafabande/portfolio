@@ -10,7 +10,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.bleighbande.portfolio.data.model.Education
+import com.bleighbande.portfolio.data.model.*
 import com.bleighbande.portfolio.ui.components.*
 import com.bleighbande.portfolio.ui.viewmodel.ProfileViewModel
 
