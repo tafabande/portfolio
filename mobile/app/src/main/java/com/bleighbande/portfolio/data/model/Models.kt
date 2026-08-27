@@ -13,9 +13,10 @@ data class Profile(
     val bio: String? = null,
     @SerializedName("created_at") val createdAt: String? = null,
     @SerializedName("updated_at") val updatedAt: String? = null
-) {
-    val fullName: String get() = listOfNotNull(firstName, lastName).joinToString(" ").ifBlank { "Your Name" }
-}
+)
+
+val Profile.fullName: String
+    get() = listOfNotNull(firstName, lastName).joinToString(" ").ifBlank { "Your Name" }
 
 data class ProfileRequest(
     @SerializedName("first_name") val firstName: String?,
@@ -35,12 +36,13 @@ data class Education(
     @SerializedName("start_date") val startDate: String? = null,
     @SerializedName("end_date")   val endDate: String? = null,
     val description: String? = null
-) {
-    val dateRange: String
-        get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
-    val displayTitle: String
-        get() = listOfNotNull(qualification, field).joinToString(" in ").ifBlank { institution }
-}
+)
+
+val Education.dateRange: String
+    get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
+
+val Education.displayTitle: String
+    get() = listOfNotNull(qualification, field).joinToString(" in ").ifBlank { institution }
 
 // ── Experience ───────────────────────────────────────────────────────────────
 data class Experience(
@@ -51,10 +53,10 @@ data class Experience(
     @SerializedName("end_date")   val endDate: String? = null,
     val location: String? = null,
     val description: String? = null
-) {
-    val dateRange: String
-        get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
-}
+)
+
+val Experience.dateRange: String
+    get() = listOfNotNull(startDate, endDate).joinToString(" – ").ifBlank { "" }
 
 // ── Skills ───────────────────────────────────────────────────────────────────
 data class Skill(
