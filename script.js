@@ -900,11 +900,6 @@ function setupFormValidation() {
 
         if (!nameEl || !emailEl || !messageEl || !btn) return;
 
-        if (!checkRateLimit()) {
-            showToast('Submission rate limit reached. Please wait 60s.', 'error');
-            return;
-        }
-
         const now = new Date();
         const dateField = cacheElement('contactDate');
         const timeField = cacheElement('contactTime');
@@ -952,6 +947,11 @@ function setupFormValidation() {
         }
 
         if (!valid) return;
+
+        if (!checkRateLimit()) {
+            showToast('Submission rate limit reached. Please wait 60s.', 'error');
+            return;
+        }
 
         const originalHTML = btn.innerHTML;
 

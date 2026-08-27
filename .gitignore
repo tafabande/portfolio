@@ -1,6 +1,7 @@
 # OS
 .DS_Store
 Thumbs.db
+*.log
 
 # Editor
 .vscode/
@@ -22,6 +23,8 @@ build/
 **/build/
 *.apk
 *.aar
+!gradle/wrapper/gradle-wrapper.jar
+!**/gradle-wrapper.jar
 
 # Tesseract
 *.traineddata

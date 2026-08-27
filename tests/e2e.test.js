@@ -3,7 +3,7 @@ const { test, expect } = require('@playwright/test');
 
 test.describe('Portfolio E2E Tests', () => {
     test.beforeEach(async ({ page }) => {
-        await page.goto('/');
+        await page.goto('/', { waitUntil: 'domcontentloaded' });
     });
 
     test('should load homepage successfully', async ({ page }) => {
